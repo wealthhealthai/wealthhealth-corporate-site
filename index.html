@@ -108,6 +108,41 @@
     }
     @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
 
+
+    /* ── PRODUCT CARDS REDESIGNED ── */
+    .p-card-header{
+      height:160px;border-radius:14px 14px 0 0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:28px 28px 24px;position:relative;overflow:hidden;
+    }
+    .p-card-header::after{
+      content:'';position:absolute;bottom:-30px;right:-30px;
+      width:120px;height:120px;border-radius:50%;
+      background:rgba(255,255,255,.03);pointer-events:none;
+    }
+    .p-logo{
+      width:72px;height:72px;object-fit:contain;
+      filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));
+    }
+    .p-logo-circle{border-radius:50%;}
+    .p-badge{
+      font-size:11px;font-weight:600;letter-spacing:.04em;
+      padding:5px 12px;border-radius:20px;
+      align-self:flex-start;white-space:nowrap;
+    }
+    .p-body{padding:24px 28px 28px;}
+    .p-name{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
+    .p-desc{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:22px;}
+    .p-link{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:13px;font-weight:600;color:var(--c-accent,var(--blue));
+      transition:gap .15s;
+    }
+    .p-link:hover{gap:11px;}
+    /* override old p-mark styles for product cards */
+    .product-card{border-radius:16px;padding:0;overflow:hidden;}
+    .product-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.1);}
+
     /* ── PRODUCTS ── */
     .products{padding:100px 28px;background:var(--white);}
     .container{max-width:1120px;margin:0 auto;}
@@ -254,55 +289,67 @@
     <div class="products-grid">
 
       <!-- FORGE -->
-      <div class="product-card" style="--c-accent:#B5442F;--c-tint:#FFF0ED;">
-        <div class="p-mark">
-          <img src="forge-icon.png" width="44" height="44" alt="Forge" style="border-radius:12px;"/>
+      <div class="product-card" style="--c-accent:#B5442F;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#1A0A08 0%,#2D1008 100%);">
+          <img src="logo-forge.png" class="p-logo" alt="Forge"/>
+          <span class="p-badge" style="background:rgba(181,68,47,.25);color:#F4906C;">Live</span>
         </div>
-        <div class="p-name">Forge</div>
-        <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you — with no terminal, no configuration, no complexity.</p>
-        <a href="https://forgeai.bot" class="p-link" target="_blank" rel="noopener">
-          Visit forgeai.bot
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-        </a>
+        <div class="p-body">
+          <div class="p-name">Forge</div>
+          <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you — with no terminal, no configuration, no complexity.</p>
+          <a href="https://forgeai.bot" class="p-link" target="_blank" rel="noopener" style="--c-accent:#B5442F;">
+            Visit forgeai.bot
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+        </div>
       </div>
 
       <!-- PROMETHEUS -->
-      <div class="product-card" style="--c-accent:#F46411;--c-tint:#FFF3EB;">
-        <div class="p-mark">
-          <img src="prometheus-icon.png" width="44" height="44" alt="Prometheus" style="border-radius:12px;"/>
+      <div class="product-card" style="--c-accent:#F46411;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#1C0A00 0%,#2E1200 100%);">
+          <img src="logo-prometheus.png" class="p-logo" alt="Prometheus"/>
+          <span class="p-badge" style="background:rgba(244,100,17,.2);color:#F5A26B;">In Development</span>
         </div>
-        <div class="p-name">Prometheus</div>
-        <p class="p-desc">AI-native infrastructure for healthcare data and clinical intelligence. Built for the modern health system and the teams that run it.</p>
-        <a href="#" class="p-link">
-          In development
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="p-body">
+          <div class="p-name">Prometheus</div>
+          <p class="p-desc">AI-native infrastructure for healthcare data and clinical intelligence. Built for the modern health system and the teams that run it.</p>
+          <a href="#" class="p-link" style="--c-accent:#F46411;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
 
       <!-- MIDAS -->
-      <div class="product-card" style="--c-accent:#8054FF;--c-tint:#F3EEFF;">
-        <div class="p-mark">
-          <img src="midas-icon.png" width="44" height="44" alt="Midas" style="border-radius:12px;"/>
+      <div class="product-card" style="--c-accent:#8054FF;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#0D0820 0%,#1A1035 100%);">
+          <img src="logo-midas.png" class="p-logo p-logo-circle" alt="Midas"/>
+          <span class="p-badge" style="background:rgba(128,84,255,.2);color:#B89FFF;">In Development</span>
         </div>
-        <div class="p-name">Midas</div>
-        <p class="p-desc">Intelligent revenue analytics and growth automation for teams that move fast. Turn raw data into decisions, automatically.</p>
-        <a href="#" class="p-link">
-          In development
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="p-body">
+          <div class="p-name">Midas</div>
+          <p class="p-desc">Intelligent revenue analytics and growth automation for teams that move fast. Turn raw data into decisions, automatically.</p>
+          <a href="#" class="p-link" style="--c-accent:#8054FF;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
 
       <!-- OLYMPUS -->
-      <div class="product-card" style="--c-accent:#107C10;--c-tint:#EDFAED;">
-        <div class="p-mark">
-          <img src="olympus-icon.png" width="44" height="44" alt="Olympus" style="border-radius:12px;"/>
+      <div class="product-card" style="--c-accent:#107C10;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#051405 0%,#0A1F0A 100%);">
+          <img src="logo-olympus.png" class="p-logo" alt="Olympus"/>
+          <span class="p-badge" style="background:rgba(16,124,16,.2);color:#6FCF6F;">In Development</span>
         </div>
-        <div class="p-name">Olympus</div>
-        <p class="p-desc">AI-driven strategic planning and organizational intelligence for leadership teams. Clarity at every level, from the ground floor to the boardroom.</p>
-        <a href="#" class="p-link">
-          In development
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="p-body">
+          <div class="p-name">Olympus</div>
+          <p class="p-desc">AI-driven strategic planning and organizational intelligence for leadership teams. Clarity at every level, from ground floor to boardroom.</p>
+          <a href="#" class="p-link" style="--c-accent:#107C10;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
 
     </div>
