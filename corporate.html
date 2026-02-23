@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>WealthHealth AI — Intelligent Products for a Better Life</title>
+  <meta name="description" content="WealthHealth AI Inc builds AI-powered products that make people healthier, wealthier, and more productive."/>
+  <link rel="icon" href="wh-icon.png" type="image/png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#0F0E2A; --navy-mid:#1A1860; --blue:#2667FF; --blue-light:#2714B8;
+      --text:#0D0D17; --text-2:#4A4A62; --text-3:#8888A0;
+      --white:#FFFFFF; --off-white:#F7F8FC; --border:#E4E6F2;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Geist',system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;background:linear-gradient(175deg,#F6F8FF 0%,#EFF3FE 25%,#F5F0FF 55%,#EDF4FF 80%,#F8F9FF 100%);background-attachment:fixed;}
+    a{color:inherit;text-decoration:none;}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(15,14,42,.82);backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:0 28px;
+      height:62px;display:flex;align-items:center;justify-content:space-between;
+    }
+    .nav-brand{display:flex;align-items:center;gap:10px;}
+    .nav-wordmark{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.02em;}
+    .nav-links{display:flex;gap:36px;list-style:none;}
+    .nav-links a{font-size:14px;color:rgba(255,255,255,.6);font-weight:500;transition:color .15s;}
+    .nav-links a:hover{color:#fff;}
+    .nav-cta{
+      font-size:13px;font-weight:600;padding:8px 20px;
+      background:var(--blue);color:#fff;border-radius:8px;
+      transition:all .15s;
+    }
+    .nav-cta:hover{background:#1a55e8;transform:translateY(-1px);}
+
+    /* ── HERO ── */
+    .hero{
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:140px 28px 100px;text-align:center;position:relative;overflow:hidden;
+      background:linear-gradient(160deg, var(--navy) 0%, #0D0B2C 40%, #121044 100%);
+    }
+    /* Subtle grid overlay */
+    .hero::before{
+      content:'';position:absolute;inset:0;
+      background-image:linear-gradient(rgba(38,103,255,.08) 1px, transparent 1px),
+                       linear-gradient(90deg, rgba(38,103,255,.08) 1px, transparent 1px);
+      background-size:60px 60px;pointer-events:none;
+    }
+    /* Radial glow */
+    .hero::after{
+      content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);
+      width:600px;height:400px;
+      background:radial-gradient(ellipse,rgba(38,103,255,.2) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:1;max-width:800px;}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.06);
+      padding:6px 14px;border-radius:20px;margin-bottom:32px;
+    }
+    .hero-badge span{width:6px;height:6px;border-radius:50%;background:#3ECF8E;box-shadow:0 0 8px #3ECF8E;}
+    .hero h1{
+      font-size:clamp(40px,6vw,72px);font-weight:800;color:#fff;
+      letter-spacing:-.05em;line-height:1.05;margin-bottom:24px;
+    }
+    .hero h1 em{
+      font-style:normal;
+      background:linear-gradient(135deg,#6B9FFF 0%,#A78BFA 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-sub{
+      font-size:18px;color:rgba(255,255,255,.6);line-height:1.7;
+      max-width:520px;margin:0 auto 44px;
+    }
+    .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .btn-hero{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:15px;font-weight:600;padding:14px 28px;
+      background:var(--blue);color:#fff;border-radius:10px;
+      transition:all .2s;box-shadow:0 4px 24px rgba(38,103,255,.35);
+    }
+    .btn-hero:hover{background:#1a55e8;transform:translateY(-2px);box-shadow:0 8px 32px rgba(38,103,255,.45);}
+    .btn-ghost{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:15px;font-weight:600;padding:14px 28px;
+      background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);
+      border:1px solid rgba(255,255,255,.15);border-radius:10px;
+      transition:all .2s;
+    }
+    .btn-ghost:hover{background:rgba(255,255,255,.14);color:#fff;}
+    /* Scroll indicator */
+    .scroll-hint{
+      position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      color:rgba(255,255,255,.3);font-size:12px;letter-spacing:.06em;
+      text-transform:uppercase;animation:bob 2s ease-in-out infinite;
+    }
+    @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+
+
+    /* ── PRODUCT CARDS REDESIGNED ── */
+    .p-card-header{
+      height:160px;border-radius:14px 14px 0 0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:28px 28px 24px;position:relative;overflow:hidden;
+    }
+    .p-card-header::after{
+      content:'';position:absolute;bottom:-30px;right:-30px;
+      width:120px;height:120px;border-radius:50%;
+      background:rgba(255,255,255,.03);pointer-events:none;
+    }
+    .p-logo{
+      width:72px;height:72px;object-fit:contain;
+      filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));
+    }
+    .p-logo-circle{border-radius:50%;}
+    .p-badge{
+      font-size:11px;font-weight:600;letter-spacing:.04em;
+      padding:5px 12px;border-radius:20px;
+      align-self:flex-start;white-space:nowrap;
+    }
+    .p-body{padding:24px 28px 28px;}
+    .p-name{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
+    .p-desc{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:22px;}
+    .p-link{
+      display:inline-flex;align-items:center;gap:7px;
+      font-size:13px;font-weight:600;color:var(--c-accent,var(--blue));
+      transition:gap .15s;
+    }
+    .p-link:hover{gap:11px;}
+    /* override old p-mark styles for product cards */
+    .product-card{border-radius:16px;padding:0;overflow:hidden;}
+    .product-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.1);}
+
+    /* ── PRODUCTS ── */
+    .products{padding:100px 28px;}
+    .container{max-width:1120px;margin:0 auto;}
+    .section-eyebrow{
+      font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--blue);margin-bottom:14px;
+    }
+    .section-title{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:16px;}
+    .section-sub{font-size:17px;color:var(--text-2);line-height:1.65;max-width:560px;}
+
+    .products-header{margin-bottom:56px;}
+    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+    @media(max-width:680px){.products-grid{grid-template-columns:1fr;}}
+
+    .product-card{
+      border-radius:18px;padding:36px;border:1.5px solid var(--border);
+      background:var(--white);position:relative;overflow:hidden;
+      transition:all .25s;cursor:default;
+    }
+    .product-card::after{
+      content:'';position:absolute;top:0;left:0;right:0;height:4px;
+      background:var(--c-accent);border-radius:4px 4px 0 0;
+    }
+    .product-card:hover{
+      border-color:var(--c-accent);
+      box-shadow:0 12px 48px rgba(0,0,0,.08);
+      transform:translateY(-3px);
+    }
+    .p-mark{
+      width:56px;height:56px;border-radius:14px;
+      background:var(--c-tint);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:22px;
+    }
+    .p-name{font-size:22px;font-weight:700;letter-spacing:-.025em;margin-bottom:10px;}
+    .p-desc{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:24px;}
+    .p-link{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:13px;font-weight:600;color:var(--c-accent);
+      border:1.5px solid var(--c-accent);border-radius:8px;
+      padding:7px 14px;transition:all .15s;
+    }
+    .p-link:hover{background:var(--c-accent);color:#fff;}
+
+    /* ── ABOUT ── */
+    .about{padding:100px 28px;background:rgba(255,255,255,.5);backdrop-filter:blur(20px);}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+    @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:48px;}}
+    .about-copy p{font-size:16px;color:var(--text-2);line-height:1.75;margin-bottom:20px;}
+    .about-copy p:last-child{margin-bottom:0;}
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .stat{background:var(--white);border-radius:14px;padding:24px;border:1.5px solid var(--border);}
+    .stat-num{font-size:32px;font-weight:800;letter-spacing:-.04em;color:var(--navy-mid);}
+    .stat-label{font-size:13px;color:var(--text-3);margin-top:5px;line-height:1.4;}
+
+    /* ── CONTACT ── */
+    .contact{
+      padding:100px 28px;
+      background:linear-gradient(160deg,var(--navy) 0%,#0D0B2C 100%);
+      text-align:center;color:#fff;
+    }
+    .contact .section-eyebrow{color:rgba(255,255,255,.5);}
+    .contact .section-title{color:#fff;}
+    .contact-sub{font-size:17px;color:rgba(255,255,255,.55);max-width:480px;margin:0 auto 40px;line-height:1.65;}
+    .contact-email{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:16px;font-weight:600;
+      background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);
+      color:#fff;padding:14px 28px;border-radius:12px;
+      transition:all .2s;
+    }
+    .contact-email:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+
+    /* ── FOOTER ── */
+    footer{background:#08071E;border-top:1px solid rgba(255,255,255,.07);padding:40px 28px;}
+    .footer-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+    .footer-brand{display:flex;align-items:center;gap:9px;}
+    .footer-wordmark{font-size:14px;font-weight:700;color:rgba(255,255,255,.7);}
+    .footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+    .footer-links a{font-size:13px;color:rgba(255,255,255,.35);transition:color .15s;}
+    .footer-links a:hover{color:rgba(255,255,255,.7);}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.25);width:100%;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);}
+
+    @media(max-width:640px){
+      .nav-links,.nav-cta{display:none;}
+      .products{padding:72px 20px;}
+      .about,.contact{padding:72px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <svg width="160" height="18" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;" aria-label="WealthHealth">
+  <g clip-path="url(#wh-nav1)"><path d="M67.9219 48.2924L62.7107 57.307L60.7559 60.6834L57.4995 66.3124H38.35L0 0H29.5719L57.7357 48.704L62.9469 39.6847L39.999 0H95.8448L70.099 44.5228L67.9219 48.2924Z" fill="white"/><path d="M135.843 0L97.498 66.3124H67.9167L73.1326 57.3024L73.1372 57.307L106.271 0H135.843Z" fill="#2667FF"/></g>
+  <path d="M145.501 0H156.579L167.658 50.3247H167.839L180.915 0H191.994L205.161 50.3247H205.342L216.421 0H227.499L211.245 64.9498H199.894L186.545 14.08H186.364L173.106 64.9498H161.664L145.501 0Z" fill="white"/>
+  <path d="M244.039 58.5002C251.939 58.5002 255.117 53.5949 255.934 50.7789H265.469C263.108 59.5903 256.207 66.3124 244.311 66.3124C229.873 66.3124 221.065 56.3201 221.065 41.7859C221.065 26.7066 229.873 17.2594 243.857 17.2594C258.84 17.2594 266.195 27.7059 266.195 44.2385H230.599C230.599 52.0507 235.594 58.5002 244.039 58.5002ZM243.857 24.799C236.139 24.799 230.599 29.9768 230.599 37.1531H256.661C256.661 29.9768 251.576 24.799 243.857 24.799Z" fill="white"/>
+  <path d="M296.252 30.7035C296.252 27.3425 294.254 24.799 287.898 24.799C280.27 24.799 277.455 27.1608 277.001 33.1562H267.738C268.193 24.254 273.913 17.2594 287.898 17.2594C298.159 17.2594 305.786 21.1655 305.786 33.5195V55.5934C305.786 58.8636 306.513 60.5895 310.236 60.2262V64.7681C308.057 65.5857 306.513 65.7673 304.697 65.7673C299.612 65.7673 297.251 63.9506 296.343 59.4086H296.161C293.255 63.4964 287.988 66.3124 280.815 66.3124C271.371 66.3124 265.559 60.862 265.559 53.0499C265.559 42.8759 273.096 39.6966 284.719 37.4256C291.893 36.063 296.252 35.1546 296.252 30.7035ZM282.903 58.7727C290.803 58.7727 296.252 54.8667 296.252 47.327V40.3325C294.708 41.4225 290.985 42.5126 286.535 43.421C278.635 45.1469 275.185 47.4179 275.185 52.1415C275.185 56.4109 277.727 58.7727 282.903 58.7727Z" fill="white"/>
+  <path d="M311.454 0H321.08V64.9498H311.454V0Z" fill="white"/>
+  <path d="M347.955 26.3433H339.237V51.5056C339.237 56.7743 341.78 57.4102 347.955 57.0468V64.8589C346.048 65.3131 343.959 65.5857 341.417 65.5857C333.789 65.5857 329.612 62.1338 329.612 52.3232V26.3433H322.892V18.5311H329.612V3.90607H339.237V18.5311H347.955V26.3433Z" fill="white"/>
+  <path d="M375.134 17.2594C383.943 17.2594 390.753 22.2555 390.753 32.8837V64.9498H381.128V35.6088C381.128 29.341 378.494 25.344 371.865 25.344C364.873 25.344 359.879 29.7951 359.879 36.6989V64.9498H350.344V0H359.879V24.5265H360.06C362.512 20.8929 367.325 17.2594 375.134 17.2594Z" fill="white"/>
+  <path d="M395.93 0H406.736V26.8883H437.429V0H448.235V64.9498H437.429V36.1539H406.736V64.9498H395.93V0Z" fill="white"/>
+  <path d="M475.205 58.5002C483.106 58.5002 486.284 53.5949 487.101 50.7789H496.636C494.275 59.5903 487.373 66.3124 475.478 66.3124C461.04 66.3124 452.231 56.3201 452.231 41.7859C452.231 26.7066 461.04 17.2594 475.024 17.2594C490.007 17.2594 497.362 27.7059 497.362 44.2385H461.766C461.766 52.0507 466.76 58.5002 475.205 58.5002ZM475.024 24.799C467.305 24.799 461.766 29.9768 461.766 37.1531H487.827C487.827 29.9768 482.742 24.799 475.024 24.799Z" fill="white"/>
+  <path d="M527.418 30.7035C527.418 27.3425 525.421 24.799 519.064 24.799C511.436 24.799 508.622 27.1608 508.167 33.1562H498.905C499.359 24.254 505.08 17.2594 519.064 17.2594C529.325 17.2594 536.953 21.1655 536.953 33.5195V55.5934C536.953 58.8636 537.68 60.5895 541.403 60.2262V64.7681C539.223 65.5857 537.68 65.7673 535.863 65.7673C530.778 65.7673 528.417 63.9506 527.509 59.4086H527.328C524.422 63.4964 519.155 66.3124 511.981 66.3124C502.537 66.3124 496.726 60.862 496.726 53.0499C496.726 42.8759 504.263 39.6966 515.886 37.4256C523.06 36.063 527.418 35.1546 527.418 30.7035ZM514.07 58.7727C521.97 58.7727 527.418 54.8667 527.418 47.327V40.3325C525.875 41.4225 522.152 42.5126 517.702 43.421C509.802 45.1469 506.351 47.4179 506.351 52.1415C506.351 56.4109 508.894 58.7727 514.07 58.7727Z" fill="white"/>
+  <path d="M542.621 0H552.246V64.9498H542.621V0Z" fill="white"/>
+  <path d="M579.121 26.3433H570.404V51.5056C570.404 56.7743 572.947 57.4102 579.121 57.0468V64.8589C577.215 65.3131 575.126 65.5857 572.583 65.5857C564.956 65.5857 560.779 62.1338 560.779 52.3232V26.3433H554.059V18.5311H560.779V3.90607H570.404V18.5311H579.121V26.3433Z" fill="white"/>
+  <path d="M606.301 17.2594C615.109 17.2594 621.92 22.2555 621.92 32.8837V64.9498H612.294V35.6088C612.294 29.341 609.661 25.344 603.032 25.344C596.04 25.344 591.046 29.7951 591.046 36.6989V64.9498H581.511V0H591.046V24.5265H591.227C593.679 20.8929 598.492 17.2594 606.301 17.2594Z" fill="white"/>
+  <defs><clipPath id="wh-nav1"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
+</svg>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="https://forgeai.bot" class="nav-cta" target="_blank" rel="noopener">Try Forge</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-wordmark" style="margin-bottom:36px;">
+      <svg width="311" height="34" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;">
+        <g clip-path="url(#clip0_2075_1148)">
+          <path d="M67.9219 48.2924L62.7107 57.307L60.7559 60.6834L57.4995 66.3124H38.35L0 0H29.5719L57.7357 48.704L62.9469 39.6847L39.999 0H95.8448L70.099 44.5228L67.9219 48.2924Z" fill="white"/>
+          <path d="M135.843 0L97.498 66.3124H67.9167L73.1326 57.3024L73.1372 57.307L106.271 0H135.843Z" fill="#2667FF"/>
+        </g>
+        <path d="M145.501 0H156.579L167.658 50.3247H167.839L180.915 0H191.994L205.161 50.3247H205.342L216.421 0H227.499L211.245 64.9498H199.894L186.545 14.08H186.364L173.106 64.9498H161.664L145.501 0Z" fill="white"/>
+        <path d="M244.039 58.5002C251.939 58.5002 255.117 53.5949 255.934 50.7789H265.469C263.108 59.5903 256.207 66.3124 244.311 66.3124C229.873 66.3124 221.065 56.3201 221.065 41.7859C221.065 26.7066 229.873 17.2594 243.857 17.2594C258.84 17.2594 266.195 27.7059 266.195 44.2385H230.599C230.599 52.0507 235.594 58.5002 244.039 58.5002ZM243.857 24.799C236.139 24.799 230.599 29.9768 230.599 37.1531H256.661C256.661 29.9768 251.576 24.799 243.857 24.799Z" fill="white"/>
+        <path d="M296.252 30.7035C296.252 27.3425 294.254 24.799 287.898 24.799C280.27 24.799 277.455 27.1608 277.001 33.1562H267.738C268.193 24.254 273.913 17.2594 287.898 17.2594C298.159 17.2594 305.786 21.1655 305.786 33.5195V55.5934C305.786 58.8636 306.513 60.5895 310.236 60.2262V64.7681C308.057 65.5857 306.513 65.7673 304.697 65.7673C299.612 65.7673 297.251 63.9506 296.343 59.4086H296.161C293.255 63.4964 287.988 66.3124 280.815 66.3124C271.371 66.3124 265.559 60.862 265.559 53.0499C265.559 42.8759 273.096 39.6966 284.719 37.4256C291.893 36.063 296.252 35.1546 296.252 30.7035ZM282.903 58.7727C290.803 58.7727 296.252 54.8667 296.252 47.327V40.3325C294.708 41.4225 290.985 42.5126 286.535 43.421C278.635 45.1469 275.185 47.4179 275.185 52.1415C275.185 56.4109 277.727 58.7727 282.903 58.7727Z" fill="white"/>
+        <path d="M311.454 0H321.08V64.9498H311.454V0Z" fill="white"/>
+        <path d="M347.955 26.3433H339.237V51.5056C339.237 56.7743 341.78 57.4102 347.955 57.0468V64.8589C346.048 65.3131 343.959 65.5857 341.417 65.5857C333.789 65.5857 329.612 62.1338 329.612 52.3232V26.3433H322.892V18.5311H329.612V3.90607H339.237V18.5311H347.955V26.3433Z" fill="white"/>
+        <path d="M375.134 17.2594C383.943 17.2594 390.753 22.2555 390.753 32.8837V64.9498H381.128V35.6088C381.128 29.341 378.494 25.344 371.865 25.344C364.873 25.344 359.879 29.7951 359.879 36.6989V64.9498H350.344V0H359.879V24.5265H360.06C362.512 20.8929 367.325 17.2594 375.134 17.2594Z" fill="white"/>
+        <path d="M395.93 0H406.736V26.8883H437.429V0H448.235V64.9498H437.429V36.1539H406.736V64.9498H395.93V0Z" fill="white"/>
+        <path d="M475.205 58.5002C483.106 58.5002 486.284 53.5949 487.101 50.7789H496.636C494.275 59.5903 487.373 66.3124 475.478 66.3124C461.04 66.3124 452.231 56.3201 452.231 41.7859C452.231 26.7066 461.04 17.2594 475.024 17.2594C490.007 17.2594 497.362 27.7059 497.362 44.2385H461.766C461.766 52.0507 466.76 58.5002 475.205 58.5002ZM475.024 24.799C467.305 24.799 461.766 29.9768 461.766 37.1531H487.827C487.827 29.9768 482.742 24.799 475.024 24.799Z" fill="white"/>
+        <path d="M527.418 30.7035C527.418 27.3425 525.421 24.799 519.064 24.799C511.436 24.799 508.622 27.1608 508.167 33.1562H498.905C499.359 24.254 505.08 17.2594 519.064 17.2594C529.325 17.2594 536.953 21.1655 536.953 33.5195V55.5934C536.953 58.8636 537.68 60.5895 541.403 60.2262V64.7681C539.223 65.5857 537.68 65.7673 535.863 65.7673C530.778 65.7673 528.417 63.9506 527.509 59.4086H527.328C524.422 63.4964 519.155 66.3124 511.981 66.3124C502.537 66.3124 496.726 60.862 496.726 53.0499C496.726 42.8759 504.263 39.6966 515.886 37.4256C523.06 36.063 527.418 35.1546 527.418 30.7035ZM514.07 58.7727C521.97 58.7727 527.418 54.8667 527.418 47.327V40.3325C525.875 41.4225 522.152 42.5126 517.702 43.421C509.802 45.1469 506.351 47.4179 506.351 52.1415C506.351 56.4109 508.894 58.7727 514.07 58.7727Z" fill="white"/>
+        <path d="M542.621 0H552.246V64.9498H542.621V0Z" fill="white"/>
+        <path d="M579.121 26.3433H570.404V51.5056C570.404 56.7743 572.947 57.4102 579.121 57.0468V64.8589C577.215 65.3131 575.126 65.5857 572.583 65.5857C564.956 65.5857 560.779 62.1338 560.779 52.3232V26.3433H554.059V18.5311H560.779V3.90607H570.404V18.5311H579.121V26.3433Z" fill="white"/>
+        <path d="M606.301 17.2594C615.109 17.2594 621.92 22.2555 621.92 32.8837V64.9498H612.294V35.6088C612.294 29.341 609.661 25.344 603.032 25.344C596.04 25.344 591.046 29.7951 591.046 36.6989V64.9498H581.511V0H591.046V24.5265H591.227C593.679 20.8929 598.492 17.2594 606.301 17.2594Z" fill="white"/>
+        <defs><clipPath id="clip0_2075_1148"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
+      </svg>
+    </div>
+    <h1>The new DTC growth stack<br/>for <em>health and wellness.</em></h1>
+    <p class="hero-sub">We help health and wellness companies find customers, convert them, reward them, and bring them back. Powered by AI and Web3 — built for the next era of direct-to-consumer sales.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-hero">
+        Explore our products
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn-ghost">Get in touch</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Scroll
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="products-header">
+      <div class="section-eyebrow">Our Products</div>
+      <h2 class="section-title">Four products.<br/>One mission.</h2>
+      <p class="section-sub">Three interconnected platforms that form a complete growth ecosystem for health and wellness DTC — plus Forge, our consumer personal AI.</p>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- FORGE -->
+      <div class="product-card" style="--c-accent:#B5442F;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#1A0A08 0%,#2D1008 100%);">
+          <img src="logo-forge.png" class="p-logo" alt="Forge"/>
+          <span class="p-badge" style="background:rgba(181,68,47,.25);color:#F4906C;">Live</span>
+        </div>
+        <div class="p-body">
+          <div class="p-name">Forge</div>
+          <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you — with no terminal, no configuration, no complexity.</p>
+          <a href="https://forgeai.bot" class="p-link" target="_blank" rel="noopener" style="--c-accent:#B5442F;">
+            Visit forgeai.bot
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- PROMETHEUS -->
+      <div class="product-card" style="--c-accent:#F46411;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#1C0A00 0%,#2E1200 100%);">
+          <img src="logo-prometheus.png" class="p-logo" alt="Prometheus"/>
+          <span class="p-badge" style="background:rgba(244,100,17,.2);color:#F5A26B;">In Development</span>
+        </div>
+        <div class="p-body">
+          <div class="p-name">Prometheus</div>
+          <p class="p-desc">An end-to-end AI pipeline for DTC sales. Scrape high-intent leads from Reddit, X, LinkedIn and more — then enrich contacts, generate campaigns, build communities, and track analytics. All with simple natural language prompting.</p>
+          <a href="#" class="p-link" style="--c-accent:#F46411;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- MIDAS -->
+      <div class="product-card" style="--c-accent:#8054FF;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#0D0820 0%,#1A1035 100%);">
+          <img src="logo-midas.png" class="p-logo p-logo-circle" alt="Midas"/>
+          <span class="p-badge" style="background:rgba(128,84,255,.2);color:#B89FFF;">In Development</span>
+        </div>
+        <div class="p-body">
+          <div class="p-name">Midas</div>
+          <p class="p-desc">A Web3 reward ecosystem built on Ethereum L2. The $WHT utility token rewards customers for every health-conscious purchase and partners for every sale — creating a compounding loyalty loop that grows the entire ecosystem.</p>
+          <a href="#" class="p-link" style="--c-accent:#8054FF;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- OLYMPUS -->
+      <div class="product-card" style="--c-accent:#107C10;">
+        <div class="p-card-header" style="background:linear-gradient(135deg,#051405 0%,#0A1F0A 100%);">
+          <img src="logo-olympus.png" class="p-logo" alt="Olympus"/>
+          <span class="p-badge" style="background:rgba(16,124,16,.2);color:#6FCF6F;">In Development</span>
+        </div>
+        <div class="p-body">
+          <div class="p-name">Olympus</div>
+          <p class="p-desc">The centralized marketplace for the WealthHealth reward ecosystem. Customers spend their $WHT rewards across partner brands, cross-pollinating sales and solving the DTC industry's biggest challenge: customer retention.</p>
+          <a href="#" class="p-link" style="--c-accent:#107C10;">
+            Coming soon
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="section-eyebrow">About Us</div>
+        <h2 class="section-title" style="margin-bottom:28px;">AI built<br/>for real life.</h2>
+        <div class="about-copy">
+          <p>WealthHealth AI Inc is building the next-generation workflow for health and wellness direct-to-consumer sales. Our ecosystem helps companies find customers, drive them to the product, reward them for their purchase, and ensure retention and re-engagement.</p>
+          <p>Built on three interconnected pillars — a Web3 reward ecosystem (Midas), an AI-powered sales pipeline (Prometheus), and a centralized product marketplace (Olympus) — plus Forge, our consumer personal AI assistant.</p>
+          <p>Founded by Jason Li, PhD (Biomedical Sciences, UCI) with a mission to unlock the full potential of health and wellness DTC commerce.</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-num">3+1</div>
+          <div class="stat-label">B2B platforms + 1 consumer product</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2026</div>
+          <div class="stat-label">Founded in Irvine, California</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Web3</div>
+          <div class="stat-label">Ethereum L2 reward ecosystem</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">DTC</div>
+          <div class="stat-label">Health and wellness sales focus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-eyebrow">Contact</div>
+    <h2 class="section-title" style="margin-bottom:16px;">Let's talk.</h2>
+    <p class="contact-sub">Whether you're interested in our products, partnership opportunities, or press inquiries — we'd love to hear from you.</p>
+    <a href="mailto:hello@wealthhealth.ai" class="contact-email">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+      hello@wealthhealth.ai
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg width="140" height="15" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;opacity:.6;" aria-label="WealthHealth">
+  <g clip-path="url(#wh-foot1)"><path d="M67.9219 48.2924L62.7107 57.307L60.7559 60.6834L57.4995 66.3124H38.35L0 0H29.5719L57.7357 48.704L62.9469 39.6847L39.999 0H95.8448L70.099 44.5228L67.9219 48.2924Z" fill="white"/><path d="M135.843 0L97.498 66.3124H67.9167L73.1326 57.3024L73.1372 57.307L106.271 0H135.843Z" fill="#2667FF"/></g>
+  <path d="M145.501 0H156.579L167.658 50.3247H167.839L180.915 0H191.994L205.161 50.3247H205.342L216.421 0H227.499L211.245 64.9498H199.894L186.545 14.08H186.364L173.106 64.9498H161.664L145.501 0Z" fill="white"/>
+  <path d="M244.039 58.5002C251.939 58.5002 255.117 53.5949 255.934 50.7789H265.469C263.108 59.5903 256.207 66.3124 244.311 66.3124C229.873 66.3124 221.065 56.3201 221.065 41.7859C221.065 26.7066 229.873 17.2594 243.857 17.2594C258.84 17.2594 266.195 27.7059 266.195 44.2385H230.599C230.599 52.0507 235.594 58.5002 244.039 58.5002ZM243.857 24.799C236.139 24.799 230.599 29.9768 230.599 37.1531H256.661C256.661 29.9768 251.576 24.799 243.857 24.799Z" fill="white"/>
+  <path d="M296.252 30.7035C296.252 27.3425 294.254 24.799 287.898 24.799C280.27 24.799 277.455 27.1608 277.001 33.1562H267.738C268.193 24.254 273.913 17.2594 287.898 17.2594C298.159 17.2594 305.786 21.1655 305.786 33.5195V55.5934C305.786 58.8636 306.513 60.5895 310.236 60.2262V64.7681C308.057 65.5857 306.513 65.7673 304.697 65.7673C299.612 65.7673 297.251 63.9506 296.343 59.4086H296.161C293.255 63.4964 287.988 66.3124 280.815 66.3124C271.371 66.3124 265.559 60.862 265.559 53.0499C265.559 42.8759 273.096 39.6966 284.719 37.4256C291.893 36.063 296.252 35.1546 296.252 30.7035ZM282.903 58.7727C290.803 58.7727 296.252 54.8667 296.252 47.327V40.3325C294.708 41.4225 290.985 42.5126 286.535 43.421C278.635 45.1469 275.185 47.4179 275.185 52.1415C275.185 56.4109 277.727 58.7727 282.903 58.7727Z" fill="white"/>
+  <path d="M311.454 0H321.08V64.9498H311.454V0Z" fill="white"/>
+  <path d="M347.955 26.3433H339.237V51.5056C339.237 56.7743 341.78 57.4102 347.955 57.0468V64.8589C346.048 65.3131 343.959 65.5857 341.417 65.5857C333.789 65.5857 329.612 62.1338 329.612 52.3232V26.3433H322.892V18.5311H329.612V3.90607H339.237V18.5311H347.955V26.3433Z" fill="white"/>
+  <path d="M375.134 17.2594C383.943 17.2594 390.753 22.2555 390.753 32.8837V64.9498H381.128V35.6088C381.128 29.341 378.494 25.344 371.865 25.344C364.873 25.344 359.879 29.7951 359.879 36.6989V64.9498H350.344V0H359.879V24.5265H360.06C362.512 20.8929 367.325 17.2594 375.134 17.2594Z" fill="white"/>
+  <path d="M395.93 0H406.736V26.8883H437.429V0H448.235V64.9498H437.429V36.1539H406.736V64.9498H395.93V0Z" fill="white"/>
+  <path d="M475.205 58.5002C483.106 58.5002 486.284 53.5949 487.101 50.7789H496.636C494.275 59.5903 487.373 66.3124 475.478 66.3124C461.04 66.3124 452.231 56.3201 452.231 41.7859C452.231 26.7066 461.04 17.2594 475.024 17.2594C490.007 17.2594 497.362 27.7059 497.362 44.2385H461.766C461.766 52.0507 466.76 58.5002 475.205 58.5002ZM475.024 24.799C467.305 24.799 461.766 29.9768 461.766 37.1531H487.827C487.827 29.9768 482.742 24.799 475.024 24.799Z" fill="white"/>
+  <path d="M527.418 30.7035C527.418 27.3425 525.421 24.799 519.064 24.799C511.436 24.799 508.622 27.1608 508.167 33.1562H498.905C499.359 24.254 505.08 17.2594 519.064 17.2594C529.325 17.2594 536.953 21.1655 536.953 33.5195V55.5934C536.953 58.8636 537.68 60.5895 541.403 60.2262V64.7681C539.223 65.5857 537.68 65.7673 535.863 65.7673C530.778 65.7673 528.417 63.9506 527.509 59.4086H527.328C524.422 63.4964 519.155 66.3124 511.981 66.3124C502.537 66.3124 496.726 60.862 496.726 53.0499C496.726 42.8759 504.263 39.6966 515.886 37.4256C523.06 36.063 527.418 35.1546 527.418 30.7035ZM514.07 58.7727C521.97 58.7727 527.418 54.8667 527.418 47.327V40.3325C525.875 41.4225 522.152 42.5126 517.702 43.421C509.802 45.1469 506.351 47.4179 506.351 52.1415C506.351 56.4109 508.894 58.7727 514.07 58.7727Z" fill="white"/>
+  <path d="M542.621 0H552.246V64.9498H542.621V0Z" fill="white"/>
+  <path d="M579.121 26.3433H570.404V51.5056C570.404 56.7743 572.947 57.4102 579.121 57.0468V64.8589C577.215 65.3131 575.126 65.5857 572.583 65.5857C564.956 65.5857 560.779 62.1338 560.779 52.3232V26.3433H554.059V18.5311H560.779V3.90607H570.404V18.5311H579.121V26.3433Z" fill="white"/>
+  <path d="M606.301 17.2594C615.109 17.2594 621.92 22.2555 621.92 32.8837V64.9498H612.294V35.6088C612.294 29.341 609.661 25.344 603.032 25.344C596.04 25.344 591.046 29.7951 591.046 36.6989V64.9498H581.511V0H591.046V24.5265H591.227C593.679 20.8929 598.492 17.2594 606.301 17.2594Z" fill="white"/>
+  <defs><clipPath id="wh-foot1"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
+</svg>
+    </div>
+    <div class="footer-links">
+      <a href="#products">Products</a>
+      <a href="https://forgeai.bot" target="_blank">Forge</a>
+      <a href="mailto:hello@wealthhealth.ai">Contact</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 WealthHealth AI Inc. All rights reserved. &nbsp;·&nbsp; Irvine, California &nbsp;·&nbsp; jason@wealthhealth.ai
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
