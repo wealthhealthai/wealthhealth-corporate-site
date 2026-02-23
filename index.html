@@ -16,7 +16,7 @@
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
-    body{font-family:'Geist',system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    body{font-family:'Geist',system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;background:linear-gradient(175deg,#F6F8FF 0%,#EFF3FE 25%,#F5F0FF 55%,#EDF4FF 80%,#F8F9FF 100%);background-attachment:fixed;}
     a{color:inherit;text-decoration:none;}
 
     /* ── NAV ── */
@@ -144,7 +144,7 @@
     .product-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.1);}
 
     /* ── PRODUCTS ── */
-    .products{padding:100px 28px;background:var(--white);}
+    .products{padding:100px 28px;}
     .container{max-width:1120px;margin:0 auto;}
     .section-eyebrow{
       font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
@@ -188,7 +188,7 @@
     .p-link:hover{background:var(--c-accent);color:#fff;}
 
     /* ── ABOUT ── */
-    .about{padding:100px 28px;background:var(--off-white);}
+    .about{padding:100px 28px;background:rgba(255,255,255,.5);backdrop-filter:blur(20px);}
     .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
     @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:48px;}}
     .about-copy p{font-size:16px;color:var(--text-2);line-height:1.75;margin-bottom:20px;}
@@ -239,10 +239,7 @@
 <nav>
   <div class="nav-inner">
     <div class="nav-brand">
-      <svg width="26" height="18" viewBox="0 0 182 124" fill="none">
-        <path d="M0 0L45 124H73L91 60L109 124H137L182 0H152L124 90L91 0L58 90L30 0Z" fill="url(#g1)"/>
-        <defs><linearGradient id="g1" x1="0" y1="0" x2="182" y2="0"><stop offset="0%" stop-color="#2714B8"/><stop offset="55%" stop-color="#2714B8"/><stop offset="55%" stop-color="#2667FF"/><stop offset="100%" stop-color="#2667FF"/></linearGradient></defs>
-      </svg>
+      <img src="logo-wealthhealth.png" width="32" height="22" alt="WealthHealth" style="object-fit:contain;"/>
       <span class="nav-wordmark">WealthHealth AI</span>
     </div>
     <ul class="nav-links">
@@ -408,9 +405,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <svg width="22" height="15" viewBox="0 0 182 124" fill="none">
-        <path d="M0 0L45 124H73L91 60L109 124H137L182 0H152L124 90L91 0L58 90L30 0Z" fill="rgba(255,255,255,0.3)"/>
-      </svg>
+      <img src="logo-wealthhealth.png" width="28" height="19" alt="WealthHealth" style="object-fit:contain;opacity:.7;"/>
       <span class="footer-wordmark">WealthHealth AI</span>
     </div>
     <div class="footer-links">
