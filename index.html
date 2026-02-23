@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WealthHealth AI Inc builds intelligent AI products that make AI accessible, private, and genuinely useful for everyone." />
+  <meta property="og:title" content="WealthHealth AI Inc" />
+  <meta property="og:description" content="Building AI that works for people." />
+  <meta property="og:url" content="https://wealthhealth.ai" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>WealthHealth AI Inc</title>
+  <link rel="icon" href="wh-icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #2714B8;
+      --blue:   #2667FF;
+      --black:  #060606;
+      --text:   #0F0F0F;
+      --muted:  #6B7280;
+      --light:  #F4F6FA;
+      --border: #E5E7EB;
+      --white:  #FFFFFF;
+      --card-bg:#FAFBFF;
+      --radius: 12px;
+      --max-w:  1100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-wordmark {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue) !important;
+      text-decoration: none;
+      padding: 8px 18px;
+      border: 1.5px solid var(--blue);
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--blue) !important;
+      color: var(--white) !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 100px 24px 96px;
+      text-align: center;
+      background: linear-gradient(180deg, #FAFBFF 0%, #FFFFFF 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+      border-radius: 100px;
+      padding: 5px 14px 5px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 36px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.75rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      color: var(--navy);
+      margin-bottom: 24px;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 18.5px);
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto 48px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+      box-shadow: 0 2px 12px rgba(38, 103, 255, 0.28);
+    }
+
+    .btn-primary:hover {
+      background: #1a52d4;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(38, 103, 255, 0.38);
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 96px 24px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+
+    .section-heading {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 540px;
+    }
+
+    /* ── PRODUCTS ── */
+    .products {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .products-header {
+      margin-bottom: 56px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+      position: relative;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 8px 32px rgba(38, 103, 255, 0.10);
+      border-color: #C7D2FE;
+      transform: translateY(-2px);
+    }
+
+    .product-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .product-card-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .product-card-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .product-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.15s;
+    }
+
+    .product-link:hover { gap: 8px; }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-badge {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 60px rgba(38, 20, 184, 0.25);
+    }
+
+    .about-text p {
+      font-size: 16.5px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* ── CONTACT / FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255, 255, 255, 0.75);
+      padding: 72px 24px 48px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      margin-bottom: 56px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 280px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer-contact h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 14px;
+    }
+
+    .footer-contact a {
+      display: block;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      transition: color 0.15s;
+    }
+
+    .footer-contact a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+    /* ── W LOGO SVG ── */
+    .wh-logo-svg {
+      display: block;
+    }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .hero { padding: 72px 20px 72px; }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .product-card { padding: 28px 24px; }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-visual { display: none; }
+
+      .footer-top {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      section { padding: 72px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.25rem; }
+      .nav-cta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <!-- WealthHealth W Logo (inline SVG, extracted from brand SVG) -->
+        <svg class="wh-logo-svg" width="32" height="22" viewBox="0 0 182 89" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth W logo">
+          <!-- Left V shape (navy) -->
+          <path d="M90.563 64.39L83.614 76.409L81.008 80.911L76.666 88.416H51.133L0 0H39.429L76.981 64.939L83.929 52.913L53.332 0H127.793L93.465 59.364L90.563 64.39Z" fill="#2714B8"/>
+          <!-- Right V shape (brand blue) -->
+          <path d="M181.125 0L130 88.416H90.556L97.51 76.403L97.516 76.409L141.695 0H181.125Z" fill="#2667FF"/>
+        </svg>
+        <span class="nav-wordmark">WealthHealth AI</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#products">Products</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        AI Product Company &mdash; Irvine, California
+      </div>
+      <h1>Building AI that works for people.</h1>
+      <p class="hero-sub">
+        WealthHealth AI develops intelligent products that make AI accessible, private, and genuinely useful for everyone.
+      </p>
+      <a href="#products" class="btn-primary">
+        Explore our products
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── PRODUCTS ── -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="products-header">
+        <p class="section-label">Our Products</p>
+        <h2 class="section-heading">Intelligent software,<br>built for real people.</h2>
+        <p class="section-sub">From personal AI companions to enterprise infrastructure, every product we build is designed to be useful, private, and genuinely powerful.</p>
+      </div>
+
+      <div class="products-grid">
+
+        <!-- Forge -->
+        <div class="product-card">
+          <div class="product-icon" style="background: #EEF2FF;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2667FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="product-card-name">Forge</div>
+          <p class="product-card-desc">Your personal AI, running on your computer. Private, persistent, and built around you.</p>
+          <a href="https://forgeai.bot" class="product-link" target="_blank" rel="noopener noreferrer">
+            Visit forgeai.bot
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Prometheus -->
+        <div class="product-card">
+          <div class="product-icon" style="background: #FFF7ED;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div class="product-card-name">Prometheus</div>
+          <p class="product-card-desc">AI-native infrastructure for healthcare data and clinical intelligence. Built for the modern health system.</p>
+          <a href="#" class="product-link">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Midas -->
+        <div class="product-card">
+          <div class="product-icon" style="background: #FEFCE8;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="product-card-name">Midas</div>
+          <p class="product-card-desc">Intelligent revenue analytics and growth automation. Turn data into decisions, automatically.</p>
+          <a href="#" class="product-link">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Olympus -->
+        <div class="product-card">
+          <div class="product-icon" style="background: #F0FDF4;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <div class="product-card-name">Olympus</div>
+          <p class="product-card-desc">AI-driven strategic planning and organizational intelligence. Built for leadership teams that move fast.</p>
+          <a href="#" class="product-link">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-text">
+          <p class="section-label">About</p>
+          <h2 class="section-heading">Who we are</h2>
+          <p>WealthHealth AI Inc is an AI product company based in Irvine, California.</p>
+          <p>We build software that helps people work smarter, live better, and get more from AI without requiring a computer science degree.</p>
+          <p>Founded by Jason Li, PhD, former researcher in biomedical sciences at UC Irvine.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-badge">
+            <svg width="80" height="56" viewBox="0 0 182 89" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth W mark">
+              <path d="M90.563 64.39L83.614 76.409L81.008 80.911L76.666 88.416H51.133L0 0H39.429L76.981 64.939L83.929 52.913L53.332 0H127.793L93.465 59.364L90.563 64.39Z" fill="rgba(255,255,255,0.9)"/>
+              <path d="M181.125 0L130 88.416H90.556L97.51 76.403L97.516 76.409L141.695 0H181.125Z" fill="rgba(255,255,255,0.55)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER / CONTACT ── -->
+  <footer id="contact">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">
+            <svg width="28" height="20" viewBox="0 0 182 89" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth W logo">
+              <path d="M90.563 64.39L83.614 76.409L81.008 80.911L76.666 88.416H51.133L0 0H39.429L76.981 64.939L83.929 52.913L53.332 0H127.793L93.465 59.364L90.563 64.39Z" fill="rgba(255,255,255,0.85)"/>
+              <path d="M181.125 0L130 88.416H90.556L97.51 76.403L97.516 76.409L141.695 0H181.125Z" fill="rgba(255,255,255,0.50)"/>
+            </svg>
+            <span class="footer-brand-name">WealthHealth AI</span>
+          </div>
+          <p class="footer-tagline">Building AI that works for people. Based in Irvine, California.</p>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <a href="mailto:hello@wealthhealth.ai">hello@wealthhealth.ai</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 WealthHealth AI Inc. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
