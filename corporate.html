@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>WealthHealth AI — Intelligent Products for a Better Life</title>
+  <title>WealthHealth AI Intelligent Products for a Better Life</title>
   <meta name="description" content="WealthHealth AI Inc builds AI-powered products that make people healthier, wealthier, and more productive."/>
   <link rel="icon" href="wh-icon.png" type="image/png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -210,71 +210,42 @@
     }
 
     /* PRODUCTS */
-    .products{padding:92px 0;}
-    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-    @media(max-width:820px){.products-grid{grid-template-columns:1fr;}}
+    .products{padding:100px 0 80px;}
+    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    @media(max-width:720px){.products-grid{grid-template-columns:1fr;}}
 
     .p{
-      border-radius:18px;overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(180deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,.03) 100%);
-      transition:transform .22s, border-color .22s, box-shadow .22s;
-      box-shadow:0 24px 70px rgba(0,0,0,.28);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:16px;
+      display:flex;flex-direction:column;
+      overflow:hidden;position:relative;
+      transition:border-color .2s, transform .2s;
     }
-    .p:hover{transform:translateY(-4px);border-color:rgba(38,103,255,.35);box-shadow:0 30px 90px rgba(0,0,0,.36)}
+    .p:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
+    .p[data-accent="forge"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#C0392B;}
+    .p[data-accent="prom"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#F46411;}
+    .p[data-accent="midas"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#8054FF;}
+    .p[data-accent="oly"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#107C10;}
 
-    .p-top{
-      padding:26px 26px 22px;
-      display:flex;align-items:center;justify-content:space-between;gap:18px;
-      position:relative;
-      background:radial-gradient(700px 220px at 20% 0%, rgba(38,103,255,.20) 0%, transparent 55%),
-                 radial-gradient(700px 220px at 80% 0%, rgba(39,20,184,.14) 0%, transparent 55%);
-    }
-    .p-top::after{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(180deg, rgba(0,0,0,.0) 0%, rgba(0,0,0,.22) 100%);
-      pointer-events:none;
-    }
-    .p-logo{display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
-    .p-icon{height:28px;width:auto;display:block;flex-shrink:0;}
-    .p-label{font-family:'Geist',system-ui,sans-serif;font-weight:500;font-size:24px;color:#fff;letter-spacing:-0.02em;line-height:1;white-space:nowrap;}
-    .p-badge{
-      position:relative;z-index:1;
-      font-size:11px;font-weight:800;letter-spacing:.06em;
-      padding:7px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.22);
-      color:rgba(255,255,255,.62);
-      white-space:nowrap;
-    }
-
-    .p-body{padding:22px 26px 26px;}
-    .p-name{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
-    .p-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.62);margin-bottom:18px;}
-
-    .p-link{
-      display:inline-flex;align-items:center;gap:10px;
-      font-size:13px;font-weight:800;
-      padding:10px 12px;border-radius:12px;
-      border:1px solid rgba(38,103,255,.35);
-      background:rgba(38,103,255,.10);
-      color:#fff;
-      transition:transform .15s, border-color .15s, background .15s;
-    }
-    .p-link:hover{transform:translateY(-1px);border-color:rgba(38,103,255,.55);background:rgba(38,103,255,.14)}
-
-    .p[data-accent="forge"] .p-top{background:radial-gradient(700px 220px at 20% 0%, rgba(255,73,0,.14) 0%, transparent 55%), radial-gradient(700px 220px at 80% 0%, rgba(38,103,255,.12) 0%, transparent 55%);} 
-    .p[data-accent="forge"] .p-link{border-color:rgba(255,73,0,.35);background:rgba(255,73,0,.10);} 
-    .p[data-accent="forge"] .p-link:hover{border-color:rgba(255,73,0,.55);background:rgba(255,73,0,.14);} 
-
-    .p[data-accent="prom"] .p-link{border-color:rgba(244,100,17,.35);background:rgba(244,100,17,.10);} 
-    .p[data-accent="prom"] .p-link:hover{border-color:rgba(244,100,17,.55);background:rgba(244,100,17,.14);} 
-
-    .p[data-accent="midas"] .p-link{border-color:rgba(128,84,255,.35);background:rgba(128,84,255,.10);} 
-    .p[data-accent="midas"] .p-link:hover{border-color:rgba(128,84,255,.55);background:rgba(128,84,255,.14);} 
-
-    .p[data-accent="oly"] .p-link{border-color:rgba(16,124,16,.35);background:rgba(16,124,16,.10);} 
-    .p[data-accent="oly"] .p-link:hover{border-color:rgba(16,124,16,.55);background:rgba(16,124,16,.14);} 
+    .p-inner{padding:28px 28px 24px;flex:1;display:flex;flex-direction:column;gap:0;}
+    .p-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px;}
+    .p-logo{display:flex;align-items:center;gap:10px;}
+    .p-icon{height:36px;width:auto;display:block;flex-shrink:0;}
+    .p-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.55);}
+    .p-badge.live{border-color:rgba(16,124,16,.5);color:#4caf50;background:rgba(16,124,16,.12);}
+    .p-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
+    .p[data-accent="forge"] .p-label{color:#E05A4E;}
+    .p[data-accent="prom"] .p-label{color:#F46411;}
+    .p[data-accent="midas"] .p-label{color:#8054FF;}
+    .p[data-accent="oly"] .p-label{color:#4caf50;}
+    .p-tagline{font-size:22px;font-weight:700;line-height:1.25;color:#fff;margin-bottom:14px;letter-spacing:-.02em;}
+    .p-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,.55);flex:1;}
+    .p-footer{padding:20px 28px;border-top:1px solid rgba(255,255,255,.07);}
+    .p-link{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.2);color:#fff;text-decoration:none;transition:background .15s,border-color .15s;}
+    .p-link:hover{background:rgba(255,255,255,.07);}
+    .p[data-accent="forge"] .p-link.live{background:#C0392B;border-color:#C0392B;}
+    .p[data-accent="forge"] .p-link.live:hover{background:#a93226;border-color:#a93226;}
 
     /* ABOUT */
     .about{padding:92px 0;}
@@ -370,7 +341,7 @@
 
         <h1><span class="h1-line">The new DTC growth stack</span><span class="h1-line">for <em>health and wellness.</em></span></h1>
 
-        <p class="hero-sub">We help health and wellness companies find customers, convert them, reward them, and bring them back. Powered by AI and Web3 — built for the next era of direct-to-consumer sales.</p>
+        <p class="hero-sub">We help health and wellness companies find customers, convert them, reward them, and bring them back. Powered by AI and Web3 built for the next era of direct-to-consumer sales.</p>
 
         <div class="hero-actions">
           <a href="#products" class="btn btn-primary">
@@ -398,70 +369,90 @@
       <div class="section-head reveal">
         <div class="eyebrow">Our Products</div>
         <div class="title">Four products.<br/>One mission.</div>
-        <div class="sub">Three interconnected platforms that form a complete growth ecosystem for health and wellness DTC — plus Forge, our consumer personal AI.</div>
+        <div class="sub">Three interconnected platforms that form a complete growth ecosystem for health and wellness DTC plus Forge, our consumer personal AI.</div>
       </div>
 
       <div class="products-grid">
         <!-- FORGE -->
         <article class="p reveal" data-accent="forge">
-          <div class="p-top">
-            <div class="p-logo"><img class="p-icon" src="logo-forge.png" alt=""/><span class="p-label">Forge</span></div>
-            <div class="p-badge">Live</div>
+          <div class="p-inner">
+            <div class="p-top">
+              <div class="p-logo">
+                <img class="p-icon" src="logo-forge.png" alt=""/>
+                <span class="p-label">Forge</span>
+              </div>
+              <div class="p-badge live">Live</div>
+            </div>
+            <div class="p-tagline">Personal AI for anyone.<br/>Zero complexity.</div>
+            <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you. No terminal, no configuration, no complexity.</p>
           </div>
-          <div class="p-body">
-            <div class="p-name">Personal AI for anyone. Zero complexity.</div>
-            <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you — with no terminal, no configuration, no complexity.</p>
-            <a class="p-link" href="https://forgeai.bot" target="_blank" rel="noopener">
+          <div class="p-footer">
+            <a class="p-link live" href="https://forgeai.bot" target="_blank" rel="noopener">
               Visit forgeai.bot
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
             </a>
           </div>
         </article>
 
         <!-- PROMETHEUS -->
         <article class="p reveal" data-accent="prom">
-          <div class="p-top">
-            <div class="p-logo"><img class="p-icon" src="logo-prometheus-t.png" alt=""/><span class="p-label">Prometheus</span></div>
-            <div class="p-badge">In Development</div>
+          <div class="p-inner">
+            <div class="p-top">
+              <div class="p-logo">
+                <img class="p-icon" src="logo-prometheus-t.png" alt=""/>
+                <span class="p-label">Prometheus</span>
+              </div>
+              <div class="p-badge">In Development</div>
+            </div>
+            <div class="p-tagline">The new AI growth stack<br/>for DTC sales.</div>
+            <p class="p-desc">An end-to-end AI pipeline. Scrape high-intent leads, enrich contacts, generate campaigns, build communities, and track analytics. All with simple natural language prompting.</p>
           </div>
-          <div class="p-body">
-            <div class="p-name">The new AI growth stack.</div>
-            <p class="p-desc">An end-to-end AI pipeline for DTC sales. Scrape high-intent leads from Reddit, X, LinkedIn and more — then enrich contacts, generate campaigns, build communities, and track analytics. All with simple natural language prompting.</p>
+          <div class="p-footer">
             <a class="p-link" href="#" aria-disabled="true">
               Coming soon
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
         </article>
 
         <!-- MIDAS -->
         <article class="p reveal" data-accent="midas">
-          <div class="p-top">
-            <div class="p-logo"><img class="p-icon" src="logo-midas-t.png" alt=""/><span class="p-label">Midas</span></div>
-            <div class="p-badge">In Development</div>
+          <div class="p-inner">
+            <div class="p-top">
+              <div class="p-logo">
+                <img class="p-icon" src="logo-midas-t.png" alt=""/>
+                <span class="p-label">Midas</span>
+              </div>
+              <div class="p-badge">In Development</div>
+            </div>
+            <div class="p-tagline">Web3 rewards for businesses<br/>and consumers.</div>
+            <p class="p-desc">A Web3 reward ecosystem on Ethereum L2. The $WHT utility token rewards customers for every health-conscious purchase and partners for every sale, creating a compounding loyalty loop.</p>
           </div>
-          <div class="p-body">
-            <div class="p-name">Web3 rewards for businesses and consumers.</div>
-            <p class="p-desc">A Web3 reward ecosystem built on Ethereum L2. The $WHT utility token rewards customers for every health-conscious purchase and partners for every sale — creating a compounding loyalty loop that grows the entire ecosystem.</p>
+          <div class="p-footer">
             <a class="p-link" href="#" aria-disabled="true">
               Coming soon
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
         </article>
 
         <!-- OLYMPUS -->
         <article class="p reveal" data-accent="oly">
-          <div class="p-top">
-            <div class="p-logo"><img class="p-icon" src="logo-olympus-t.png" alt=""/><span class="p-label">Olympus</span></div>
-            <div class="p-badge">In Development</div>
+          <div class="p-inner">
+            <div class="p-top">
+              <div class="p-logo">
+                <img class="p-icon" src="logo-olympus-t.png" alt=""/>
+                <span class="p-label">Olympus</span>
+              </div>
+              <div class="p-badge">In Development</div>
+            </div>
+            <div class="p-tagline">A loyalty-driven marketplace<br/>for health and wellness.</div>
+            <p class="p-desc">The centralized marketplace for the WealthHealth reward ecosystem. Customers spend $WHT rewards across partner brands, cross-pollinating sales and solving the DTC industry's biggest challenge: retention.</p>
           </div>
-          <div class="p-body">
-            <div class="p-name">A loyalty-driven marketplace for health & wellness.</div>
-            <p class="p-desc">The centralized marketplace for the WealthHealth reward ecosystem. Customers spend their $WHT rewards across partner brands, cross-pollinating sales and solving the DTC industry's biggest challenge: customer retention.</p>
+          <div class="p-footer">
             <a class="p-link" href="#" aria-disabled="true">
               Coming soon
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
         </article>
@@ -479,7 +470,7 @@
             <div class="title" style="margin-bottom:16px;">AI built<br/>for real life.</div>
             <div class="about-copy">
               <p>WealthHealth AI Inc is building the next-generation workflow for health and wellness direct-to-consumer sales. Our ecosystem helps companies find customers, drive them to the product, reward them for their purchase, and ensure retention and re-engagement.</p>
-              <p>Built on three interconnected pillars — a Web3 reward ecosystem (Midas), an AI-powered sales pipeline (Prometheus), and a centralized product marketplace (Olympus) — plus Forge, our consumer personal AI assistant.</p>
+              <p>Built on three interconnected pillars a Web3 reward ecosystem (Midas), an AI-powered sales pipeline (Prometheus), and a centralized product marketplace (Olympus) plus Forge, our consumer personal AI assistant.</p>
               <p>Founded by Jason Li, PhD (Biomedical Sciences, UCI) with a mission to unlock the full potential of health and wellness DTC commerce.</p>
             </div>
           </div>
@@ -514,7 +505,7 @@
       <div class="contact-card reveal">
         <div class="eyebrow" style="color:rgba(255,255,255,.40);">Contact</div>
         <div class="title" style="margin-bottom:12px;">Let's talk.</div>
-        <p class="contact-sub">Whether you're interested in our products, partnership opportunities, or press inquiries — we'd love to hear from you.</p>
+        <p class="contact-sub">Whether you're interested in our products, partnership opportunities, or press inquiries we'd love to hear from you.</p>
         <a href="mailto:support@wealthhealth.ai" class="email">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
           support@wealthhealth.ai
