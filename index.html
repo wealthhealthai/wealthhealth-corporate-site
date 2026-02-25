@@ -6,99 +6,193 @@
   <title>WealthHealth AI — Coming Soon</title>
   <link rel="icon" href="wh-icon.png" type="image/png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body{height:100%;font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+
     body{
       min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:32px 24px;position:relative;overflow:hidden;
-      background:linear-gradient(160deg,#0A0918 0%,#0D0B2C 40%,#101040 100%);
+      padding:40px 24px;position:relative;overflow:hidden;
+      background:#0A0918;
     }
-    /* Grid overlay */
-    body::before{
-      content:'';position:absolute;inset:0;
-      background-image:linear-gradient(rgba(38,103,255,.06) 1px,transparent 1px),
-                       linear-gradient(90deg,rgba(38,103,255,.06) 1px,transparent 1px);
-      background-size:56px 56px;pointer-events:none;
+
+    /* Warped mesh canvas — fixed full-screen behind everything */
+    #wh-mesh{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      pointer-events:none;z-index:0;
     }
-    /* Radial glow */
-    body::after{
-      content:'';position:absolute;bottom:-10%;left:50%;transform:translateX(-50%);
-      width:700px;height:400px;
-      background:radial-gradient(ellipse,rgba(38,103,255,.18) 0%,transparent 70%);
-      pointer-events:none;
+
+    /* Ambient glow blobs */
+    .glow-top{
+      position:fixed;top:-15%;left:50%;transform:translateX(-50%);
+      width:800px;height:500px;
+      background:radial-gradient(ellipse,rgba(38,103,255,.14) 0%,transparent 65%);
+      pointer-events:none;z-index:0;
     }
+    .glow-bottom{
+      position:fixed;bottom:-20%;left:50%;transform:translateX(-50%);
+      width:600px;height:400px;
+      background:radial-gradient(ellipse,rgba(39,20,184,.12) 0%,transparent 65%);
+      pointer-events:none;z-index:0;
+    }
+
+    /* Main card */
     .card{
-      width:100%;max-width:480px;text-align:center;
+      width:100%;max-width:500px;text-align:center;
       position:relative;z-index:1;
+      animation:fadeUp .8s cubic-bezier(.22,.68,0,1) both;
+    }
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(28px);}
+      to{opacity:1;transform:translateY(0);}
     }
 
-    /* WH wordmark */
-    .wh-logo{margin-bottom:40px;display:flex;justify-content:center;}
+    /* Logo */
+    .wh-logo{
+      margin-bottom:44px;
+      display:flex;justify-content:center;
+      animation:fadeUp .8s .1s cubic-bezier(.22,.68,0,1) both;
+    }
 
-    /* Under construction badge */
+    /* Status badge */
     .badge{
-      display:inline-flex;align-items:center;gap:7px;
-      font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-      color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      padding:5px 14px;border-radius:20px;margin-bottom:28px;
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+      color:rgba(255,255,255,.45);
+      border:1px solid rgba(38,103,255,.25);
+      background:rgba(38,103,255,.07);
+      padding:5px 14px;border-radius:20px;margin-bottom:30px;
+      animation:fadeUp .8s .15s cubic-bezier(.22,.68,0,1) both;
     }
     .badge-dot{
       width:6px;height:6px;border-radius:50%;
-      background:#F5A623;box-shadow:0 0 8px #F5A623;
-      animation:pulse 2s ease-in-out infinite;
+      background:#2667FF;box-shadow:0 0 10px rgba(38,103,255,.8);
+      animation:pulse 2.2s ease-in-out infinite;
     }
-    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+    @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 10px rgba(38,103,255,.8);}50%{opacity:.5;box-shadow:0 0 4px rgba(38,103,255,.4);}}
 
     h1{
-      font-size:clamp(32px,5vw,48px);font-weight:800;color:#fff;
-      letter-spacing:-.05em;line-height:1.1;margin-bottom:14px;
+      font-size:clamp(34px,5.5vw,52px);font-weight:800;color:#fff;
+      letter-spacing:-.05em;line-height:1.08;margin-bottom:16px;
+      animation:fadeUp .8s .2s cubic-bezier(.22,.68,0,1) both;
     }
     h1 em{
       font-style:normal;
-      background:linear-gradient(135deg,#6B9FFF 0%,#A78BFA 100%);
+      background:linear-gradient(125deg,#4d8cff 0%,#2667FF 50%,#7B5EFF 100%);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .sub{
-      font-size:16px;color:rgba(255,255,255,.45);line-height:1.65;
-      margin-bottom:40px;
+
+    .tagline{
+      font-size:16px;color:rgba(255,255,255,.42);line-height:1.7;
+      max-width:380px;margin:0 auto 44px;
+      animation:fadeUp .8s .25s cubic-bezier(.22,.68,0,1) both;
     }
 
-    /* Password form */
-    .form{display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto;}
-    .input-row{display:flex;gap:8px;}
-    input[type="password"]{
-      flex:1;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);
-      border-radius:10px;padding:13px 16px;color:#fff;font-size:14px;
-      font-family:inherit;outline:none;text-align:center;letter-spacing:.1em;
-      transition:border-color .15s;
+    /* Email form */
+    .form-wrap{
+      animation:fadeUp .8s .3s cubic-bezier(.22,.68,0,1) both;
     }
-    input[type="password"]:focus{border-color:rgba(38,103,255,.5);}
-    input[type="password"]::placeholder{letter-spacing:0;color:rgba(255,255,255,.2);}
-    .btn{
+    .form-label{
+      font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-bottom:12px;
+    }
+    .form{
+      display:flex;gap:8px;max-width:400px;margin:0 auto;
+    }
+    input[type="email"]{
+      flex:1;background:rgba(255,255,255,.05);
+      border:1.5px solid rgba(255,255,255,.1);
+      border-radius:10px;padding:13px 16px;
+      color:#fff;font-size:14px;font-family:inherit;outline:none;
+      transition:border-color .2s,background .2s;
+    }
+    input[type="email"]:focus{
+      border-color:rgba(38,103,255,.6);
+      background:rgba(38,103,255,.05);
+    }
+    input[type="email"]::placeholder{color:rgba(255,255,255,.22);}
+    .btn-notify{
       background:#2667FF;color:#fff;border:none;border-radius:10px;
-      padding:13px 22px;font-size:14px;font-weight:600;cursor:pointer;
-      font-family:inherit;transition:all .15s;white-space:nowrap;
-      box-shadow:0 4px 20px rgba(38,103,255,.3);
+      padding:13px 20px;font-size:14px;font-weight:600;cursor:pointer;
+      font-family:inherit;white-space:nowrap;
+      box-shadow:0 4px 20px rgba(38,103,255,.35);
+      transition:all .18s;
     }
-    .btn:hover{background:#1a55e8;transform:translateY(-1px);}
-    .err{font-size:13px;color:#F87171;min-height:18px;text-align:center;}
+    .btn-notify:hover{
+      background:#3876ff;transform:translateY(-1px);
+      box-shadow:0 6px 28px rgba(38,103,255,.5);
+    }
+    .btn-notify:active{transform:translateY(0);}
+    .form-note{font-size:12px;color:rgba(255,255,255,.18);margin-top:12px;}
+    .form-success{
+      font-size:14px;color:rgba(255,255,255,.6);
+      display:none;margin-top:16px;
+    }
+    .form-success.show{display:block;}
 
+    /* Access code section */
+    .divider{
+      display:flex;align-items:center;gap:14px;
+      max-width:400px;margin:28px auto;
+      color:rgba(255,255,255,.15);font-size:12px;
+    }
+    .divider::before,.divider::after{
+      content:'';flex:1;height:1px;background:rgba(255,255,255,.1);
+    }
+    .input-row{display:flex;gap:8px;max-width:400px;margin:0 auto;}
+    input[type="password"]{
+      flex:1;background:rgba(255,255,255,.05);
+      border:1.5px solid rgba(255,255,255,.1);
+      border-radius:10px;padding:13px 16px;
+      color:#fff;font-size:14px;font-family:inherit;outline:none;
+      text-align:center;letter-spacing:.12em;
+      transition:border-color .2s,background .2s;
+    }
+    input[type="password"]:focus{
+      border-color:rgba(38,103,255,.6);
+      background:rgba(38,103,255,.05);
+    }
+    input[type="password"]::placeholder{letter-spacing:0;color:rgba(255,255,255,.2);}
+    .btn-enter{
+      background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);
+      border:1.5px solid rgba(255,255,255,.12);
+      border-radius:10px;padding:13px 20px;font-size:14px;font-weight:600;cursor:pointer;
+      font-family:inherit;white-space:nowrap;
+      transition:all .18s;
+    }
+    .btn-enter:hover{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.22);}
+    .err{font-size:13px;color:#FF6B6B;min-height:18px;text-align:center;margin-top:10px;}
+
+    /* Footer */
     .footer-text{
-      margin-top:48px;font-size:12px;color:rgba(255,255,255,.18);
+      margin-top:56px;font-size:12px;color:rgba(255,255,255,.14);
       letter-spacing:.04em;
+      animation:fadeUp .8s .4s cubic-bezier(.22,.68,0,1) both;
+    }
+
+    /* WH logo SVG inline */
+    .wh-wordmark-svg{display:block;}
+
+    @media(max-width:480px){
+      .form{flex-direction:column;}
+      .input-row{flex-direction:column;}
     }
   </style>
 </head>
 <body>
+
+<!-- Warped mesh background -->
+<canvas id="wh-mesh"></canvas>
+<div class="glow-top"></div>
+<div class="glow-bottom"></div>
+
 <div class="card">
 
-  <!-- WealthHealth wordmark -->
+  <!-- WealthHealth Wordmark -->
   <div class="wh-logo">
-    <svg width="200" height="22" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth">
-      <g clip-path="url(#wh-gate)">
+    <svg class="wh-wordmark-svg" width="220" height="24" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth">
+      <g clip-path="url(#wh-cs)">
         <path d="M67.9219 48.2924L62.7107 57.307L60.7559 60.6834L57.4995 66.3124H38.35L0 0H29.5719L57.7357 48.704L62.9469 39.6847L39.999 0H95.8448L70.099 44.5228L67.9219 48.2924Z" fill="white"/>
         <path d="M135.843 0L97.498 66.3124H67.9167L73.1326 57.3024L73.1372 57.307L106.271 0H135.843Z" fill="#2667FF"/>
       </g>
@@ -114,30 +208,81 @@
       <path d="M542.621 0H552.246V64.9498H542.621V0Z" fill="white"/>
       <path d="M579.121 26.3433H570.404V51.5056C570.404 56.7743 572.947 57.4102 579.121 57.0468V64.8589C577.215 65.3131 575.126 65.5857 572.583 65.5857C564.956 65.5857 560.779 62.1338 560.779 52.3232V26.3433H554.059V18.5311H560.779V3.90607H570.404V18.5311H579.121V26.3433Z" fill="white"/>
       <path d="M606.301 17.2594C615.109 17.2594 621.92 22.2555 621.92 32.8837V64.9498H612.294V35.6088C612.294 29.341 609.661 25.344 603.032 25.344C596.04 25.344 591.046 29.7951 591.046 36.6989V64.9498H581.511V0H591.046V24.5265H591.227C593.679 20.8929 598.492 17.2594 606.301 17.2594Z" fill="white"/>
-      <defs><clipPath id="wh-gate"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
+      <defs><clipPath id="wh-cs"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
     </svg>
   </div>
 
   <div class="badge">
     <div class="badge-dot"></div>
-    Under Construction
+    Building something new
   </div>
 
-  <h1>Something big<br/>is <em>coming.</em></h1>
-  <p class="sub">We're building the next generation of health and wellness commerce. Check back soon.</p>
+  <h1>The future of<br/><em>health commerce</em><br/>is almost here.</h1>
 
-  <div class="form">
-    <div class="input-row">
-      <input type="password" id="pw" placeholder="Access code" autocomplete="off"
-             onkeydown="if(event.key==='Enter')unlock()"/>
-      <button class="btn" onclick="unlock()">Enter</button>
+  <p class="tagline">AI-powered growth infrastructure for health & wellness DTC brands. Launching 2026.</p>
+
+  <!-- Email capture -->
+  <div class="form-wrap">
+    <div class="form-label">Get early access</div>
+    <div class="form">
+      <input type="email" id="email-input" placeholder="Enter your email" autocomplete="email"/>
+      <button class="btn-notify" onclick="submitEmail()">Notify me</button>
     </div>
-    <div class="err" id="err"></div>
+    <div class="form-note">No spam. Unsubscribe anytime.</div>
+    <div class="form-success" id="form-success">
+      ✓ &nbsp;You're on the list. We'll be in touch.
+    </div>
   </div>
+
+  <!-- Access code -->
+  <div class="divider">or enter access code</div>
+  <div class="input-row">
+    <input type="password" id="pw" placeholder="Access code" autocomplete="off"
+           onkeydown="if(event.key==='Enter')unlock()"/>
+    <button class="btn-enter" onclick="unlock()">Enter →</button>
+  </div>
+  <div class="err" id="err"></div>
 
   <div class="footer-text">© 2026 WealthHealth AI Inc. &nbsp;·&nbsp; Irvine, California</div>
 </div>
 
+<!-- Warped mesh animation -->
+<script>
+(function() {
+  const canvas = document.getElementById('wh-mesh');
+  const ctx = canvas.getContext('2d');
+  const COLS = 20, ROWS = 14;
+  let W, H, t = 0;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const cW = W/(COLS-1), cH = H/(ROWS-1);
+    const pts = [];
+    for (let r=0;r<ROWS;r++) { pts[r]=[];
+      for (let c=0;c<COLS;c++) {
+        const nx=c/(COLS-1),ny=r/(ROWS-1);
+        const dx=Math.sin(ny*3.4+t*0.9)*cW*0.45+Math.sin(nx*2.2+t*0.55+1.2)*cW*0.22;
+        const dy=Math.cos(nx*3.1+t*0.75)*cH*0.38+Math.cos(ny*2.0+t*0.42+0.8)*cH*0.18;
+        pts[r][c]={x:c*cW+dx,y:r*cH+dy};
+      }
+    }
+    ctx.strokeStyle='rgba(38,103,255,1)'; ctx.lineWidth=1.2; ctx.globalAlpha=0.22;
+    ctx.beginPath();
+    for (let r=0;r<ROWS;r++) for (let c=0;c<COLS-1;c++) {
+      ctx.moveTo(pts[r][c].x,pts[r][c].y); ctx.lineTo(pts[r][c+1].x,pts[r][c+1].y);
+    }
+    for (let c=0;c<COLS;c++) for (let r=0;r<ROWS-1;r++) {
+      ctx.moveTo(pts[r][c].x,pts[r][c].y); ctx.lineTo(pts[r+1][c].x,pts[r+1][c].y);
+    }
+    ctx.stroke(); ctx.globalAlpha=1;
+    t+=0.004; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<!-- Access + email logic -->
 <script>
 if (localStorage.getItem('wh_access') === '1') {
   window.location.replace('/corporate.html');
@@ -155,6 +300,19 @@ function unlock() {
     setTimeout(() => err.textContent = '', 2500);
   }
 }
+function submitEmail() {
+  const input = document.getElementById('email-input');
+  const val = input.value.trim();
+  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+    input.focus(); return;
+  }
+  // In production hook to your email capture service
+  input.value = '';
+  document.getElementById('form-success').classList.add('show');
+}
+document.getElementById('email-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitEmail();
+});
 </script>
 </body>
 </html>
