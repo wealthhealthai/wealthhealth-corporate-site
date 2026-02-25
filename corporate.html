@@ -210,42 +210,58 @@
     }
 
     /* PRODUCTS */
-    .products{padding:100px 0 80px;}
-    .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
-    @media(max-width:720px){.products-grid{grid-template-columns:1fr;}}
+    .products{padding:60px 0 0;}
+    .prod{padding:80px 0;position:relative;overflow:hidden;}
+    .prod[data-accent="forge"]{background:linear-gradient(135deg, rgba(192,57,43,.18) 0%, rgba(11,12,16,.97) 55%);}
+    .prod[data-accent="prom"]{background:linear-gradient(135deg, rgba(244,100,17,.15) 0%, rgba(11,12,16,.97) 55%);}
+    .prod[data-accent="midas"]{background:linear-gradient(135deg, rgba(128,84,255,.15) 0%, rgba(11,12,16,.97) 55%);}
+    .prod[data-accent="oly"]{background:linear-gradient(135deg, rgba(16,124,16,.15) 0%, rgba(11,12,16,.97) 55%);}
+    .prod-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);}
 
-    .p{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:16px;
-      display:flex;flex-direction:column;
-      overflow:hidden;position:relative;
-      transition:border-color .2s, transform .2s;
+    .prod-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+    .prod:nth-child(even) .prod-layout{direction:rtl;}
+    .prod:nth-child(even) .prod-layout > *{direction:ltr;}
+    @media(max-width:720px){
+      .prod-layout{grid-template-columns:1fr;gap:32px;}
+      .prod:nth-child(even) .prod-layout{direction:ltr;}
     }
-    .p:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
-    .p[data-accent="forge"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#C0392B;}
-    .p[data-accent="prom"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#F46411;}
-    .p[data-accent="midas"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#8054FF;}
-    .p[data-accent="oly"]::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:#107C10;}
 
-    .p-inner{padding:28px 28px 24px;flex:1;display:flex;flex-direction:column;gap:0;}
-    .p-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px;}
-    .p-logo{display:flex;align-items:center;gap:10px;}
-    .p-icon{height:36px;width:auto;display:block;flex-shrink:0;}
-    .p-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.55);}
-    .p-badge.live{border-color:rgba(16,124,16,.5);color:#4caf50;background:rgba(16,124,16,.12);}
-    .p-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
-    .p[data-accent="forge"] .p-label{color:#E05A4E;}
-    .p[data-accent="prom"] .p-label{color:#F46411;}
-    .p[data-accent="midas"] .p-label{color:#8054FF;}
-    .p[data-accent="oly"] .p-label{color:#4caf50;}
-    .p-tagline{font-size:22px;font-weight:700;line-height:1.25;color:#fff;margin-bottom:14px;letter-spacing:-.02em;}
-    .p-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,.55);flex:1;}
-    .p-footer{padding:20px 28px;border-top:1px solid rgba(255,255,255,.07);}
-    .p-link{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.2);color:#fff;text-decoration:none;transition:background .15s,border-color .15s;}
-    .p-link:hover{background:rgba(255,255,255,.07);}
-    .p[data-accent="forge"] .p-link.live{background:#C0392B;border-color:#C0392B;}
-    .p[data-accent="forge"] .p-link.live:hover{background:#a93226;border-color:#a93226;}
+    .prod-info{display:flex;flex-direction:column;gap:20px;}
+    .prod-header{display:flex;align-items:center;gap:14px;justify-content:space-between;}
+    .prod-brand{display:flex;align-items:center;gap:10px;}
+    .prod-icon{height:40px;width:auto;display:block;}
+    .prod-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
+    .prod[data-accent="forge"] .prod-label{color:#E05A4E;}
+    .prod[data-accent="prom"] .prod-label{color:#F46411;}
+    .prod[data-accent="midas"] .prod-label{color:#8054FF;}
+    .prod[data-accent="oly"] .prod-label{color:#4caf50;}
+    .prod-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.55);}
+    .prod-badge.live{border-color:rgba(16,124,16,.5);color:#4caf50;background:rgba(16,124,16,.12);}
+
+    .prod-title{font-size:clamp(36px,5vw,58px);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:#fff;margin:0;}
+    .prod-desc{font-size:16px;line-height:1.7;color:rgba(255,255,255,.58);margin:0;}
+    .prod-cta{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 26px;border-radius:12px;
+      font-size:15px;font-weight:600;text-decoration:none;
+      border:1px solid rgba(255,255,255,.2);color:#fff;
+      transition:background .15s,border-color .15s;align-self:flex-start;
+    }
+    .prod-cta:hover{background:rgba(255,255,255,.08);}
+    .prod[data-accent="forge"] .prod-cta.live{background:#C0392B;border-color:#C0392B;}
+    .prod[data-accent="forge"] .prod-cta.live:hover{background:#a93226;}
+
+    .prod-visual{display:flex;align-items:center;justify-content:center;padding:20px;}
+    .prod-bigicon{
+      width:min(260px, 80%);height:auto;opacity:.85;
+      filter:drop-shadow(0 20px 60px rgba(0,0,0,.4));
+    }
+    .prod[data-accent="forge"] .prod-bigicon{filter:drop-shadow(0 20px 60px rgba(192,57,43,.25));}
+    .prod[data-accent="prom"] .prod-bigicon{filter:drop-shadow(0 20px 60px rgba(244,100,17,.2));}
+    .prod[data-accent="midas"] .prod-bigicon{filter:drop-shadow(0 20px 60px rgba(128,84,255,.2));}
+    .prod[data-accent="oly"] .prod-bigicon{filter:drop-shadow(0 20px 60px rgba(16,124,16,.2));}
+
+    /* section head */
 
     /* ABOUT */
     .about{padding:92px 0;}
@@ -366,97 +382,121 @@
   <!-- PRODUCTS (preserved) -->
   <section class="products" id="products">
     <div class="container">
-      <div class="section-head reveal">
+      <div class="section-head reveal" style="padding:0 28px;">
         <div class="eyebrow">Our Products</div>
         <div class="title">Four products.<br/>One mission.</div>
         <div class="sub">Three interconnected platforms that form a complete growth ecosystem for health and wellness DTC plus Forge, our consumer personal AI.</div>
       </div>
 
-      <div class="products-grid">
-        <!-- FORGE -->
-        <article class="p reveal" data-accent="forge">
-          <div class="p-inner">
-            <div class="p-top">
-              <div class="p-logo">
-                <img class="p-icon" src="logo-forge.png" alt=""/>
-                <span class="p-label">Forge</span>
+      <!-- Forge -->
+      <div class="prod-divider"></div>
+      <div class="prod reveal" data-accent="forge">
+        <div class="container">
+          <div class="prod-layout">
+            <div class="prod-info">
+              <div class="prod-header">
+                <div class="prod-brand">
+                  <img class="prod-icon" src="logo-forge.png" alt=""/>
+                  <span class="prod-label">Forge</span>
+                </div>
+                <span class="prod-badge live">Live</span>
               </div>
-              <div class="p-badge live">Live</div>
+              <h2 class="prod-title">Forge</h2>
+              <p class="prod-desc">Your personal AI, running on your computer. Private, persistent, and built around you. No terminal, no configuration, no complexity.</p>
+              <a class="prod-cta live" href="https://forgeai.bot" target="_blank" rel="noopener">
+                Visit forgeai.bot
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </a>
             </div>
-            <div class="p-tagline">Personal AI for anyone.<br/>Zero complexity.</div>
-            <p class="p-desc">Your personal AI, running on your computer. Private, persistent, and built around you. No terminal, no configuration, no complexity.</p>
-          </div>
-          <div class="p-footer">
-            <a class="p-link live" href="https://forgeai.bot" target="_blank" rel="noopener">
-              Visit forgeai.bot
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <!-- PROMETHEUS -->
-        <article class="p reveal" data-accent="prom">
-          <div class="p-inner">
-            <div class="p-top">
-              <div class="p-logo">
-                <img class="p-icon" src="logo-prometheus-t.png" alt=""/>
-                <span class="p-label">Prometheus</span>
-              </div>
-              <div class="p-badge">In Development</div>
+            <div class="prod-visual">
+              <img class="prod-bigicon" src="logo-forge-full.png" alt="Forge"/>
             </div>
-            <div class="p-tagline">The new AI growth stack<br/>for DTC sales.</div>
-            <p class="p-desc">An end-to-end AI pipeline. Scrape high-intent leads, enrich contacts, generate campaigns, build communities, and track analytics. All with simple natural language prompting.</p>
           </div>
-          <div class="p-footer">
-            <a class="p-link" href="#" aria-disabled="true">
-              Coming soon
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <!-- MIDAS -->
-        <article class="p reveal" data-accent="midas">
-          <div class="p-inner">
-            <div class="p-top">
-              <div class="p-logo">
-                <img class="p-icon" src="logo-midas-t.png" alt=""/>
-                <span class="p-label">Midas</span>
-              </div>
-              <div class="p-badge">In Development</div>
-            </div>
-            <div class="p-tagline">Web3 rewards for businesses<br/>and consumers.</div>
-            <p class="p-desc">A Web3 reward ecosystem on Ethereum L2. The $WHT utility token rewards customers for every health-conscious purchase and partners for every sale, creating a compounding loyalty loop.</p>
-          </div>
-          <div class="p-footer">
-            <a class="p-link" href="#" aria-disabled="true">
-              Coming soon
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <!-- OLYMPUS -->
-        <article class="p reveal" data-accent="oly">
-          <div class="p-inner">
-            <div class="p-top">
-              <div class="p-logo">
-                <img class="p-icon" src="logo-olympus-t.png" alt=""/>
-                <span class="p-label">Olympus</span>
-              </div>
-              <div class="p-badge">In Development</div>
-            </div>
-            <div class="p-tagline">A loyalty-driven marketplace<br/>for health and wellness.</div>
-            <p class="p-desc">The centralized marketplace for the WealthHealth reward ecosystem. Customers spend $WHT rewards across partner brands, cross-pollinating sales and solving the DTC industry's biggest challenge: retention.</p>
-          </div>
-          <div class="p-footer">
-            <a class="p-link" href="#" aria-disabled="true">
-              Coming soon
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </article>
+        </div>
       </div>
+
+      <!-- Prometheus -->
+      <div class="prod-divider"></div>
+      <div class="prod reveal" data-accent="prom">
+        <div class="container">
+          <div class="prod-layout">
+            <div class="prod-info">
+              <div class="prod-header">
+                <div class="prod-brand">
+                  <img class="prod-icon" src="logo-prometheus-t.png" alt=""/>
+                  <span class="prod-label">Prometheus</span>
+                </div>
+                <span class="prod-badge">In Development</span>
+              </div>
+              <h2 class="prod-title">Prometheus</h2>
+              <p class="prod-desc">An end-to-end AI pipeline for DTC sales. Scrape high-intent leads from Reddit, X, LinkedIn and more, enrich contacts, generate campaigns, build communities, and track analytics. All with simple natural language prompting.</p>
+              <a class="prod-cta" href="#" aria-disabled="true">
+                Coming soon
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+            <div class="prod-visual">
+              <img class="prod-bigicon" src="logo-prometheus-full.png" alt="Prometheus"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Midas -->
+      <div class="prod-divider"></div>
+      <div class="prod reveal" data-accent="midas">
+        <div class="container">
+          <div class="prod-layout">
+            <div class="prod-info">
+              <div class="prod-header">
+                <div class="prod-brand">
+                  <img class="prod-icon" src="logo-midas-t.png" alt=""/>
+                  <span class="prod-label">Midas</span>
+                </div>
+                <span class="prod-badge">In Development</span>
+              </div>
+              <h2 class="prod-title">Midas</h2>
+              <p class="prod-desc">A Web3 reward ecosystem built on Ethereum L2. The $WHT utility token rewards customers for every health-conscious purchase and partners for every sale, creating a compounding loyalty loop that grows the entire ecosystem.</p>
+              <a class="prod-cta" href="#" aria-disabled="true">
+                Coming soon
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+            <div class="prod-visual">
+              <img class="prod-bigicon" src="logo-midas-full.png" alt="Midas"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Olympus -->
+      <div class="prod-divider"></div>
+      <div class="prod reveal" data-accent="oly">
+        <div class="container">
+          <div class="prod-layout">
+            <div class="prod-info">
+              <div class="prod-header">
+                <div class="prod-brand">
+                  <img class="prod-icon" src="logo-olympus-t.png" alt=""/>
+                  <span class="prod-label">Olympus</span>
+                </div>
+                <span class="prod-badge">In Development</span>
+              </div>
+              <h2 class="prod-title">Olympus</h2>
+              <p class="prod-desc">The centralized marketplace for the WealthHealth reward ecosystem. Customers spend their $WHT rewards across partner brands, cross-pollinating sales and solving the DTC industry's biggest challenge: retention.</p>
+              <a class="prod-cta" href="#" aria-disabled="true">
+                Coming soon
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+            <div class="prod-visual">
+              <img class="prod-bigicon" src="logo-olympus-full.png" alt="Olympus"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="prod-divider"></div>
+
     </div>
   </section>
 
