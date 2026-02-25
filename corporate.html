@@ -227,11 +227,9 @@
       background:linear-gradient(180deg, rgba(0,0,0,.0) 0%, rgba(0,0,0,.22) 100%);
       pointer-events:none;
     }
-    .p-logo{width:auto;display:block;position:relative;z-index:1;max-width:200px;}
-    .p-logo[alt="Forge"]{height:40px;}
-    .p-logo[alt="Prometheus"]{height:26px;}
-    .p-logo[alt="Olympus"]{height:26px;}
-    .p-logo[alt="Midas"]{height:30px;}
+    .p-logo{display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
+    .p-icon{height:28px;width:auto;display:block;flex-shrink:0;}
+    .p-label{font-family:'Geist',system-ui,sans-serif;font-weight:500;font-size:18px;color:#fff;letter-spacing:-0.01em;line-height:1;white-space:nowrap;}
     .p-badge{
       position:relative;z-index:1;
       font-size:11px;font-weight:800;letter-spacing:.06em;
@@ -419,7 +417,7 @@
         <!-- FORGE -->
         <article class="p reveal" data-accent="forge">
           <div class="p-top">
-            <img class="p-logo" src="logo-forge-full.png" alt="Forge"/>
+            <div class="p-logo"><img class="p-icon" src="logo-forge.png" alt=""/><span class="p-label">Forge</span></div>
             <div class="p-badge">Live</div>
           </div>
           <div class="p-body">
@@ -435,7 +433,7 @@
         <!-- PROMETHEUS -->
         <article class="p reveal" data-accent="prom">
           <div class="p-top">
-            <img class="p-logo" src="logo-prometheus-full.png" alt="Prometheus"/>
+            <div class="p-logo"><img class="p-icon" src="logo-prometheus-t.png" alt=""/><span class="p-label">Prometheus</span></div>
             <div class="p-badge">In Development</div>
           </div>
           <div class="p-body">
@@ -451,7 +449,7 @@
         <!-- MIDAS -->
         <article class="p reveal" data-accent="midas">
           <div class="p-top">
-            <img class="p-logo" src="logo-midas-full.png" alt="Midas"/>
+            <div class="p-logo"><img class="p-icon" src="logo-midas-t.png" alt=""/><span class="p-label">Midas</span></div>
             <div class="p-badge">In Development</div>
           </div>
           <div class="p-body">
@@ -467,7 +465,7 @@
         <!-- OLYMPUS -->
         <article class="p reveal" data-accent="oly">
           <div class="p-top">
-            <img class="p-logo" src="logo-olympus-full.png" alt="Olympus"/>
+            <div class="p-logo"><img class="p-icon" src="logo-olympus-t.png" alt=""/><span class="p-label">Olympus</span></div>
             <div class="p-badge">In Development</div>
           </div>
           <div class="p-body">
