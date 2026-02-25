@@ -95,8 +95,7 @@
     .hero-section-wrap{
       position:relative;
       overflow:hidden;
-      /* height drives how much hero shows; at least 100vh */
-      min-height:100vh;
+      min-height:auto;
       background:linear-gradient(160deg,#0B0C10 0%, #0E1018 55%, #0B0D14 100%);
     }
 
@@ -230,151 +229,47 @@
     }
 
     /* Individual product section */
+    /* ── Products ── */
+    .products-wrap{padding:0;}
     .prod-section{
       padding:100px 0;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,.06);
       position:relative;
-      overflow:hidden;
     }
-
-    /* Very subtle accent tints — ~5% opacity */
-    .prod-section[data-product="forge"]{
-      background:linear-gradient(180deg, rgba(192,57,43,.05) 0%, transparent 60%);
-    }
-    .prod-section[data-product="prometheus"]{
-      background:linear-gradient(180deg, rgba(244,100,17,.05) 0%, transparent 60%);
-    }
-    .prod-section[data-product="midas"]{
-      background:linear-gradient(180deg, rgba(128,84,255,.05) 0%, transparent 60%);
-    }
-    .prod-section[data-product="olympus"]{
-      background:linear-gradient(180deg, rgba(16,124,16,.05) 0%, transparent 60%);
-    }
-
-    /* Two-column layout: text left + visual right (default); even sections flip */
-    .prod-cols{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:72px;
-      align-items:center;
-    }
-    /* Even sections: visual left, text right — use CSS order */
-    .prod-section:nth-of-type(even) .prod-visual-col{order:-1;}
-
-    @media(max-width:760px){
-      .prod-cols{
-        grid-template-columns:1fr;
-        gap:40px;
-      }
-      /* On mobile always show visual below text */
-      .prod-section:nth-of-type(even) .prod-visual-col{order:1;}
-    }
-
-    .prod-text-col{
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
-
-    /* Eyebrow uses brand accent */
-    .prod-eyebrow{
-      font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-      margin-bottom:4px;
-    }
-    .prod-section[data-product="forge"]    .prod-eyebrow{color:#C0392B;}
+    .prod-section[data-product="forge"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,.07) 0%,transparent 70%);pointer-events:none;}
+    .prod-section[data-product="prometheus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(244,100,17,.06) 0%,transparent 70%);pointer-events:none;}
+    .prod-section[data-product="midas"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(128,84,255,.07) 0%,transparent 70%);pointer-events:none;}
+    .prod-section[data-product="olympus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(16,124,16,.06) 0%,transparent 70%);pointer-events:none;}
+    .prod-center-top{display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:44px;position:relative;z-index:1;}
+    .prod-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
+    .prod-section[data-product="forge"] .prod-eyebrow{color:#E05A4E;}
     .prod-section[data-product="prometheus"] .prod-eyebrow{color:#F46411;}
-    .prod-section[data-product="midas"]    .prod-eyebrow{color:#8054FF;}
-    .prod-section[data-product="olympus"]  .prod-eyebrow{color:#107C10;}
+    .prod-section[data-product="midas"] .prod-eyebrow{color:#8054FF;}
+    .prod-section[data-product="olympus"] .prod-eyebrow{color:#4caf50;}
+    .prod-lockup{height:44px;width:auto;display:block;}
+    .prod-section[data-product="forge"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(192,57,43,.4));}
+    .prod-section[data-product="prometheus"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(244,100,17,.35));}
+    .prod-section[data-product="midas"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(128,84,255,.4));}
+    .prod-section[data-product="olympus"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(16,124,16,.35));}
+    .prod-center-body{max-width:700px;margin:0 auto 64px;position:relative;z-index:1;}
+    .prod-headline{font-size:clamp(30px,3.8vw,50px);font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:20px;color:#fff;}
+    .prod-description{font-size:17px;line-height:1.7;color:rgba(255,255,255,.55);margin-bottom:32px;}
+    .prod-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);margin-bottom:20px;}
+    .prod-badge.live{border-color:rgba(16,124,16,.5);color:#4caf50;background:rgba(16,124,16,.1);}
+    .prod-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:11px;font-size:15px;font-weight:600;border:1px solid rgba(255,255,255,.2);color:#fff;transition:background .15s,border-color .15s;text-decoration:none;}
+    .prod-cta:hover{background:rgba(255,255,255,.07);}
+    .prod-section[data-product="forge"] .prod-cta.live{background:#C0392B;border-color:#C0392B;}
+    .prod-section[data-product="forge"] .prod-cta.live:hover{background:#a93226;}
+    .prod-features{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;position:relative;z-index:1;}
+    @media(max-width:720px){.prod-features{grid-template-columns:1fr;}}
+    .prod-feat{padding:32px 28px;text-align:left;background:rgba(255,255,255,.025);border-right:1px solid rgba(255,255,255,.06);}
+    .prod-feat:last-child{border-right:none;}
+    .feat-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+    .feat-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,.5);}
+    .products-intro{padding:80px 0 0;text-align:center;position:relative;z-index:1;}
 
-    .prod-tagline{
-      font-size:14px;font-weight:500;
-      color:rgba(255,255,255,.45);
-      letter-spacing:.01em;
-      margin-bottom:6px;
-    }
-
-    .prod-headline{
-      font-size:clamp(28px,3.6vw,44px);
-      font-weight:800;
-      letter-spacing:-.04em;
-      line-height:1.08;
-      color:#fff;
-      margin:0;
-    }
-
-    .prod-description{
-      font-size:16px;
-      line-height:1.75;
-      color:rgba(255,255,255,.58);
-      margin:0;
-    }
-
-    .prod-badges{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .prod-badge{
-      font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-      padding:5px 11px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      color:rgba(255,255,255,.50);
-    }
-    .prod-badge.live{
-      border-color:rgba(16,185,129,.45);
-      color:#10b981;
-      background:rgba(16,185,129,.10);
-    }
-
-    /* CTA button */
-    .prod-cta{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:13px 24px;border-radius:12px;
-      font-size:14px;font-weight:700;
-      border:1px solid rgba(255,255,255,.16);
-      color:#fff;
-      background:rgba(255,255,255,.05);
-      transition:background .15s, border-color .15s, transform .15s;
-      align-self:flex-start;
-    }
-    .prod-cta:hover{
-      background:rgba(255,255,255,.09);
-      border-color:rgba(255,255,255,.26);
-      transform:translateY(-1px);
-    }
-    /* Live CTA — Forge only */
-    .prod-cta.cta-live{
-      background:#C0392B;
-      border-color:#C0392B;
-    }
-    .prod-cta.cta-live:hover{
-      background:#a93226;
-      border-color:#a93226;
-    }
-
-    /* Visual column */
-    .prod-visual-col{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-    .prod-logo-img{
-      width:min(300px, 90%);
-      height:auto;
-      opacity:.88;
-      transition:opacity .3s;
-    }
-    .prod-logo-img:hover{opacity:1;}
-
-    /* Per-product drop-shadow glow on the logo */
-    .prod-section[data-product="forge"]    .prod-logo-img{filter:drop-shadow(0 24px 64px rgba(192,57,43,.30));}
-    .prod-section[data-product="prometheus"] .prod-logo-img{filter:drop-shadow(0 24px 64px rgba(244,100,17,.25));}
-    .prod-section[data-product="midas"]    .prod-logo-img{filter:drop-shadow(0 24px 64px rgba(128,84,255,.28));}
-    .prod-section[data-product="olympus"]  .prod-logo-img{filter:drop-shadow(0 24px 64px rgba(16,124,16,.25));}
-
-    /* ─── ABOUT ─── */
-    .about{padding:92px 0;}
+        .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
       border:1px solid rgba(255,255,255,.10);
@@ -509,117 +404,101 @@
       </div>
 
       <!-- ── FORGE ── -->
-      <div class="prod-divider" style="margin-top:60px;"></div>
       <div class="prod-section reveal" data-product="forge">
         <div class="container">
-          <div class="prod-cols">
-            <div class="prod-text-col">
-              <div>
-                <div class="prod-eyebrow">The Forge Platform</div>
-                <div class="prod-tagline">The personal AI that runs on your computer.</div>
-              </div>
-              <h2 class="prod-headline">Your AI. Your computer.<br/>No cloud required.</h2>
-              <p class="prod-description">Forge is a personal AI assistant that installs on your Mac or PC. Private, persistent, and built around you. One download, zero configuration, no complexity.</p>
-              <div class="prod-badges">
-                <span class="prod-badge live">● Live</span>
-              </div>
-              <a class="prod-cta cta-live" href="https://forgeai.bot" target="_blank" rel="noopener">
-                Visit forgeai.bot
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-              </a>
-            </div>
-            <div class="prod-visual-col">
-              <img class="prod-logo-img" src="logo-forge-full.png" alt="Forge"/>
-            </div>
+          <div class="prod-center-top">
+            <span class="prod-eyebrow">The Forge Platform</span>
+            <img class="prod-lockup" src="logo-forge-full.png" alt="Forge"/>
+          </div>
+          <div class="prod-center-body">
+            <span class="prod-badge live">Live</span>
+            <h2 class="prod-headline">Your AI. Your computer.<br/>No cloud required.</h2>
+            <p class="prod-description">Forge is a personal AI assistant that installs on your Mac or PC. Private, persistent, and built around you. One download, zero configuration, no complexity.</p>
+            <a class="prod-cta live" href="https://forgeai.bot" target="_blank" rel="noopener">
+              Visit forgeai.bot <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+          </div>
+          <div class="prod-features">
+            <div class="prod-feat"><div class="feat-title">Private by default</div><p class="feat-desc">Runs entirely on your machine. Nothing leaves your computer without your permission.</p></div>
+            <div class="prod-feat"><div class="feat-title">Zero setup</div><p class="feat-desc">One download. No API keys, no terminal, no configuration required.</p></div>
+            <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
           </div>
         </div>
       </div>
 
       <!-- ── PROMETHEUS ── -->
-      <div class="prod-divider"></div>
       <div class="prod-section reveal" data-product="prometheus">
         <div class="container">
-          <div class="prod-cols">
-            <div class="prod-text-col">
-              <div>
-                <div class="prod-eyebrow">The Prometheus Platform</div>
-                <div class="prod-tagline">The AI growth stack for DTC sales.</div>
-              </div>
-              <h2 class="prod-headline">From prospect to customer,<br/>without the manual work.</h2>
-              <p class="prod-description">Prometheus scrapes high-intent leads across Reddit, X, LinkedIn, and more. Enrich contacts, generate campaigns, build communities, and track analytics. All through natural language.</p>
-              <div class="prod-badges">
-                <span class="prod-badge">In Development</span>
-              </div>
-              <a class="prod-cta" href="#" aria-disabled="true">
-                Coming soon
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-            <div class="prod-visual-col">
-              <img class="prod-logo-img" src="logo-prometheus-full.png" alt="Prometheus"/>
-            </div>
+          <div class="prod-center-top">
+            <span class="prod-eyebrow">The Prometheus Platform</span>
+            <img class="prod-lockup" src="logo-prometheus-full.png" alt="Prometheus"/>
+          </div>
+          <div class="prod-center-body">
+            <span class="prod-badge">In Development</span>
+            <h2 class="prod-headline">From prospect to customer,<br/>without the manual work.</h2>
+            <p class="prod-description">Prometheus scrapes high-intent leads across Reddit, X, LinkedIn, and more. Enrich contacts, generate campaigns, build communities, and track analytics through natural language.</p>
+            <a class="prod-cta" href="#" aria-disabled="true">
+              Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="prod-features">
+            <div class="prod-feat"><div class="feat-title">Lead intelligence</div><p class="feat-desc">Scrape and score high-intent prospects from Reddit, X, LinkedIn, and niche communities.</p></div>
+            <div class="prod-feat"><div class="feat-title">Campaign generation</div><p class="feat-desc">Write and deploy outreach campaigns in minutes using natural language prompts.</p></div>
+            <div class="prod-feat"><div class="feat-title">Unified analytics</div><p class="feat-desc">Track every touchpoint from first contact to conversion in one dashboard.</p></div>
           </div>
         </div>
       </div>
 
       <!-- ── MIDAS ── -->
-      <div class="prod-divider"></div>
       <div class="prod-section reveal" data-product="midas">
         <div class="container">
-          <div class="prod-cols">
-            <div class="prod-text-col">
-              <div>
-                <div class="prod-eyebrow">The Midas Platform</div>
-                <div class="prod-tagline">Web3 rewards for health and wellness.</div>
-              </div>
-              <h2 class="prod-headline">Turn every purchase into a reward.<br/>Turn every reward into loyalty.</h2>
-              <p class="prod-description">The $WHT utility token rewards customers for health-conscious purchases and partners for every sale, creating a compounding loyalty loop on Ethereum L2.</p>
-              <div class="prod-badges">
-                <span class="prod-badge">In Development</span>
-              </div>
-              <a class="prod-cta" href="#" aria-disabled="true">
-                Coming soon
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-            <div class="prod-visual-col">
-              <img class="prod-logo-img" src="logo-midas-full.png" alt="Midas"/>
-            </div>
+          <div class="prod-center-top">
+            <span class="prod-eyebrow">The Midas Platform</span>
+            <img class="prod-lockup" src="logo-midas-full.png" alt="Midas"/>
+          </div>
+          <div class="prod-center-body">
+            <span class="prod-badge">In Development</span>
+            <h2 class="prod-headline">Turn every purchase into a reward.<br/>Turn every reward into loyalty.</h2>
+            <p class="prod-description">The $WHT utility token rewards customers for health-conscious purchases and partners for every sale, creating a compounding loyalty loop on Ethereum L2.</p>
+            <a class="prod-cta" href="#" aria-disabled="true">
+              Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="prod-features">
+            <div class="prod-feat"><div class="feat-title">$WHT utility token</div><p class="feat-desc">A real utility token that rewards health-conscious behavior across brands and categories.</p></div>
+            <div class="prod-feat"><div class="feat-title">Ethereum L2</div><p class="feat-desc">Low-cost, fast transactions on a proven L2 network. Built for real commerce at scale.</p></div>
+            <div class="prod-feat"><div class="feat-title">Loyalty loop</div><p class="feat-desc">Partners earn on every redemption. Customers earn on every purchase. Everyone wins.</p></div>
           </div>
         </div>
       </div>
 
       <!-- ── OLYMPUS ── -->
-      <div class="prod-divider"></div>
       <div class="prod-section reveal" data-product="olympus">
         <div class="container">
-          <div class="prod-cols">
-            <div class="prod-text-col">
-              <div>
-                <div class="prod-eyebrow">The Olympus Platform</div>
-                <div class="prod-tagline">The marketplace powered by rewards.</div>
-              </div>
-              <h2 class="prod-headline">Spend your rewards.<br/>Discover what's next.</h2>
-              <p class="prod-description">Olympus is the centralized marketplace for the WealthHealth ecosystem. Customers spend their $WHT rewards across partner brands, solving the DTC industry's biggest retention challenge.</p>
-              <div class="prod-badges">
-                <span class="prod-badge">In Development</span>
-              </div>
-              <a class="prod-cta" href="#" aria-disabled="true">
-                Coming soon
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-            <div class="prod-visual-col">
-              <img class="prod-logo-img" src="logo-olympus-full.png" alt="Olympus"/>
-            </div>
+          <div class="prod-center-top">
+            <span class="prod-eyebrow">The Olympus Platform</span>
+            <img class="prod-lockup" src="logo-olympus-full.png" alt="Olympus"/>
+          </div>
+          <div class="prod-center-body">
+            <span class="prod-badge">In Development</span>
+            <h2 class="prod-headline">Spend your rewards.<br/>Discover what's next.</h2>
+            <p class="prod-description">Olympus is the centralized marketplace for the WealthHealth ecosystem. Customers spend $WHT rewards across partner brands, solving the DTC industry's biggest challenge: retention.</p>
+            <a class="prod-cta" href="#" aria-disabled="true">
+              Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="prod-features">
+            <div class="prod-feat"><div class="feat-title">Cross-brand rewards</div><p class="feat-desc">One wallet. Spend $WHT at any partner brand in the ecosystem instantly.</p></div>
+            <div class="prod-feat"><div class="feat-title">Retention by design</div><p class="feat-desc">Customers return to spend rewards. Partners benefit from each other's traffic.</p></div>
+            <div class="prod-feat"><div class="feat-title">Health focus</div><p class="feat-desc">Curated marketplace of health and wellness brands aligned with the $WHT mission.</p></div>
           </div>
         </div>
       </div>
-      <div class="prod-divider"></div>
 
-    </section>
+    </div>
+  </section>
 
-    <!-- ABOUT (preserved) -->
+  <!-- ABOUT (preserved) -->
     <section class="about" id="about">
       <div class="container">
         <div class="about-wrap reveal">
