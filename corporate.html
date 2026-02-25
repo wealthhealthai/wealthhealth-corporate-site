@@ -99,6 +99,11 @@
     }
 
     /* HERO */
+    /* hero-icon */
+    .hero-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;}
+    .hero-icon-glow{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(38,103,255,.32) 0%,rgba(38,103,255,.08) 45%,transparent 72%);pointer-events:none;}
+    .hero-icon{width:80px;height:80px;border-radius:18px;position:relative;z-index:1;display:block;}
+    .hero-center{max-width:760px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:24px;}
     .hero{
       padding:140px 0 88px;
       position:relative;
@@ -151,7 +156,7 @@
     }
     .btn-primary:hover{box-shadow:0 22px 52px rgba(38,103,255,.32)}
 
-    .hero-card{
+    /* .hero-card removed */.hero-card-unused{
       border-radius:18px;
       border:1px solid rgba(255,255,255,.10);
       background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.035) 100%);
@@ -159,9 +164,9 @@
       padding:22px;
     }
     .hero-card h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:800;margin-bottom:14px;}
-    .hero-mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    @media(max-width:920px){.hero-mini{grid-template-columns:1fr 1fr;}}
-    @media(max-width:520px){.hero-mini{grid-template-columns:1fr;}}
+    .hero-mini-unused{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:920px){.hero-mini-unused{grid-template-columns:1fr 1fr;}}
+    @media(max-width:520px){.hero-mini-unused{grid-template-columns:1fr;}}
     .mini{
       padding:14px;border-radius:14px;
       border:1px solid rgba(255,255,255,.08);
@@ -354,46 +359,29 @@
   <!-- HERO (preserved) -->
   <section class="hero" id="top">
     <div class="container">
-      <div class="hero-grid">
+      <div class="hero-center reveal">
 
-        <div class="reveal">
-          <div class="pill"><span class="dot"></span> WealthHealth AI Inc</div>
-          <h1>The new DTC growth stack<br/>for <em>health and wellness.</em></h1>
-          <p class="hero-sub">We help health and wellness companies find customers, convert them, reward them, and bring them back. Powered by AI and Web3 — built for the next era of direct-to-consumer sales.</p>
-
-          <div class="hero-actions">
-            <a href="#products" class="btn btn-primary">
-              Explore our products
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="#contact" class="btn">
-              Get in touch
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-            </a>
-          </div>
+        <div class="hero-icon-wrap">
+          <div class="hero-icon-glow"></div>
+          <img class="hero-icon" src="wh-icon.png" alt="WealthHealth AI"/>
         </div>
 
-        <aside class="hero-card reveal">
-          <h3>What we build</h3>
-          <div class="hero-mini">
-            <div class="mini">
-              <div class="k">Prometheus</div>
-              <div class="v">AI pipeline for lead gen, campaigns, analytics</div>
-            </div>
-            <div class="mini">
-              <div class="k">Midas</div>
-              <div class="v">Web3 loyalty rewards + $WHT utility token</div>
-            </div>
-            <div class="mini">
-              <div class="k">Olympus</div>
-              <div class="v">Marketplace for spending rewards across brands</div>
-            </div>
-            <div class="mini">
-              <div class="k">Forge</div>
-              <div class="v">Personal AI that runs on your computer</div>
-            </div>
-          </div>
-        </aside>
+        <div class="pill"><span class="dot"></span> WealthHealth AI Inc</div>
+
+        <h1>The new DTC growth stack<br/>for <em>health and wellness.</em></h1>
+
+        <p class="hero-sub">We help health and wellness companies find customers, convert them, reward them, and bring them back. Powered by AI and Web3 — built for the next era of direct-to-consumer sales.</p>
+
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary">
+            Explore our products
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="btn">
+            Get in touch
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </a>
+        </div>
 
       </div>
 
