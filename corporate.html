@@ -473,6 +473,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       width:7px;height:7px;border-radius:50%;flex-shrink:0;
     }
     @media(max-width:900px){ .jump-sidebar{ display:none; } }
+    
+    /* Per-section centered accent tints (fade to transparent at edges) */
+    .prod-section[data-product="forge"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 85% 60% at 50% 50%,rgba(192,57,43,.09) 0%,transparent 72%);pointer-events:none;}
+    .prod-section[data-product="prometheus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 85% 60% at 50% 50%,rgba(244,100,17,.07) 0%,transparent 72%);pointer-events:none;}
+    .prod-section[data-product="midas"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 85% 60% at 50% 50%,rgba(128,84,255,.08) 0%,transparent 72%);pointer-events:none;}
+    .prod-section[data-product="olympus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 85% 60% at 50% 50%,rgba(16,124,16,.07) 0%,transparent 72%);pointer-events:none;}
         .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
