@@ -319,7 +319,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     /* Gradient overlay at top and bottom of scroll container — creates fade edge */
     /* gradient overlays removed */
-    .section-scroll.in{
+    .scroll-inner{
+      display:flex;align-items:center;gap:8px;
+    }
+    .scroll-inner.in{
       animation: bob 2.2s ease-in-out infinite;
     }
     @media(max-width:720px){
@@ -599,9 +602,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
       <!-- scroll hint -->
-      <div class="section-scroll reveal" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
+      <div class="section-scroll" aria-hidden="true">
+        <span class="scroll-inner reveal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll
+        </span>
       </div>
       <!-- ── FORGE ── -->
       <div class="prod-section reveal" data-product="forge">
@@ -662,9 +667,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
 
       <!-- scroll hint -->
-      <div class="section-scroll reveal" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
+      <div class="section-scroll" aria-hidden="true">
+        <span class="scroll-inner reveal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll
+        </span>
       </div>
       <!-- ── PROMETHEUS ── -->
       <div class="prod-section reveal" data-product="prometheus">
@@ -737,9 +744,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
 
       <!-- scroll hint -->
-      <div class="section-scroll reveal" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
+      <div class="section-scroll" aria-hidden="true">
+        <span class="scroll-inner reveal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll
+        </span>
       </div>
       <!-- ── MIDAS ── -->
       <div class="prod-section reveal" data-product="midas">
@@ -765,9 +774,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
 
       <!-- scroll hint -->
-      <div class="section-scroll reveal" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
+      <div class="section-scroll" aria-hidden="true">
+        <span class="scroll-inner reveal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll
+        </span>
       </div>
       <!-- ── OLYMPUS ── -->
       <div class="prod-section reveal" data-product="olympus">
