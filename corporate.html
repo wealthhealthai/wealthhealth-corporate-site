@@ -11,8 +11,8 @@
 
   <style>
     :root{
-      --bg0:#0B0C10;
-      --bg1:#0E1018;
+      --bg0:#0C0C0E;
+      --bg1:#111113;
       --ink:#FFFFFF;
       --muted:rgba(255,255,255,.62);
       --muted2:rgba(255,255,255,.42);
@@ -38,7 +38,7 @@
       font-family:'Geist',system-ui,sans-serif;
       -webkit-font-smoothing:antialiased;
       color:var(--ink);
-      background:#0B0C10;
+      background:#0C0C0E;
       min-height:100vh;
       overflow-x:hidden;
     }
@@ -57,7 +57,7 @@
       position:fixed;top:0;left:0;right:0;z-index:50;
       background:rgba(10,9,24,.66);
       backdrop-filter:blur(18px);
-      border-bottom:1px solid rgba(38,103,255,.15);
+      border-bottom:1px solid rgba(255,255,255,.07);
     }
     .nav-inner{
       max-width:var(--max);margin:0 auto;padding:0 28px;
@@ -96,7 +96,7 @@
       position:relative;
       overflow:hidden;
       min-height:auto;
-      background:linear-gradient(160deg,#0B0C10 0%, #0E1018 55%, #0B0D14 100%);
+      background:linear-gradient(160deg,#0C0C0E 0%, #111113 55%, #0D0D0F 100%);
     }
 
     /* Mesh canvas — absolute inside hero-section-wrap, clips at hero boundary */
@@ -110,15 +110,13 @@
     .glow{
       position:absolute;inset:0;pointer-events:none;z-index:0;
       background:
-        radial-gradient(700px 420px at 20% 15%, rgba(38,103,255,.18) 0%, transparent 65%),
-        radial-gradient(650px 420px at 80% 25%, rgba(39,20,184,.14) 0%, transparent 70%),
-        radial-gradient(600px 360px at 55% 85%, rgba(38,103,255,.10) 0%, transparent 70%);
+radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70%);
       opacity:.95;
     }
 
     /* hero-icon */
     .hero-icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;}
-    .hero-center::before{content:'';position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:900px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(38,103,255,.20) 0%,rgba(38,103,255,.08) 40%,transparent 70%);pointer-events:none;z-index:-1;}
+    .hero-center::before{content:'';position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:900px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 60%);pointer-events:none;z-index:-1;}
     .hero-icon{height:56px;width:auto;position:relative;z-index:1;display:block;}
     .hero-center{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;position:relative;}
     .hero-center h1{text-align:center;font-size:clamp(32px,4vw,56px);}
@@ -178,7 +176,7 @@
     /* ─── BELOW FOLD ─── */
     /* Solid cover that sits on top of the mesh — mesh is clipped anyway, this is belt-and-suspenders */
     .below-fold{
-      background:#0B0C10;
+      background:#0C0C0E;
       position:relative;
       z-index:2;
     }
@@ -296,8 +294,8 @@
     .contact{padding:92px 0 74px;}
     .contact-card{
       border-radius:22px;
-      border:1px solid rgba(38,103,255,.22);
-      background:radial-gradient(900px 380px at 30% 0%, rgba(38,103,255,.18) 0%, transparent 60%),
+      border:1px solid rgba(255,255,255,.09);
+      background:radial-gradient(900px 380px at 30% 0%, rgba(255,255,255,.025) 0%, transparent 60%),
                  linear-gradient(180deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,.03) 100%);
       box-shadow:0 30px 100px rgba(0,0,0,.35);
       padding:40px;
@@ -397,7 +395,7 @@
       <!-- Section intro -->
       <div class="products-intro reveal">
         <div class="container">
-          <div class="eyebrow" style="color:rgba(38,103,255,.85);">Our Products</div>
+          <div class="eyebrow" style="color:rgba(255,255,255,.45);">Our Products</div>
           <div class="title">Four platforms.<br/>One ecosystem.</div>
           <p class="sub">An interconnected growth stack for health and wellness DTC — plus Forge, our consumer personal AI. Built to work together from day one.</p>
         </div>
@@ -594,9 +592,7 @@
           pts[r][c]={x:c*cW+dx,y:r*cH+dy};
         }
       }
-      ctx.strokeStyle='rgba(38,103,255,1)';
-      ctx.lineWidth=1.2;
-      ctx.globalAlpha=0.22;
+      ctx.strokeStyle='rgba(255,255,255,1)'; ctx.lineWidth=0.9; ctx.globalAlpha=0.09;
       ctx.beginPath();
       for (let r=0;r<ROWS;r++) for (let c=0;c<COLS-1;c++) {
         ctx.moveTo(pts[r][c].x,pts[r][c].y);
