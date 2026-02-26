@@ -160,8 +160,24 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .hero-center h1{text-align:center;font-size:clamp(3rem,6.5vw,5rem);}
     .h1-line{display:block;}
     @media(max-width:640px){.h1-line{display:inline;}}
-    .hero{
-      padding:140px 0 88px;
+
+    /* Hero → below-fold gradient fade */
+    .hero-section-wrap{
+      position: relative;
+    }
+    .hero-section-wrap::after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 160px;
+      background: linear-gradient(to bottom, transparent 0%, #0C0C0E 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+        .hero{
+      padding:140px 0 120px;
       position:relative;
       z-index:1;
     }
@@ -270,7 +286,18 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     /* ── Products ── */
     .products-wrap{padding:0;}
     /* Scroll snap container */
-    .below-fold{
+
+    /* Gradient at top of below-fold (complements hero fade) */
+    .below-fold::before{
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 3;
+    }
+        .below-fold{
       background:#0C0C0E;
       position:relative;
       z-index:2;
@@ -325,7 +352,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .prod-feat:last-child{border-right:none;}
     .feat-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
     .feat-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,.5);}
-    .products-intro{padding:80px 0 0;text-align:center;position:relative;z-index:1;}
+    .products-intro{padding:100px 0 20px;text-align:center;position:relative;z-index:1;}
 
         /* ── Mockups ── */
     .prod-mockup-wrap{
@@ -604,7 +631,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               </div>
             </div>
           </div>
-                    <div class="prod-features reveal-group">
+                    <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Private by default</div><p class="feat-desc">Runs entirely on your machine. Nothing leaves your computer without your permission.</p></div>
             <div class="prod-feat"><div class="feat-title">Zero setup</div><p class="feat-desc">One download. No API keys, no terminal, no configuration required.</p></div>
             <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
@@ -673,7 +700,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             </div>
           </div>
                     <!-- Prometheus dashboard mockup -->
-                                        <div class="prod-features reveal-group">
+                                        <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Lead intelligence</div><p class="feat-desc">Scrape and score high-intent prospects from Reddit, X, LinkedIn, and niche communities.</p></div>
             <div class="prod-feat"><div class="feat-title">Campaign generation</div><p class="feat-desc">Write and deploy outreach campaigns in minutes using natural language prompts.</p></div>
             <div class="prod-feat"><div class="feat-title">Unified analytics</div><p class="feat-desc">Track every touchpoint from first contact to conversion in one dashboard.</p></div>
@@ -695,7 +722,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-          <div class="prod-features reveal-group">
+          <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">$WHT utility token</div><p class="feat-desc">A real utility token that rewards health-conscious behavior across brands and categories.</p></div>
             <div class="prod-feat"><div class="feat-title">Ethereum L2</div><p class="feat-desc">Low-cost, fast transactions on a proven L2 network. Built for real commerce at scale.</p></div>
             <div class="prod-feat"><div class="feat-title">Loyalty loop</div><p class="feat-desc">Partners earn on every redemption. Customers earn on every purchase. Everyone wins.</p></div>
@@ -717,7 +744,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-          <div class="prod-features reveal-group">
+          <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Cross-brand rewards</div><p class="feat-desc">One wallet. Spend $WHT at any partner brand in the ecosystem instantly.</p></div>
             <div class="prod-feat"><div class="feat-title">Retention by design</div><p class="feat-desc">Customers return to spend rewards. Partners benefit from each other's traffic.</p></div>
             <div class="prod-feat"><div class="feat-title">Health focus</div><p class="feat-desc">Curated marketplace of health and wellness brands aligned with the $WHT mission.</p></div>
