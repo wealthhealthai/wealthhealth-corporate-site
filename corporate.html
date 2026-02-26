@@ -234,11 +234,18 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
     .section-scroll{
       display:flex;align-items:center;justify-content:center;gap:10px;
-      padding:32px 0;
+      padding:60px 0 80px;
       color:rgba(255,255,255,.18);
       font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-      position:relative;z-index:1;
-      border-top:1px solid rgba(255,255,255,.05);
+      position:relative;z-index:3;
+      /* gradient: fades out the section above AND fades in the section below */
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(12,12,14,.5) 30%,
+        rgba(12,12,14,.8) 50%,
+        rgba(12,12,14,.5) 70%,
+        transparent 100%
+      );
     }
 
 
@@ -293,17 +300,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .products-wrap{padding:0;}
     /* Scroll snap container */
 
-    /* Gradient at top of below-fold (complements hero fade) */
-    .below-fold::before{
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 3;
-    }
-        .below-fold{
+    .below-fold{
       background:#0C0C0E;
       position:relative;
       z-index:2;
