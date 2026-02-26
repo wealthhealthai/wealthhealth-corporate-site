@@ -194,10 +194,17 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       font-weight:800;
       margin-bottom:18px;
     }
+    @keyframes gradientShift{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
     h1 em{
       font-style:normal;
-      background:linear-gradient(125deg,#4d8cff 0%, #2667FF 50%, #7B5EFF 100%);
+      background:linear-gradient(125deg,#4d8cff 0%,#7B5EFF 25%,#2667FF 50%,#60a5fa 75%,#4d8cff 100%);
+      background-size:250% auto;
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:gradientShift 5s ease infinite;
     }
     .hero-sub{
       font-size:18px;line-height:1.7;color:var(--muted);
