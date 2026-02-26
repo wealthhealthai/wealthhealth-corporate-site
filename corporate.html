@@ -335,10 +335,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       .prod-section{ min-height: auto; padding: 80px 0; }
 
     }
-    .prod-section[data-product="forge"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% 30%,rgba(192,57,43,.04) 0%,transparent 80%);pointer-events:none;}
-    .prod-section[data-product="prometheus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% 30%,rgba(244,100,17,.035) 0%,transparent 80%);pointer-events:none;}
-    .prod-section[data-product="midas"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% 30%,rgba(128,84,255,.04) 0%,transparent 80%);pointer-events:none;}
-    .prod-section[data-product="olympus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% 30%,rgba(16,124,16,.035) 0%,transparent 80%);pointer-events:none;}
+    
+    
+    
+    
     .prod-center-top{display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:44px;position:relative;z-index:1;}
     .prod-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
     .prod-section[data-product="forge"] .prod-eyebrow{color:#E05A4E;}
@@ -438,12 +438,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       transition:opacity .6s cubic-bezier(.22,.68,0,1), filter .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
       will-change: opacity, filter;
       position: relative;
-      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 12%, transparent 88%, #0C0C0E 100%);
     }
 
     .below-fold.has-focus .prod-section{
-      opacity: 0.2;
-      filter: blur(1px);
+      opacity: 0.15;
+      filter: blur(0.5px);
     }
     .below-fold.has-focus .prod-section.focused{
       opacity: 1;
