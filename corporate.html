@@ -390,6 +390,27 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .cta-banner p{font-size:17px;color:rgba(255,255,255,.5);margin-bottom:36px;line-height:1.7;}
     .cta-banner-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
+    
+    /* ── Section focus/fade effect ── */
+    /* Default: sections below-fold start at full opacity (no snap) */
+    /* JS-driven: active section = 1.0, others = 0.25 with blur */
+    .prod-section{
+      transition:opacity .6s cubic-bezier(.22,.68,0,1), filter .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
+      will-change: opacity, filter;
+    }
+    .below-fold.has-focus .prod-section{
+      opacity: 0.2;
+      filter: blur(1px);
+    }
+    .below-fold.has-focus .prod-section.focused{
+      opacity: 1;
+      filter: blur(0px);
+    }
+    /* Also dim the products-intro when any section is focused */
+    .below-fold.has-focus .products-intro{
+      opacity: 0.15;
+      transition: opacity .6s cubic-bezier(.22,.68,0,1);
+    }
         .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
@@ -455,7 +476,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <nav>
     <div class="nav-inner">
       <a class="brand" href="#top" aria-label="WealthHealth AI">
-        <img src="wh-slash-icon.png" style="height:20px;width:auto;vertical-align:middle;" alt=""/> <img src="logo-wh-nav.png" style="height:18px;width:auto;vertical-align:middle;" alt="WealthHealth"/>
+        <img src="logo-wh-nav.png" style="height:20px;width:auto;display:block;" alt="WealthHealth"/>
       </a>
 
       <div class="nav-mobile">Menu</div>
@@ -845,45 +866,76 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- Scroll reveal -->
+  <!-- Scroll reveal + section focus/fade -->
   <script>
     (function(){
-      // Observe all .reveal elements (includes .reveal-group and .reveal-line)
-      const els = Array.from(document.querySelectorAll('.reveal'));
-      const io = new IntersectionObserver((entries) => {
+      // ── 1. Reveal animation ────────────────────────────────────────────
+      const revealEls = Array.from(document.querySelectorAll('.reveal'));
+      const revealIO = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
             e.target.classList.add('in');
-            io.unobserve(e.target);
+            revealIO.unobserve(e.target);
           }
         }
       }, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
-      els.forEach(el => io.observe(el));
+      revealEls.forEach(el => revealIO.observe(el));
 
-      // Subtle parallax depth on product sections
+      // ── 2. Section focus/fade ─────────────────────────────────────────
+      // When a product section is >45% visible, it becomes "focused"
+      // All other sections dim to 0.2 opacity + slight blur
       const prodSections = Array.from(document.querySelectorAll('.prod-section'));
-      if (prodSections.length && window.innerWidth > 900) {
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-          if (!ticking) {
-            requestAnimationFrame(() => {
-              const vy = window.scrollY;
-              prodSections.forEach((sec, i) => {
-                const rect = sec.getBoundingClientRect();
-                const center = rect.top + rect.height / 2;
-                const vCenter = window.innerHeight / 2;
-                const dist = (center - vCenter) / window.innerHeight;
-                // Very subtle: each section slightly pulls toward center
-                const offset = dist * 18;
-                if (sec.classList.contains('in')) {
-                  sec.style.transform = `translateY(${offset}px)`;
-                }
-              });
-              ticking = false;
-            });
-            ticking = true;
-          }
-        }, {passive: true});
+      const belowFold = document.querySelector('.below-fold');
+      if (!prodSections.length || !belowFold) return;
+
+      let focusedSection = null;
+      let focusTimeout = null;
+
+      function setFocus(sec) {
+        if (focusedSection === sec) return;
+        focusedSection = sec;
+        if (sec) {
+          belowFold.classList.add('has-focus');
+          prodSections.forEach(s => s.classList.toggle('focused', s === sec));
+        } else {
+          belowFold.classList.remove('has-focus');
+          prodSections.forEach(s => s.classList.remove('focused'));
+        }
+      }
+
+      // Track which section is most "central" in viewport
+      const focusIO = new IntersectionObserver((entries) => {
+        // Find the section with the highest intersection ratio
+        let best = null, bestRatio = 0;
+        for (const e of entries) {
+          // Update ratio cache on each entry
+          e.target._ratio = e.intersectionRatio;
+        }
+        prodSections.forEach(s => {
+          const r = s._ratio || 0;
+          if (r > bestRatio) { bestRatio = r; best = s; }
+        });
+
+        // Only activate focus mode when scrolled into product area
+        if (bestRatio > 0.4) {
+          setFocus(best);
+        } else if (bestRatio < 0.1) {
+          // Check if any section is substantially visible
+          const anyVisible = prodSections.some(s => (s._ratio || 0) > 0.25);
+          if (!anyVisible) setFocus(null);
+        }
+      }, {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+      });
+
+      prodSections.forEach(s => {
+        s._ratio = 0;
+        focusIO.observe(s);
+      });
+
+      // Disable focus effect on mobile (too aggressive on small screens)
+      if (window.innerWidth < 720) {
+        belowFold.classList.remove('has-focus');
       }
     })();
   </script>
