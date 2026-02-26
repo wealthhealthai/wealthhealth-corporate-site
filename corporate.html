@@ -922,19 +922,43 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           var btn = document.getElementById('contact-submit');
           var status = document.getElementById('contact-status');
           var data = new FormData(form);
+
           btn.textContent = 'Sending...';
           btn.style.opacity = '.6';
-          // Submit to mailto as fallback (can swap for a real endpoint later)
-          var name = data.get('name');
-          var email = data.get('email');
-          var subject = data.get('subject') || 'Website inquiry';
-          var message = data.get('message');
-          var body = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
-          window.location.href = 'mailto:outreach@wealthhealth.ai?subject=' + encodeURIComponent(subject) + '&body=' + body;
-          btn.textContent = 'Message prepared →';
-          btn.style.opacity = '1';
-          status.textContent = 'Your email client should open with the message pre-filled.';
-          status.style.display = 'block';
+          btn.disabled = true;
+          status.style.display = 'none';
+
+          // Web3Forms submission
+          data.append('access_key', '92d2b10b-3b07-4473-ad77-1b5be348a42f');
+          data.append('subject', 'WealthHealth AI — ' + (data.get('subject') || 'Website inquiry'));
+          data.append('from_name', data.get('name') + ' via wealthhealth.ai');
+
+          fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: data
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(result) {
+            if (result.success) {
+              btn.textContent = '✓ Message sent';
+              btn.style.background = 'linear-gradient(135deg,rgba(16,124,16,.8),rgba(16,124,16,.6))';
+              btn.style.opacity = '1';
+              status.textContent = "We got it — you'll hear from us at " + data.get('email') + " soon.";
+              status.style.color = 'rgba(78,205,115,.8)';
+              status.style.display = 'block';
+              form.reset();
+            } else {
+              throw new Error(result.message || 'Submission failed');
+            }
+          })
+          .catch(function(err) {
+            btn.textContent = 'Send message →';
+            btn.style.opacity = '1';
+            btn.disabled = false;
+            status.textContent = 'Something went wrong. Email us directly at outreach@wealthhealth.ai';
+            status.style.color = 'rgba(255,100,80,.8)';
+            status.style.display = 'block';
+          });
         }
         </script>
       </div>
