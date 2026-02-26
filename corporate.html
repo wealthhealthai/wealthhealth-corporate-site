@@ -134,7 +134,6 @@
       position:relative;
       overflow:hidden;
       min-height:auto;
-      background:#0C0C0E;
     }
 
     /* Mesh canvas — absolute inside hero-section-wrap, clips at hero boundary */
@@ -292,23 +291,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     /* ── Products ── */
     .products-wrap{padding:0;}
     /* Scroll snap container */
-
-
-    /* Covers the hero-section-wrap / below-fold seam */
-    .below-fold::before{
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0; right: 0;
-      height: 200px;
-      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 10;
-    }
-        .below-fold{
-      background:#0C0C0E;
+    .below-fold{
       position:relative;
       z-index:2;
+      margin-top:-1px;
     }
     /* Each product section = full viewport */
     .prod-section{
