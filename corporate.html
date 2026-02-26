@@ -316,7 +316,15 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     /* Gradient overlay at top and bottom of scroll container — creates fade edge */
     /* gradient overlays removed */
-/* section-scroll CSS removed */
+    .section-scroll{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      padding:36px 0;
+      color:rgba(255,255,255,.22);
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    }
+    .section-scroll.in{
+      animation: bob 2.2s ease-in-out infinite;
+    }
     @media(max-width:720px){
 
       .prod-section{ min-height: auto; padding: 80px 0; }
@@ -581,6 +589,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     <!-- PRODUCTS -->
     <section id="products">
 
+
+      <!-- scroll hint -->
+      <div class="section-scroll reveal" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
+      </div>
       <!-- ── FORGE ── -->
       <div class="prod-section reveal" data-product="forge">
         <div class="container">
@@ -637,6 +651,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- scroll hint -->
+      <div class="section-scroll reveal" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
       </div>
       <!-- ── PROMETHEUS ── -->
       <div class="prod-section reveal" data-product="prometheus">
@@ -707,6 +727,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           </div>
         </div>
       </div>
+
+      <!-- scroll hint -->
+      <div class="section-scroll reveal" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
+      </div>
       <!-- ── MIDAS ── -->
       <div class="prod-section reveal" data-product="midas">
         <div class="container">
@@ -728,6 +754,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             <div class="prod-feat"><div class="feat-title">Loyalty loop</div><p class="feat-desc">Partners earn on every redemption. Customers earn on every purchase. Everyone wins.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- scroll hint -->
+      <div class="section-scroll reveal" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
       </div>
       <!-- ── OLYMPUS ── -->
       <div class="prod-section reveal" data-product="olympus">
