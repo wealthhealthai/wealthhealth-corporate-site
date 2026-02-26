@@ -186,13 +186,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       border-top:1px solid rgba(255,255,255,.05);
     }
 
-    /* ─── BELOW FOLD ─── */
-    /* Solid cover that sits on top of the mesh — mesh is clipped anyway, this is belt-and-suspenders */
-    .below-fold{
-      background:#0C0C0E;
-      position:relative;
-      z-index:2;
-    }
+
 
     /* Section helpers */
     section{position:relative;z-index:1;}
@@ -242,11 +236,75 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     /* Individual product section */
     /* ── Products ── */
     .products-wrap{padding:0;}
-    .prod-section{
-      padding:100px 0;
-      text-align:center;
-      border-top:1px solid rgba(255,255,255,.06);
+    /* Scroll snap container */
+    .below-fold{
+      background:#0C0C0E;
       position:relative;
+      z-index:2;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+      scroll-behavior: smooth;
+    }
+    /* Each product section = full viewport */
+    .prod-section{
+      min-height: 100vh;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,.06);
+      position: relative;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 0 100px;
+      /* fade transition */
+      opacity: 0.15;
+      transition: opacity 0.7s cubic-bezier(.22,.68,0,1);
+    }
+    .prod-section.in-view{
+      opacity: 1;
+    }
+    /* Gradient overlay at top and bottom of scroll container — creates fade edge */
+    .below-fold::before,
+    .below-fold::after{
+      content: '';
+      position: fixed;
+      left: 0; right: 0;
+      height: 140px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .below-fold::before{
+      top: 0;
+      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 100%);
+    }
+    .below-fold::after{
+      bottom: 0;
+      background: linear-gradient(to top, #0C0C0E 0%, transparent 100%);
+    }
+    /* Section scroll indicator — sticky bottom of each section */
+    .section-scroll{
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,.25);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color .3s;
+    }
+    .prod-section.in-view .section-scroll{
+      color: rgba(255,255,255,.35);
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    @media(max-width:720px){
+      .below-fold{ height: auto; overflow-y: visible; scroll-snap-type: none; }
+      .prod-section{ min-height: auto; opacity: 1; padding: 80px 0; }
+      .below-fold::before,.below-fold::after{ display: none; }
     }
     .prod-section[data-product="forge"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,.07) 0%,transparent 70%);pointer-events:none;}
     .prod-section[data-product="prometheus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(244,100,17,.06) 0%,transparent 70%);pointer-events:none;}
@@ -456,7 +514,25 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <div class="scroll-hint" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           Scroll
-        </div>
+  
+          <!-- scroll hint -->
+          <div class="section-scroll">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            Scroll
+    
+          <!-- scroll hint -->
+          <div class="section-scroll">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            Scroll
+    
+          <!-- scroll hint -->
+          <div class="section-scroll">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            Scroll
+          </div>
+      </div>
+      </div>
+      </div>
       </div>
     </section>
     <!-- Products intro: inside mesh area -->
@@ -514,9 +590,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
                   <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><span style="width:5px;height:5px;border-radius:50%;background:#3ECF8E;box-shadow:0 0 5px #3ECF8E;display:inline-block;"></span><span style="font-size:11px;font-weight:700;color:#fff;">Forge AI</span></div>
                   <div style="font-size:10px;color:rgba(255,255,255,.4);">Ready · Your AI</div>
                 </div>
-                <div class="mx-nav-item active">💬 Chat</div>
-                <div class="mx-nav-item">🧠 Memory</div>
-                <div class="mx-nav-item">⚙️ Settings</div>
+                <div class="mx-nav-item active"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-4 6.5V17H9v-1.5C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="10" y1="17" x2="14" y2="17"/></svg> Memory</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg> Settings</div>
               </div>
               <div class="mx-main">
                 <div class="mx-messages">
@@ -540,13 +616,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           </div>
         </div>
       </div>
-
-      <!-- scroll divider -->
-      <div class="section-scroll" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
-      </div>
-
       <!-- ── PROMETHEUS ── -->
       <div class="prod-section reveal" data-product="prometheus">
         <div class="container">
@@ -571,21 +640,20 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             <div class="mx-body">
               <div class="mx-sidebar">
                 <div class="mx-sidebar-brand">
-                  <svg width="14" height="17" viewBox="0 0 24 30" fill="none"><path d="M12 0L0 7.5V22.5L12 30L24 22.5V7.5L12 0Z" fill="#F46411" opacity=".9"/></svg>
-                  <span style="font-size:12px;font-weight:700;color:#fff;">Prometheus</span>
+                  <img src="logo-prometheus-t.png" style="height:22px;width:auto;" alt="Prometheus"/>
                 </div>
-                <div class="mx-nav-item active" style="color:#F46411;">📊 Lead Gen</div>
-                <div class="mx-nav-item">👥 Leads</div>
-                <div class="mx-nav-item">📣 Campaigns</div>
-                <div class="mx-nav-item">🌐 Sources</div>
-                <div class="mx-nav-item">✉️ Outreach</div>
+                <div class="mx-nav-item active" style="color:#F46411;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Lead Gen</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Leads</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Campaigns</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Sources</div>
+                <div class="mx-nav-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg> Outreach</div>
               </div>
               <div class="mx-main">
                 <div class="mx-topbar">
                   <span class="mx-topbar-tab">Dashboard</span>
                   <span style="font-size:11px;color:rgba(255,255,255,.3);">/ Overview</span>
                   <div style="margin-left:auto;">
-                    <div class="mx-topbar-search">🔍 Search leads...</div>
+                    <div class="mx-topbar-search">Search leads...</div>
                   </div>
                 </div>
                 <div class="mx-stats">
@@ -610,28 +678,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             </div>
           </div>
                     <!-- Prometheus dashboard mockup -->
-                    <div class="prod-mockup-wrap" style="box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 80px rgba(244,100,17,.08);">
-                      <div class="mx-titlebar"><div class="mx-dot"></div><div class="mx-dot"></div><div class="mx-dot"></div><span class="mx-label">Prometheus — Dashboard</span></div>
-                      <div class="mx-body">
-                        <div class="mx-sidebar">
-                          <div class="mx-sidebar-brand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#F46411" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:12px;font-weight:700;color:#fff;">Prometheus</span></div>
-                          <div class="mx-nav-item active" style="color:#F46411;">📊 Lead Gen</div>
-                          <div class="mx-nav-item">👥 Leads</div>
-                          <div class="mx-nav-item">📣 Campaigns</div>
-                          <div class="mx-nav-item">🌐 Sources</div>
-                          <div class="mx-nav-item">✉️ Outreach</div>
-                        </div>
-                        <div class="mx-main">
-                          <div class="mx-topbar"><span class="mx-topbar-tab">Dashboard</span><span style="font-size:11px;color:rgba(255,255,255,.3);">/ Overview</span><div style="margin-left:auto;"><div class="mx-topbar-search">🔍 Search leads...</div></div></div>
-                          <div class="mx-stats">
-                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">👥</span><span class="mx-stat-delta">+12.5%</span></div><div class="mx-stat-val">2,543</div><div class="mx-stat-label">Total Leads</div></div>
-                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📣</span><span class="mx-stat-delta">+2.0%</span></div><div class="mx-stat-val">12</div><div class="mx-stat-label">Active Campaigns</div></div>
-                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📧</span><span class="mx-stat-delta">+5.1%</span></div><div class="mx-stat-val">45.2%</div><div class="mx-stat-label">Avg. Open Rate</div></div>
-                          </div>
-                          <div class="mx-chart" style="margin:0 16px 14px;"><div class="mx-chart-title">Lead Generation Growth</div><div class="mx-chart-sub">Last 7 days</div><div class="mx-chart-bars"><div class="mx-bar" style="height:35%;"></div><div class="mx-bar" style="height:50%;"></div><div class="mx-bar" style="height:42%;"></div><div class="mx-bar" style="height:65%;"></div><div class="mx-bar" style="height:58%;"></div><div class="mx-bar hi" style="height:80%;"></div><div class="mx-bar hi" style="height:100%;"></div></div></div>
-                        </div>
-                      </div>
-                    </div>
                                         <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Lead intelligence</div><p class="feat-desc">Scrape and score high-intent prospects from Reddit, X, LinkedIn, and niche communities.</p></div>
             <div class="prod-feat"><div class="feat-title">Campaign generation</div><p class="feat-desc">Write and deploy outreach campaigns in minutes using natural language prompts.</p></div>
@@ -639,13 +685,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           </div>
         </div>
       </div>
-
-      <!-- scroll divider -->
-      <div class="section-scroll" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
-      </div>
-
       <!-- ── MIDAS ── -->
       <div class="prod-section reveal" data-product="midas">
         <div class="container">
@@ -668,13 +707,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           </div>
         </div>
       </div>
-
-      <!-- scroll divider -->
-      <div class="section-scroll" aria-hidden="true">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-        Scroll
-      </div>
-
       <!-- ── OLYMPUS ── -->
       <div class="prod-section reveal" data-product="olympus">
         <div class="container">
@@ -833,6 +865,25 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       requestAnimationFrame(draw);
     }
     draw();
+  })();
+  </script>
+
+
+  <!-- Prod section fade in/out observer -->
+  <script>
+  (function(){
+    const sections = document.querySelectorAll('.prod-section');
+    if (!sections.length) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+        } else {
+          e.target.classList.remove('in-view');
+        }
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => io.observe(s));
   })();
   </script>
 
