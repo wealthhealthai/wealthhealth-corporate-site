@@ -241,70 +241,26 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       background:#0C0C0E;
       position:relative;
       z-index:2;
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-      height: 100vh;
-      scroll-behavior: smooth;
     }
     /* Each product section = full viewport */
     .prod-section{
-      min-height: 100vh;
       text-align: center;
       border-top: 1px solid rgba(255,255,255,.06);
       position: relative;
-      scroll-snap-align: start;
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 80px 0 100px;
-      /* fade transition */
-      opacity: 0.15;
-      transition: opacity 0.7s cubic-bezier(.22,.68,0,1);
+
     }
-    .prod-section.in-view{
-      opacity: 1;
-    }
+
     /* Gradient overlay at top and bottom of scroll container — creates fade edge */
-    .below-fold::before,
-    .below-fold::after{
-      content: '';
-      position: fixed;
-      left: 0; right: 0;
-      height: 140px;
-      pointer-events: none;
-      z-index: 10;
-    }
-    .below-fold::before{
-      top: 0;
-      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 100%);
-    }
-    .below-fold::after{
-      bottom: 0;
-      background: linear-gradient(to top, #0C0C0E 0%, transparent 100%);
-    }
-    /* Section scroll indicator — sticky bottom of each section */
-    .section-scroll{
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255,255,255,.25);
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      transition: color .3s;
-    }
-    .prod-section.in-view .section-scroll{
-      color: rgba(255,255,255,.35);
-      animation: bob 2.2s ease-in-out infinite;
-    }
+    /* gradient overlays removed */
+/* section-scroll CSS removed */
     @media(max-width:720px){
-      .below-fold{ height: auto; overflow-y: visible; scroll-snap-type: none; }
-      .prod-section{ min-height: auto; opacity: 1; padding: 80px 0; }
-      .below-fold::before,.below-fold::after{ display: none; }
+
+      .prod-section{ min-height: auto; padding: 80px 0; }
+
     }
     .prod-section[data-product="forge"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,.07) 0%,transparent 70%);pointer-events:none;}
     .prod-section[data-product="prometheus"]::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(244,100,17,.06) 0%,transparent 70%);pointer-events:none;}
@@ -514,22 +470,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <div class="scroll-hint" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           Scroll
-  
-          <!-- scroll hint -->
-          <div class="section-scroll">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-            Scroll
-    
-          <!-- scroll hint -->
-          <div class="section-scroll">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-            Scroll
-    
-          <!-- scroll hint -->
-          <div class="section-scroll">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-            Scroll
-          </div>
+        </div>
       </div>
       </div>
       </div>
@@ -869,23 +810,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </script>
 
 
-  <!-- Prod section fade in/out observer -->
-  <script>
-  (function(){
-    const sections = document.querySelectorAll('.prod-section');
-    if (!sections.length) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in-view');
-        } else {
-          e.target.classList.remove('in-view');
-        }
-      });
-    }, { threshold: 0.35 });
-    sections.forEach(s => io.observe(s));
-  })();
-  </script>
+
 
   <!-- Scroll reveal -->
   <script>
