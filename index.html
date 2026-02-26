@@ -282,24 +282,10 @@
 })();
 </script>
 
-<!-- Access + email logic -->
+<!-- Password gate removed — redirect all visitors to corporate.html -->
 <script>
-if (localStorage.getItem('wh_access') === '1') {
   window.location.replace('/corporate.html');
-}
-function unlock() {
-  const val = document.getElementById('pw').value.trim();
-  const err = document.getElementById('err');
-  if (val === 'wealthhealth2026') {
-    localStorage.setItem('wh_access', '1');
-    window.location.replace('/corporate.html');
-  } else {
-    err.textContent = 'Incorrect access code.';
-    document.getElementById('pw').value = '';
-    document.getElementById('pw').focus();
-    setTimeout(() => err.textContent = '', 2500);
-  }
-}
+
 function submitEmail() {
   const input = document.getElementById('email-input');
   const val = input.value.trim();
