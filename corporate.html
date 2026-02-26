@@ -54,8 +54,41 @@
     @media(max-width:640px){.container{padding:0 20px;}}
 
     /* Reveal on scroll */
-    .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.68,0,1), transform .45s cubic-bezier(.22,.68,0,1);}
-    .reveal.in{opacity:1;transform:translateY(0);}
+    /* ── Scroll reveal ── */
+    .reveal{
+      opacity:0;
+      transform:translateY(22px);
+      transition:opacity .65s cubic-bezier(.22,.68,0,1.05), transform .65s cubic-bezier(.22,.68,0,1.05);
+    }
+    .reveal.in{ opacity:1; transform:translateY(0); }
+
+    /* stagger children inside a revealed parent */
+    .reveal-group > *{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .55s cubic-bezier(.22,.68,0,1), transform .55s cubic-bezier(.22,.68,0,1);
+    }
+    .reveal-group.in > *:nth-child(1){ opacity:1;transform:translateY(0);transition-delay:.0s; }
+    .reveal-group.in > *:nth-child(2){ opacity:1;transform:translateY(0);transition-delay:.1s; }
+    .reveal-group.in > *:nth-child(3){ opacity:1;transform:translateY(0);transition-delay:.2s; }
+    .reveal-group.in > *:nth-child(4){ opacity:1;transform:translateY(0);transition-delay:.3s; }
+
+    /* animated divider line */
+    .reveal-line{
+      height:1px;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.15) 50%,transparent 100%);
+      transform:scaleX(0);
+      transition:transform .9s cubic-bezier(.22,.68,0,1);
+      transform-origin:center;
+    }
+    .reveal-line.in{ transform:scaleX(1); }
+
+    /* product section: subtle lift on scroll entry */
+    .prod-section{
+      transition:opacity .7s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1);
+    }
+    .prod-section.reveal{ transform:translateY(32px); }
+    .prod-section.reveal.in{ transform:translateY(0); }
 
     /* NAV */
     nav{
@@ -485,7 +518,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
     </div>
     <!-- Numbers row -->
-    <div class="numbers-row reveal">
+    <div class="numbers-row reveal reveal-group">
       <div class="num-cell"><div class="num-val">4</div><div class="num-label">Platforms</div></div>
       <div class="num-cell"><div class="num-val">AI</div><div class="num-label">Powered</div></div>
       <div class="num-cell"><div class="num-val">Web3</div><div class="num-label">Native</div></div>
@@ -550,7 +583,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               </div>
             </div>
           </div>
-                    <div class="prod-features">
+                    <div class="prod-features reveal-group">
             <div class="prod-feat"><div class="feat-title">Private by default</div><p class="feat-desc">Runs entirely on your machine. Nothing leaves your computer without your permission.</p></div>
             <div class="prod-feat"><div class="feat-title">Zero setup</div><p class="feat-desc">One download. No API keys, no terminal, no configuration required.</p></div>
             <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
@@ -619,7 +652,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             </div>
           </div>
                     <!-- Prometheus dashboard mockup -->
-                                        <div class="prod-features">
+                                        <div class="prod-features reveal-group">
             <div class="prod-feat"><div class="feat-title">Lead intelligence</div><p class="feat-desc">Scrape and score high-intent prospects from Reddit, X, LinkedIn, and niche communities.</p></div>
             <div class="prod-feat"><div class="feat-title">Campaign generation</div><p class="feat-desc">Write and deploy outreach campaigns in minutes using natural language prompts.</p></div>
             <div class="prod-feat"><div class="feat-title">Unified analytics</div><p class="feat-desc">Track every touchpoint from first contact to conversion in one dashboard.</p></div>
@@ -641,7 +674,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-          <div class="prod-features">
+          <div class="prod-features reveal-group">
             <div class="prod-feat"><div class="feat-title">$WHT utility token</div><p class="feat-desc">A real utility token that rewards health-conscious behavior across brands and categories.</p></div>
             <div class="prod-feat"><div class="feat-title">Ethereum L2</div><p class="feat-desc">Low-cost, fast transactions on a proven L2 network. Built for real commerce at scale.</p></div>
             <div class="prod-feat"><div class="feat-title">Loyalty loop</div><p class="feat-desc">Partners earn on every redemption. Customers earn on every purchase. Everyone wins.</p></div>
@@ -663,7 +696,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-          <div class="prod-features">
+          <div class="prod-features reveal-group">
             <div class="prod-feat"><div class="feat-title">Cross-brand rewards</div><p class="feat-desc">One wallet. Spend $WHT at any partner brand in the ecosystem instantly.</p></div>
             <div class="prod-feat"><div class="feat-title">Retention by design</div><p class="feat-desc">Customers return to spend rewards. Partners benefit from each other's traffic.</p></div>
             <div class="prod-feat"><div class="feat-title">Health focus</div><p class="feat-desc">Curated marketplace of health and wellness brands aligned with the $WHT mission.</p></div>
@@ -815,16 +848,43 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- Scroll reveal -->
   <script>
     (function(){
+      // Observe all .reveal elements (includes .reveal-group and .reveal-line)
       const els = Array.from(document.querySelectorAll('.reveal'));
-      const io = new IntersectionObserver((entries)=>{
-        for (const e of entries){
-          if (e.isIntersecting){
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
             e.target.classList.add('in');
             io.unobserve(e.target);
           }
         }
-      }, {threshold:0.12});
-      els.forEach(el=>io.observe(el));
+      }, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
+      els.forEach(el => io.observe(el));
+
+      // Subtle parallax depth on product sections
+      const prodSections = Array.from(document.querySelectorAll('.prod-section'));
+      if (prodSections.length && window.innerWidth > 900) {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              const vy = window.scrollY;
+              prodSections.forEach((sec, i) => {
+                const rect = sec.getBoundingClientRect();
+                const center = rect.top + rect.height / 2;
+                const vCenter = window.innerHeight / 2;
+                const dist = (center - vCenter) / window.innerHeight;
+                // Very subtle: each section slightly pulls toward center
+                const offset = dist * 18;
+                if (sec.classList.contains('in')) {
+                  sec.style.transform = `translateY(${offset}px)`;
+                }
+              });
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, {passive: true});
+      }
     })();
   </script>
 </body>
