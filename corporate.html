@@ -1033,46 +1033,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         belowFold.classList.remove('has-focus');
       }
 
-      // Jump sidebar — show when scrolled past hero, hide after products
-      (function() {
-        var sidebar = document.getElementById('jump-sidebar');
-        if (!sidebar) return;
-        var btns = sidebar.querySelectorAll('.jump-btn');
-        var prodIds = ['prod-forge','prod-prometheus','prod-midas','prod-olympus'];
-
-        function tick() {
-          var forge = document.getElementById('prod-forge');
-          var olympus = document.getElementById('prod-olympus');
-          if (!forge || !olympus) return;
-
-          var forgeTop = forge.getBoundingClientRect().top;
-          var olympusBottom = olympus.getBoundingClientRect().bottom;
-          var show = forgeTop < window.innerHeight * 0.9 && olympusBottom > 100;
-
-          sidebar.style.opacity = show ? '1' : '0';
-          sidebar.style.pointerEvents = show ? 'auto' : 'none';
-
-          // Active highlight — closest to viewport center
-          var mid = window.innerHeight / 2;
-          var best = -1, bestD = Infinity;
-          prodIds.forEach(function(id, i) {
-            var el = document.getElementById(id);
-            if (!el) return;
-            var r = el.getBoundingClientRect();
-            var d = Math.abs(r.top + r.height/2 - mid);
-            if (d < bestD) { bestD = d; best = i; }
-          });
-          btns.forEach(function(b, i) {
-            b.classList.toggle('active', i === best);
-          });
-        }
-
-        window.addEventListener('scroll', tick, {passive: true});
-        window.addEventListener('resize', tick, {passive: true});
-        // Call immediately and after short delay to ensure layout is ready
-        tick();
-        setTimeout(tick, 500);
-      })();
     })();
   </script>
 
@@ -1092,5 +1052,40 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     </button>
   </aside>
 
+
+  <!-- Jump sidebar standalone script -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebar = document.getElementById('jump-sidebar');
+    if (!sidebar) return;
+    var btns = Array.prototype.slice.call(sidebar.querySelectorAll('.jump-btn'));
+    var prodIds = ['prod-forge','prod-prometheus','prod-midas','prod-olympus'];
+
+    function tick() {
+      var forge = document.getElementById('prod-forge');
+      var olympus = document.getElementById('prod-olympus');
+      if (!forge || !olympus) return;
+      var forgeTop = forge.getBoundingClientRect().top;
+      var olympusBottom = olympus.getBoundingClientRect().bottom;
+      var show = forgeTop < window.innerHeight * 0.9 && olympusBottom > 100;
+      sidebar.style.opacity = show ? '1' : '0';
+      sidebar.style.pointerEvents = show ? 'auto' : 'none';
+      var mid = window.innerHeight / 2, best = -1, bestD = Infinity;
+      prodIds.forEach(function(id, i) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var r = el.getBoundingClientRect();
+        var d = Math.abs(r.top + r.height/2 - mid);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      btns.forEach(function(b, i) { b.classList.toggle('active', i === best); });
+    }
+
+    window.addEventListener('scroll', tick, {passive: true});
+    tick();
+    setTimeout(tick, 300);
+    setTimeout(tick, 1000);
+  });
+  </script>
 </body>
 </html>
