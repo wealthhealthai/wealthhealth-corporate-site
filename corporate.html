@@ -432,6 +432,17 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .prod-section{
       transition:opacity .6s cubic-bezier(.22,.68,0,1), filter .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
       will-change: opacity, filter;
+      position: relative;
+    }
+    /* Bottom gradient fade — section content fades into dark gap */
+    .prod-section::after{
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent 0%, #0C0C0E 100%);
+      pointer-events: none;
+      z-index: 2;
     }
     .below-fold.has-focus .prod-section{
       opacity: 0.2;
