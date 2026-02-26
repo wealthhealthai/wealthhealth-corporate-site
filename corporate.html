@@ -238,14 +238,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       color:rgba(255,255,255,.18);
       font-size:11px;letter-spacing:.14em;text-transform:uppercase;
       position:relative;z-index:3;
-      /* gradient: fades out the section above AND fades in the section below */
-      background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(12,12,14,.5) 30%,
-        rgba(12,12,14,.8) 50%,
-        rgba(12,12,14,.5) 70%,
-        transparent 100%
-      );
+
     }
 
 
@@ -445,17 +438,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       transition:opacity .6s cubic-bezier(.22,.68,0,1), filter .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
       will-change: opacity, filter;
       position: relative;
+      background: linear-gradient(to bottom, #0C0C0E 0%, transparent 12%, transparent 88%, #0C0C0E 100%);
     }
-    /* Bottom gradient fade — section content fades into dark gap */
-    .prod-section::after{
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 220px;
-      background: linear-gradient(to bottom, transparent 0%, #0C0C0E 100%);
-      pointer-events: none;
-      z-index: 2;
-    }
+
     .below-fold.has-focus .prod-section{
       opacity: 0.2;
       filter: blur(1px);
@@ -1065,47 +1050,36 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         belowFold.classList.remove('has-focus');
       }
 
-      // Jump sidebar: show/hide + active state
+      // Jump sidebar
       const jumpSidebar = document.getElementById('jump-sidebar');
       const jumpBtns = jumpSidebar ? Array.from(jumpSidebar.querySelectorAll('.jump-btn')) : [];
       const prodIds = ['prod-forge','prod-prometheus','prod-midas','prod-olympus'];
 
-      if (jumpSidebar && prodIds.length) {
-        // Show sidebar when any product section is in view
-        const sidebarIO = new IntersectionObserver((entries) => {
-          const anyVisible = entries.some(e => e.isIntersecting);
-          // Also check if any prod section is currently in viewport
-          const anyProdVisible = prodIds.some(id => {
+      if (jumpSidebar) {
+        const firstProd = document.getElementById('prod-forge');
+        const lastProd = document.getElementById('prod-olympus');
+
+        function updateSidebar() {
+          if (!firstProd || !lastProd) return;
+          const top = firstProd.getBoundingClientRect().top;
+          const bottom = lastProd.getBoundingClientRect().bottom;
+          const inRange = top < window.innerHeight && bottom > 0;
+          jumpSidebar.classList.toggle('visible', inRange);
+
+          // Active state
+          let activeIdx = -1, bestDist = Infinity;
+          prodIds.forEach((id, i) => {
             const el = document.getElementById(id);
-            if (!el) return false;
+            if (!el) return;
             const r = el.getBoundingClientRect();
-            return r.top < window.innerHeight && r.bottom > 0;
+            const dist = Math.abs(r.top + r.height/2 - window.innerHeight/2);
+            if (dist < bestDist) { bestDist = dist; activeIdx = i; }
           });
-          if (anyProdVisible) jumpSidebar.classList.add('visible');
-          else jumpSidebar.classList.remove('visible');
-        }, {threshold:0.01});
+          jumpBtns.forEach((b,i) => b.classList.toggle('active', i === activeIdx));
+        }
 
-        // Active button based on which section is most visible
-        const activeIO = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            const idx = prodIds.indexOf(e.target.id);
-            if (idx >= 0 && e.isIntersecting && e.intersectionRatio > 0.3) {
-              jumpBtns.forEach((b,i) => b.classList.toggle('active', i === idx));
-              jumpSidebar.classList.add('visible');
-            }
-          });
-          // Hide when no products in view
-          const allRatios = prodIds.map(id => {
-            const el = document.getElementById(id);
-            return el ? (el._ratio || 0) : 0;
-          });
-          if (allRatios.every(r => r < 0.05)) jumpSidebar.classList.remove('visible');
-        }, {threshold:[0,0.1,0.3,0.5,0.8]});
-
-        prodIds.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) { el._ratio = 0; activeIO.observe(el); sidebarIO.observe(el); }
-        });
+        window.addEventListener('scroll', updateSidebar, {passive:true});
+        updateSidebar();
       }
     })();
   </script>
