@@ -172,6 +172,14 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       user-select:none;
     }
     @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+    .section-scroll{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      padding:32px 0;
+      color:rgba(255,255,255,.18);
+      font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      position:relative;z-index:1;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
 
     /* ─── BELOW FOLD ─── */
     /* Solid cover that sits on top of the mesh — mesh is clipped anyway, this is belt-and-suspenders */
@@ -383,6 +391,14 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </div>
       </div>
     </section>
+    <!-- Products intro: inside mesh area -->
+    <div class="products-intro reveal" style="padding:0 0 80px;">
+      <div class="container">
+        <div class="eyebrow" style="color:rgba(255,255,255,.4);">Our Products</div>
+        <div class="title">Four platforms.<br/>One ecosystem.</div>
+        <p class="sub" style="max-width:600px;margin:0 auto;">An interconnected growth stack for health and wellness DTC plus Forge, our consumer personal AI. Built to work together from day one.</p>
+      </div>
+    </div>
   </div>
   <!-- /hero-section-wrap — mesh does not render past this point -->
 
@@ -391,15 +407,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     <!-- PRODUCTS -->
     <section id="products">
-
-      <!-- Section intro -->
-      <div class="products-intro reveal">
-        <div class="container">
-          <div class="eyebrow" style="color:rgba(255,255,255,.45);">Our Products</div>
-          <div class="title">Four platforms.<br/>One ecosystem.</div>
-          <p class="sub">An interconnected growth stack for health and wellness DTC — plus Forge, our consumer personal AI. Built to work together from day one.</p>
-        </div>
-      </div>
 
       <!-- ── FORGE ── -->
       <div class="prod-section reveal" data-product="forge">
@@ -422,6 +429,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- scroll divider -->
+      <div class="section-scroll" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
       </div>
 
       <!-- ── PROMETHEUS ── -->
@@ -447,6 +460,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </div>
       </div>
 
+      <!-- scroll divider -->
+      <div class="section-scroll" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
+      </div>
+
       <!-- ── MIDAS ── -->
       <div class="prod-section reveal" data-product="midas">
         <div class="container">
@@ -468,6 +487,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             <div class="prod-feat"><div class="feat-title">Loyalty loop</div><p class="feat-desc">Partners earn on every redemption. Customers earn on every purchase. Everyone wins.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- scroll divider -->
+      <div class="section-scroll" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Scroll
       </div>
 
       <!-- ── OLYMPUS ── -->
