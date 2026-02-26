@@ -134,7 +134,7 @@
       position:relative;
       overflow:hidden;
       min-height:auto;
-      background:linear-gradient(160deg,#0C0C0E 0%, #111113 45%, #0C0C0E 100%);
+      background:#0C0C0E;
     }
 
     /* Mesh canvas — absolute inside hero-section-wrap, clips at hero boundary */
@@ -316,7 +316,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       background:#0C0C0E;
       position:relative;
       z-index:2;
-      margin-top:-2px;
     }
     /* Each product section = full viewport */
     .prod-section{
@@ -471,35 +470,42 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       transition: opacity .6s cubic-bezier(.22,.68,0,1);
     }
     
-    /* ── Jump navigation ── */
-    .jump-nav{
-      position:sticky;
-      top:0;
-      z-index:50;
-      background:rgba(12,12,14,.85);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      padding:0 28px;
+    /* ── Jump sidebar (fixed right) ── */
+    .jump-sidebar{
+      position:fixed;
+      right:28px;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:100;
       display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      height:52px;
+      flex-direction:column;
+      gap:6px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .4s cubic-bezier(.22,.68,0,1);
+    }
+    .jump-sidebar.visible{
+      opacity:1;
+      pointer-events:auto;
     }
     .jump-btn{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:7px 16px;border-radius:8px;
-      font-size:13px;font-weight:600;color:rgba(255,255,255,.5);
-      background:transparent;border:none;cursor:pointer;
-      transition:color .15s,background .15s;font-family:inherit;
-      letter-spacing:-.01em;
+      display:flex;align-items:center;gap:10px;
+      padding:8px 14px 8px 10px;
+      border-radius:999px;
+      font-size:12px;font-weight:600;color:rgba(255,255,255,.4);
+      background:rgba(12,12,14,.7);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.08);
+      cursor:pointer;font-family:inherit;letter-spacing:-.01em;
+      transition:color .15s,background .15s,border-color .15s;
+      white-space:nowrap;
     }
-    .jump-btn:hover{ color:#fff; background:rgba(255,255,255,.07); }
-    .jump-btn.active{ color:#fff; background:rgba(255,255,255,.08); }
+    .jump-btn:hover{ color:#fff; background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.15); }
+    .jump-btn.active{ color:#fff; border-color:rgba(255,255,255,.2); }
     .jump-dot{
-      width:6px;height:6px;border-radius:50%;flex-shrink:0;
+      width:7px;height:7px;border-radius:50%;flex-shrink:0;
     }
+    @media(max-width:900px){ .jump-sidebar{ display:none; } }
         .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
@@ -639,22 +645,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- BELOW FOLD: solid #0B0C10 covers all content below hero -->
   <div class="below-fold">
-
-    <!-- Jump navigation -->
-    <nav class="jump-nav" id="jump-nav">
-      <button class="jump-btn" onclick="document.getElementById('prod-forge').scrollIntoView({behavior:'smooth'})">
-        <span class="jump-dot" style="background:#C0392B;"></span>Forge
-      </button>
-      <button class="jump-btn" onclick="document.getElementById('prod-prometheus').scrollIntoView({behavior:'smooth'})">
-        <span class="jump-dot" style="background:#F46411;"></span>Prometheus
-      </button>
-      <button class="jump-btn" onclick="document.getElementById('prod-midas').scrollIntoView({behavior:'smooth'})">
-        <span class="jump-dot" style="background:#8054FF;"></span>Midas
-      </button>
-      <button class="jump-btn" onclick="document.getElementById('prod-olympus').scrollIntoView({behavior:'smooth'})">
-        <span class="jump-dot" style="background:#4caf50;"></span>Olympus
-      </button>
-    </nav>
 
     <!-- PRODUCTS -->
     <section id="products">
@@ -1075,24 +1065,66 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         belowFold.classList.remove('has-focus');
       }
 
-      // Jump nav active state
-      const jumpBtns = document.querySelectorAll('.jump-btn');
+      // Jump sidebar: show/hide + active state
+      const jumpSidebar = document.getElementById('jump-sidebar');
+      const jumpBtns = jumpSidebar ? Array.from(jumpSidebar.querySelectorAll('.jump-btn')) : [];
       const prodIds = ['prod-forge','prod-prometheus','prod-midas','prod-olympus'];
-      if (jumpBtns.length) {
+
+      if (jumpSidebar && prodIds.length) {
+        // Show sidebar when any product section is in view
+        const sidebarIO = new IntersectionObserver((entries) => {
+          const anyVisible = entries.some(e => e.isIntersecting);
+          // Also check if any prod section is currently in viewport
+          const anyProdVisible = prodIds.some(id => {
+            const el = document.getElementById(id);
+            if (!el) return false;
+            const r = el.getBoundingClientRect();
+            return r.top < window.innerHeight && r.bottom > 0;
+          });
+          if (anyProdVisible) jumpSidebar.classList.add('visible');
+          else jumpSidebar.classList.remove('visible');
+        }, {threshold:0.01});
+
+        // Active button based on which section is most visible
         const activeIO = new IntersectionObserver((entries) => {
           entries.forEach(e => {
             const idx = prodIds.indexOf(e.target.id);
             if (idx >= 0 && e.isIntersecting && e.intersectionRatio > 0.3) {
               jumpBtns.forEach((b,i) => b.classList.toggle('active', i === idx));
+              jumpSidebar.classList.add('visible');
             }
           });
-        }, {threshold:[0.3,0.5]});
+          // Hide when no products in view
+          const allRatios = prodIds.map(id => {
+            const el = document.getElementById(id);
+            return el ? (el._ratio || 0) : 0;
+          });
+          if (allRatios.every(r => r < 0.05)) jumpSidebar.classList.remove('visible');
+        }, {threshold:[0,0.1,0.3,0.5,0.8]});
+
         prodIds.forEach(id => {
           const el = document.getElementById(id);
-          if (el) activeIO.observe(el);
+          if (el) { el._ratio = 0; activeIO.observe(el); sidebarIO.observe(el); }
         });
       }
     })();
   </script>
+
+  <!-- Fixed platform jump sidebar -->
+  <aside class="jump-sidebar" id="jump-sidebar" aria-label="Jump to platform">
+    <button class="jump-btn" onclick="document.getElementById('prod-forge').scrollIntoView({behavior:'smooth'})">
+      <span class="jump-dot" style="background:#C0392B;"></span>Forge
+    </button>
+    <button class="jump-btn" onclick="document.getElementById('prod-prometheus').scrollIntoView({behavior:'smooth'})">
+      <span class="jump-dot" style="background:#F46411;"></span>Prometheus
+    </button>
+    <button class="jump-btn" onclick="document.getElementById('prod-midas').scrollIntoView({behavior:'smooth'})">
+      <span class="jump-dot" style="background:#8054FF;"></span>Midas
+    </button>
+    <button class="jump-btn" onclick="document.getElementById('prod-olympus').scrollIntoView({behavior:'smooth'})">
+      <span class="jump-dot" style="background:#4caf50;"></span>Olympus
+    </button>
+  </aside>
+
 </body>
 </html>
