@@ -13,12 +13,17 @@
     :root{
       --bg0:#0C0C0E;
       --bg1:#111113;
-      --ink:#FFFFFF;
+      --fg:#F2EDE8;
+      --muted:#7A7570;
+      --s1:#141414;
+      --s2:#1C1C1C;
+      --s3:#242424;
+      --bd2:#323232;
       --muted:rgba(255,255,255,.62);
       --muted2:rgba(255,255,255,.42);
       --hairline:rgba(255,255,255,.10);
-      --glass:rgba(255,255,255,.06);
-      --glass2:rgba(255,255,255,.035);
+      --glass:rgba(255,255,255,.05);
+      --glass2:rgba(255,255,255,.03);
 
       --blue:#2667FF;
       --navy:#2714B8;
@@ -37,7 +42,7 @@
     body{
       font-family:'Geist',system-ui,sans-serif;
       -webkit-font-smoothing:antialiased;
-      color:var(--ink);
+      color:var(--fg);
       background:#0C0C0E;
       min-height:100vh;
       overflow-x:hidden;
@@ -49,7 +54,7 @@
     @media(max-width:640px){.container{padding:0 20px;}}
 
     /* Reveal on scroll */
-    .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1);}
+    .reveal{opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.68,0,1), transform .45s cubic-bezier(.22,.68,0,1);}
     .reveal.in{opacity:1;transform:translateY(0);}
 
     /* NAV */
@@ -68,7 +73,7 @@
     .nav-links{display:flex;gap:30px;list-style:none;align-items:center;}
     .nav-links a{
       font-size:13px;font-weight:600;letter-spacing:.02em;
-      color:rgba(255,255,255,.55);
+      color:var(--muted);
       transition:color .15s;
     }
     .nav-links a:hover{color:#fff;}
@@ -119,7 +124,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .hero-center::before{content:'';position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:900px;height:700px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 60%);pointer-events:none;z-index:-1;}
     .hero-icon{height:56px;width:auto;position:relative;z-index:1;display:block;}
     .hero-center{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;position:relative;}
-    .hero-center h1{text-align:center;font-size:clamp(32px,4vw,56px);}
+    .hero-center h1{text-align:center;font-size:clamp(3rem,6.5vw,5rem);}
     .h1-line{display:block;}
     @media(max-width:640px){.h1-line{display:inline;}}
     .hero{
@@ -129,7 +134,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     }
 
     h1{
-      font-size:clamp(42px,5.8vw,74px);
+      font-size:clamp(3rem,6.5vw,5rem);
       letter-spacing:-.055em;
       line-height:1.02;
       font-weight:800;
@@ -260,7 +265,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .prod-section[data-product="olympus"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(16,124,16,.35));}
     .prod-center-body{max-width:700px;margin:0 auto 64px;position:relative;z-index:1;}
     .prod-headline{font-size:clamp(30px,3.8vw,50px);font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:20px;color:#fff;}
-    .prod-description{font-size:17px;line-height:1.7;color:rgba(255,255,255,.55);margin-bottom:32px;}
+    .prod-description{font-size:17px;line-height:1.7;color:var(--muted);margin-bottom:32px;}
     .prod-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);margin-bottom:20px;}
     .prod-badge.live{border-color:rgba(16,124,16,.5);color:#4caf50;background:rgba(16,124,16,.1);}
     .prod-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:11px;font-size:15px;font-weight:600;border:1px solid rgba(255,255,255,.2);color:#fff;transition:background .15s,border-color .15s;text-decoration:none;}
@@ -275,6 +280,69 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .feat-desc{font-size:14px;line-height:1.65;color:rgba(255,255,255,.5);}
     .products-intro{padding:80px 0 0;text-align:center;position:relative;z-index:1;}
 
+        /* ── Mockups ── */
+    .prod-mockup-wrap{
+      max-width:900px;margin:0 auto 56px;
+      border-radius:18px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
+      position:relative;z-index:1;
+    }
+    .mx-titlebar{
+      height:38px;background:#111;border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:center;padding:0 14px;gap:6px;
+    }
+    .mx-dot{width:10px;height:10px;border-radius:50%;}
+    .mx-dot:nth-child(1){background:#FF5F57;}
+    .mx-dot:nth-child(2){background:#FFBD2E;}
+    .mx-dot:nth-child(3){background:#28CA41;}
+    .mx-label{margin:0 auto;font-size:12px;color:rgba(255,255,255,.3);font-weight:500;}
+    .mx-body{display:flex;height:360px;}
+    .mx-sidebar{width:160px;flex-shrink:0;background:#111;border-right:1px solid rgba(255,255,255,.07);padding:14px;}
+    .mx-sidebar-brand{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
+    .mx-nav-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:2px;}
+    .mx-nav-item.active{background:rgba(255,255,255,.06);color:#fff;}
+    .mx-main{flex:1;background:#0D0D0D;display:flex;flex-direction:column;overflow:hidden;}
+    /* Chat mockup */
+    .mx-messages{flex:1;padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;}
+    .mx-msg{display:flex;gap:8px;align-items:flex-start;}
+    .mx-msg.user{flex-direction:row-reverse;}
+    .mx-ava{width:22px;height:22px;border-radius:6px;flex-shrink:0;background:rgba(38,103,255,.25);border:1px solid rgba(38,103,255,.4);display:flex;align-items:center;justify-content:center;}
+    .mx-ava-u{background:rgba(255,255,255,.1);font-size:9px;color:rgba(255,255,255,.6);font-weight:700;}
+    .mx-bubble{max-width:68%;padding:7px 10px;border-radius:9px;font-size:11px;line-height:1.5;color:rgba(255,255,255,.85);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);}
+    .mx-msg.user .mx-bubble{background:rgba(38,103,255,.12);color:rgba(38,103,255,.95);border-color:rgba(38,103,255,.3);}
+    .mx-input-row{padding:9px 12px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:8px;align-items:center;}
+    .mx-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px 10px;font-size:11px;color:rgba(255,255,255,.3);font-family:inherit;}
+    .mx-send{width:28px;height:28px;border-radius:7px;background:rgba(38,103,255,.2);border:1px solid rgba(38,103,255,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    /* Dashboard mockup (Prometheus) */
+    .mx-topbar{height:40px;background:#111;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 16px;gap:12px;}
+    .mx-topbar-tab{font-size:12px;font-weight:600;color:#fff;padding:4px 12px;border-radius:6px;background:rgba(255,255,255,.07);}
+    .mx-topbar-search{flex:1;max-width:220px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,.4);font-family:inherit;}
+    .mx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px 10px;}
+    .mx-stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;}
+    .mx-stat-icon{font-size:14px;margin-bottom:4px;opacity:.7;}
+    .mx-stat-val{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;}
+    .mx-stat-label{font-size:10px;color:rgba(255,255,255,.45);margin-top:3px;}
+    .mx-stat-delta{font-size:10px;font-weight:700;color:#3ECF8E;float:right;margin-top:2px;}
+    .mx-chart{margin:0 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;flex:1;}
+    .mx-chart-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;}
+    .mx-chart-sub{font-size:10px;color:rgba(255,255,255,.4);}
+    .mx-chart-bars{display:flex;align-items:flex-end;gap:4px;height:60px;margin-top:12px;}
+    .mx-bar{flex:1;border-radius:3px 3px 0 0;background:rgba(244,100,17,.35);}
+    .mx-bar.hi{background:rgba(244,100,17,.8);}
+    /* Numbers row */
+    .numbers-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;max-width:800px;margin:48px auto 0;position:relative;z-index:1;}
+    @media(max-width:640px){.numbers-row{grid-template-columns:repeat(2,1fr);}}
+    .num-cell{padding:24px 20px;text-align:center;background:rgba(255,255,255,.03);}
+    .num-val{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1;}
+    .num-label{font-size:11px;color:rgba(255,255,255,.45);margin-top:4px;letter-spacing:.04em;text-transform:uppercase;}
+    /* CTA banner */
+    .cta-banner{padding:100px 0;text-align:center;border-top:1px solid rgba(255,255,255,.06);}
+    .cta-banner-inner{max-width:600px;margin:0 auto;}
+    .cta-banner h2{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.03em;margin-bottom:16px;}
+    .cta-banner p{font-size:17px;color:rgba(255,255,255,.5);margin-bottom:36px;line-height:1.7;}
+    .cta-banner-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
         .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
@@ -285,7 +353,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     }
     .about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:start;}
     @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:26px;}}
-    .about-copy p{font-size:16px;line-height:1.78;color:rgba(255,255,255,.62);margin-bottom:16px;}
+    .about-copy p{font-size:16px;line-height:1.78;color:var(--muted);margin-bottom:16px;}
     .about-copy p:last-child{margin-bottom:0;}
 
     .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -310,7 +378,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       text-align:center;
     }
     @media(max-width:640px){.contact-card{padding:28px;}}
-    .contact-sub{font-size:16px;line-height:1.7;color:rgba(255,255,255,.58);max-width:640px;margin:0 auto 26px;}
+    .contact-sub{font-size:16px;line-height:1.7;color:var(--muted);max-width:640px;margin:0 auto 26px;}
 
     .email{
       display:inline-flex;align-items:center;gap:10px;
@@ -340,7 +408,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <nav>
     <div class="nav-inner">
       <a class="brand" href="#top" aria-label="WealthHealth AI">
-        <img src="logo-wh-nav.png" alt="WealthHealth AI"/>
+        <img src="wh-slash-icon.png" style="height:20px;width:auto;vertical-align:middle;" alt=""/> <img src="logo-wh-nav.png" style="height:18px;width:auto;vertical-align:middle;" alt="WealthHealth"/>
       </a>
 
       <div class="nav-mobile">Menu</div>
@@ -399,6 +467,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <p class="sub" style="max-width:600px;margin:0 auto;">An interconnected growth stack for health and wellness DTC plus Forge, our consumer personal AI. Built to work together from day one.</p>
       </div>
     </div>
+    <!-- Numbers row -->
+    <div class="numbers-row reveal">
+      <div class="num-cell"><div class="num-val">4</div><div class="num-label">Platforms</div></div>
+      <div class="num-cell"><div class="num-val">AI</div><div class="num-label">Powered</div></div>
+      <div class="num-cell"><div class="num-val">Web3</div><div class="num-label">Native</div></div>
+      <div class="num-cell"><div class="num-val">$WHT</div><div class="num-label">Utility Token</div></div>
+    </div>
   </div>
   <!-- /hero-section-wrap — mesh does not render past this point -->
 
@@ -423,7 +498,42 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Visit forgeai.bot <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
             </a>
           </div>
-          <div class="prod-features">
+          <!-- Forge chat mockup -->
+          <div class="prod-mockup-wrap">
+            <div class="mx-titlebar">
+              <div class="mx-dot"></div><div class="mx-dot"></div><div class="mx-dot"></div>
+              <span class="mx-label">Forge AI</span>
+            </div>
+            <div class="mx-body">
+              <div class="mx-sidebar">
+                <div class="mx-sidebar-brand">
+                  <svg width="16" height="16" viewBox="0 0 371 373" fill="none"><path d="M195.103 0H69.1499V49.3588C69.1499 61.3662 59.4183 71.1007 47.4146 71.1007H0V197.049C0 294.223 78.7528 373 175.854 373H301.807V323.641C301.807 311.677 311.539 301.942 323.543 301.942H371V175.994C370.957 78.7768 292.204 0 195.103 0ZM301.593 279.9C301.593 291.907 291.861 301.642 279.858 301.642H85.6978C76.6951 301.642 69.3642 294.352 69.3642 285.303V93.057C69.3642 81.0497 79.0958 71.3151 91.0995 71.3151H285.302C294.305 71.3151 301.636 78.6482 301.636 87.6537V279.9H301.593Z" fill="#C0392B"/></svg>
+                  <span style="font-size:12px;font-weight:700;color:#fff;">Forge</span>
+                </div>
+                <div style="background:rgba(38,103,255,.1);border:1px solid rgba(38,103,255,.25);border-radius:8px;padding:8px 10px;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><span style="width:5px;height:5px;border-radius:50%;background:#3ECF8E;box-shadow:0 0 5px #3ECF8E;display:inline-block;"></span><span style="font-size:11px;font-weight:700;color:#fff;">Forge AI</span></div>
+                  <div style="font-size:10px;color:rgba(255,255,255,.4);">Ready · Your AI</div>
+                </div>
+                <div class="mx-nav-item active">💬 Chat</div>
+                <div class="mx-nav-item">🧠 Memory</div>
+                <div class="mx-nav-item">⚙️ Settings</div>
+              </div>
+              <div class="mx-main">
+                <div class="mx-messages">
+                  <div class="mx-msg"><div class="mx-ava"><svg width="10" height="10" viewBox="0 0 371 373" fill="none"><path d="M195.103 0H69.1499V49.3588C69.1499 61.3662 59.4183 71.1007 47.4146 71.1007H0V197.049C0 294.223 78.7528 373 175.854 373H301.807V323.641C301.807 311.677 311.539 301.942 323.543 301.942H371V175.994C370.957 78.7768 292.204 0 195.103 0ZM301.593 279.9C301.593 291.907 291.861 301.642 279.858 301.642H85.6978C76.6951 301.642 69.3642 294.352 69.3642 285.303V93.057C69.3642 81.0497 79.0958 71.3151 91.0995 71.3151H285.302C294.305 71.3151 301.636 78.6482 301.636 87.6537V279.9H301.593Z" fill="#fff" opacity=".8"/></svg></div><div class="mx-bubble">Good morning! Your board meeting is at 2pm today. Want to run through the deck?</div></div>
+                  <div class="mx-msg user"><div class="mx-ava mx-ava-u">J</div><div class="mx-bubble">Yes — make the market slide punchier.</div></div>
+                  <div class="mx-msg"><div class="mx-ava"><svg width="10" height="10" viewBox="0 0 371 373" fill="none"><path d="M195.103 0H69.1499V49.3588C69.1499 61.3662 59.4183 71.1007 47.4146 71.1007H0V197.049C0 294.223 78.7528 373 175.854 373H301.807V323.641C301.807 311.677 311.539 301.942 323.543 301.942H371V175.994C370.957 78.7768 292.204 0 195.103 0ZM301.593 279.9C301.593 291.907 291.861 301.642 279.858 301.642H85.6978C76.6951 301.642 69.3642 294.352 69.3642 285.303V93.057C69.3642 81.0497 79.0958 71.3151 91.0995 71.3151H285.302C294.305 71.3151 301.636 78.6482 301.636 87.6537V279.9H301.593Z" fill="#fff" opacity=".8"/></svg></div><div class="mx-bubble">Lead with this: <em>"The $2.4T opportunity nobody has captured."</em> I remember you mentioned that stat last week.</div></div>
+                  <div class="mx-msg user"><div class="mx-ava mx-ava-u">J</div><div class="mx-bubble">Perfect. What about the competitive slide?</div></div>
+                  <div class="mx-msg"><div class="mx-ava"><svg width="10" height="10" viewBox="0 0 371 373" fill="none"><path d="M195.103 0H69.1499V49.3588C69.1499 61.3662 59.4183 71.1007 47.4146 71.1007H0V197.049C0 294.223 78.7528 373 175.854 373H301.807V323.641C301.807 311.677 311.539 301.942 323.543 301.942H371V175.994C370.957 78.7768 292.204 0 195.103 0ZM301.593 279.9C301.593 291.907 291.861 301.642 279.858 301.642H85.6978C76.6951 301.642 69.3642 294.352 69.3642 285.303V93.057C69.3642 81.0497 79.0958 71.3151 91.0995 71.3151H285.302C294.305 71.3151 301.636 78.6482 301.636 87.6537V279.9H301.593Z" fill="#fff" opacity=".8"/></svg></div><div class="mx-bubble">Based on your notes: emphasize the local-first advantage. No other player has that.</div></div>
+                </div>
+                <div class="mx-input-row">
+                  <div class="mx-input">Ask anything...</div>
+                  <div class="mx-send"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+                    <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Private by default</div><p class="feat-desc">Runs entirely on your machine. Nothing leaves your computer without your permission.</p></div>
             <div class="prod-feat"><div class="feat-title">Zero setup</div><p class="feat-desc">One download. No API keys, no terminal, no configuration required.</p></div>
             <div class="prod-feat"><div class="feat-title">Always remembers</div><p class="feat-desc">Persistent memory across every session. Gets to know you and grows smarter over time.</p></div>
@@ -452,7 +562,77 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
               Coming soon <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
-          <div class="prod-features">
+          <!-- Prometheus dashboard mockup -->
+          <div class="prod-mockup-wrap" style="box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04),0 0 80px rgba(244,100,17,.08);">
+            <div class="mx-titlebar">
+              <div class="mx-dot"></div><div class="mx-dot"></div><div class="mx-dot"></div>
+              <span class="mx-label">Prometheus — Dashboard</span>
+            </div>
+            <div class="mx-body">
+              <div class="mx-sidebar">
+                <div class="mx-sidebar-brand">
+                  <svg width="14" height="17" viewBox="0 0 24 30" fill="none"><path d="M12 0L0 7.5V22.5L12 30L24 22.5V7.5L12 0Z" fill="#F46411" opacity=".9"/></svg>
+                  <span style="font-size:12px;font-weight:700;color:#fff;">Prometheus</span>
+                </div>
+                <div class="mx-nav-item active" style="color:#F46411;">📊 Lead Gen</div>
+                <div class="mx-nav-item">👥 Leads</div>
+                <div class="mx-nav-item">📣 Campaigns</div>
+                <div class="mx-nav-item">🌐 Sources</div>
+                <div class="mx-nav-item">✉️ Outreach</div>
+              </div>
+              <div class="mx-main">
+                <div class="mx-topbar">
+                  <span class="mx-topbar-tab">Dashboard</span>
+                  <span style="font-size:11px;color:rgba(255,255,255,.3);">/ Overview</span>
+                  <div style="margin-left:auto;">
+                    <div class="mx-topbar-search">🔍 Search leads...</div>
+                  </div>
+                </div>
+                <div class="mx-stats">
+                  <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">👥</span><span class="mx-stat-delta">+12.5%</span></div><div class="mx-stat-val">2,543</div><div class="mx-stat-label">Total Leads</div></div>
+                  <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📣</span><span class="mx-stat-delta">+2.0%</span></div><div class="mx-stat-val">12</div><div class="mx-stat-label">Active Campaigns</div></div>
+                  <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📧</span><span class="mx-stat-delta">+5.1%</span></div><div class="mx-stat-val">45.2%</div><div class="mx-stat-label">Avg. Open Rate</div></div>
+                </div>
+                <div class="mx-chart" style="margin-bottom:14px;">
+                  <div class="mx-chart-title">Lead Generation Growth</div>
+                  <div class="mx-chart-sub">Last 7 days performance</div>
+                  <div class="mx-chart-bars">
+                    <div class="mx-bar" style="height:35%;"></div>
+                    <div class="mx-bar" style="height:50%;"></div>
+                    <div class="mx-bar" style="height:42%;"></div>
+                    <div class="mx-bar" style="height:65%;"></div>
+                    <div class="mx-bar" style="height:58%;"></div>
+                    <div class="mx-bar hi" style="height:80%;"></div>
+                    <div class="mx-bar hi" style="height:100%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                    <!-- Prometheus dashboard mockup -->
+                    <div class="prod-mockup-wrap" style="box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 80px rgba(244,100,17,.08);">
+                      <div class="mx-titlebar"><div class="mx-dot"></div><div class="mx-dot"></div><div class="mx-dot"></div><span class="mx-label">Prometheus — Dashboard</span></div>
+                      <div class="mx-body">
+                        <div class="mx-sidebar">
+                          <div class="mx-sidebar-brand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#F46411" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:12px;font-weight:700;color:#fff;">Prometheus</span></div>
+                          <div class="mx-nav-item active" style="color:#F46411;">📊 Lead Gen</div>
+                          <div class="mx-nav-item">👥 Leads</div>
+                          <div class="mx-nav-item">📣 Campaigns</div>
+                          <div class="mx-nav-item">🌐 Sources</div>
+                          <div class="mx-nav-item">✉️ Outreach</div>
+                        </div>
+                        <div class="mx-main">
+                          <div class="mx-topbar"><span class="mx-topbar-tab">Dashboard</span><span style="font-size:11px;color:rgba(255,255,255,.3);">/ Overview</span><div style="margin-left:auto;"><div class="mx-topbar-search">🔍 Search leads...</div></div></div>
+                          <div class="mx-stats">
+                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">👥</span><span class="mx-stat-delta">+12.5%</span></div><div class="mx-stat-val">2,543</div><div class="mx-stat-label">Total Leads</div></div>
+                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📣</span><span class="mx-stat-delta">+2.0%</span></div><div class="mx-stat-val">12</div><div class="mx-stat-label">Active Campaigns</div></div>
+                            <div class="mx-stat-card"><div style="display:flex;justify-content:space-between;"><span class="mx-stat-icon">📧</span><span class="mx-stat-delta">+5.1%</span></div><div class="mx-stat-val">45.2%</div><div class="mx-stat-label">Avg. Open Rate</div></div>
+                          </div>
+                          <div class="mx-chart" style="margin:0 16px 14px;"><div class="mx-chart-title">Lead Generation Growth</div><div class="mx-chart-sub">Last 7 days</div><div class="mx-chart-bars"><div class="mx-bar" style="height:35%;"></div><div class="mx-bar" style="height:50%;"></div><div class="mx-bar" style="height:42%;"></div><div class="mx-bar" style="height:65%;"></div><div class="mx-bar" style="height:58%;"></div><div class="mx-bar hi" style="height:80%;"></div><div class="mx-bar hi" style="height:100%;"></div></div></div>
+                        </div>
+                      </div>
+                    </div>
+                                        <div class="prod-features">
             <div class="prod-feat"><div class="feat-title">Lead intelligence</div><p class="feat-desc">Scrape and score high-intent prospects from Reddit, X, LinkedIn, and niche communities.</p></div>
             <div class="prod-feat"><div class="feat-title">Campaign generation</div><p class="feat-desc">Write and deploy outreach campaigns in minutes using natural language prompts.</p></div>
             <div class="prod-feat"><div class="feat-title">Unified analytics</div><p class="feat-desc">Track every touchpoint from first contact to conversion in one dashboard.</p></div>
@@ -575,7 +755,27 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
     </section>
 
-    <!-- FOOTER (preserved) -->
+    <!-- CTA Banner -->
+    <div class="cta-banner">
+      <div class="container">
+        <div class="cta-banner-inner reveal">
+          <h2>Built for the next era<br/>of health and wellness.</h2>
+          <p>One ecosystem. Four platforms. Everything a DTC health brand needs to find customers, reward them, and keep them.</p>
+          <div class="cta-banner-actions">
+            <a href="https://forgeai.bot" class="btn btn-primary" target="_blank" rel="noopener">
+              Try Forge free
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="#contact" class="btn">
+              Talk to us
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- FOOTER (preserved) -->
     <footer>
       <div class="container">
         <div class="footer-inner">
