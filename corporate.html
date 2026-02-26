@@ -134,7 +134,7 @@
       position:relative;
       overflow:hidden;
       min-height:auto;
-      background:linear-gradient(160deg,#0C0C0E 0%, #111113 55%, #0D0D0F 100%);
+      background:linear-gradient(160deg,#0C0C0E 0%, #111113 45%, #0C0C0E 100%);
     }
 
     /* Mesh canvas — absolute inside hero-section-wrap, clips at hero boundary */
@@ -316,6 +316,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       background:#0C0C0E;
       position:relative;
       z-index:2;
+      margin-top:-2px;
     }
     /* Each product section = full viewport */
     .prod-section{
@@ -469,6 +470,36 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       opacity: 0.15;
       transition: opacity .6s cubic-bezier(.22,.68,0,1);
     }
+    
+    /* ── Jump navigation ── */
+    .jump-nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(12,12,14,.85);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:0 28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      height:52px;
+    }
+    .jump-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 16px;border-radius:8px;
+      font-size:13px;font-weight:600;color:rgba(255,255,255,.5);
+      background:transparent;border:none;cursor:pointer;
+      transition:color .15s,background .15s;font-family:inherit;
+      letter-spacing:-.01em;
+    }
+    .jump-btn:hover{ color:#fff; background:rgba(255,255,255,.07); }
+    .jump-btn.active{ color:#fff; background:rgba(255,255,255,.08); }
+    .jump-dot{
+      width:6px;height:6px;border-radius:50%;flex-shrink:0;
+    }
         .about{padding:92px 0;}
     .about-wrap{
       border-radius:22px;
@@ -609,6 +640,22 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- BELOW FOLD: solid #0B0C10 covers all content below hero -->
   <div class="below-fold">
 
+    <!-- Jump navigation -->
+    <nav class="jump-nav" id="jump-nav">
+      <button class="jump-btn" onclick="document.getElementById('prod-forge').scrollIntoView({behavior:'smooth'})">
+        <span class="jump-dot" style="background:#C0392B;"></span>Forge
+      </button>
+      <button class="jump-btn" onclick="document.getElementById('prod-prometheus').scrollIntoView({behavior:'smooth'})">
+        <span class="jump-dot" style="background:#F46411;"></span>Prometheus
+      </button>
+      <button class="jump-btn" onclick="document.getElementById('prod-midas').scrollIntoView({behavior:'smooth'})">
+        <span class="jump-dot" style="background:#8054FF;"></span>Midas
+      </button>
+      <button class="jump-btn" onclick="document.getElementById('prod-olympus').scrollIntoView({behavior:'smooth'})">
+        <span class="jump-dot" style="background:#4caf50;"></span>Olympus
+      </button>
+    </nav>
+
     <!-- PRODUCTS -->
     <section id="products">
 
@@ -621,7 +668,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── FORGE ── -->
-      <div class="prod-section reveal" data-product="forge">
+      <div class="prod-section reveal" data-product="forge" id="prod-forge">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Forge Platform</span>
@@ -686,7 +733,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── PROMETHEUS ── -->
-      <div class="prod-section reveal" data-product="prometheus">
+      <div class="prod-section reveal" data-product="prometheus" id="prod-prometheus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Prometheus Platform</span>
@@ -763,7 +810,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── MIDAS ── -->
-      <div class="prod-section reveal" data-product="midas">
+      <div class="prod-section reveal" data-product="midas" id="prod-midas">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Midas Platform</span>
@@ -793,7 +840,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── OLYMPUS ── -->
-      <div class="prod-section reveal" data-product="olympus">
+      <div class="prod-section reveal" data-product="olympus" id="prod-olympus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Olympus Platform</span>
@@ -1026,6 +1073,24 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       // Disable focus effect on mobile (too aggressive on small screens)
       if (window.innerWidth < 720) {
         belowFold.classList.remove('has-focus');
+      }
+
+      // Jump nav active state
+      const jumpBtns = document.querySelectorAll('.jump-btn');
+      const prodIds = ['prod-forge','prod-prometheus','prod-midas','prod-olympus'];
+      if (jumpBtns.length) {
+        const activeIO = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            const idx = prodIds.indexOf(e.target.id);
+            if (idx >= 0 && e.isIntersecting && e.intersectionRatio > 0.3) {
+              jumpBtns.forEach((b,i) => b.classList.toggle('active', i === idx));
+            }
+          });
+        }, {threshold:[0.3,0.5]});
+        prodIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) activeIO.observe(el);
+        });
       }
     })();
   </script>
