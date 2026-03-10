@@ -316,13 +316,16 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.mod
   window.addEventListener('resize', resize);
   resize();
 
-  // Cosine oscillation: smooth ease-in/out at both ends — guaranteed no visual pop
-  let _phase = 0;
+  // Triangle wave capped at _max=12 — stays strictly below fract period (20),
+  // so no integer crossings ever occur → zero discontinuities → clean out/in reversal
+  let _t = 0, _dir = 1;
   let animId;
   function animate() {
     animId = requestAnimationFrame(animate);
-    _phase += 0.0058;
-    uniforms.time.value = (1 - Math.cos(_phase)) / 2 * 30;
+    _t += 0.03 * _dir;
+    if (_t >= 12) { _t = 12; _dir = -1; }
+    if (_t <= 0)  { _t = 0;  _dir =  1; }
+    uniforms.time.value = _t;
     renderer.render(scene, camera);
   }
   animate();

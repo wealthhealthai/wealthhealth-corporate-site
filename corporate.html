@@ -1086,13 +1086,15 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     window.addEventListener('resize', resize);
     resize();
 
-    // Cosine oscillation: smooth ease-in/out at both ends — guaranteed no visual pop
-    // phase 0→π = outward, π→2π = inward; one full cycle ≈ 18s at 60fps
-    let _phase = 0;
+    // Triangle wave capped at _max=12 — stays strictly below fract period (20),
+    // so no integer crossings ever occur → zero discontinuities → clean out/in reversal
+    let _t = 0, _dir = 1;
     (function animate() {
       requestAnimationFrame(animate);
-      _phase += 0.0058;
-      uniforms.time.value = (1 - Math.cos(_phase)) / 2 * 30;
+      _t += 0.03 * _dir;
+      if (_t >= 12) { _t = 12; _dir = -1; }
+      if (_t <= 0)  { _t = 0;  _dir =  1; }
+      uniforms.time.value = _t;
       renderer.render(scene, camera);
     })();
   })();
