@@ -20,7 +20,7 @@
     /* Shader canvas — fixed full-screen behind everything */
     #wh-shader{
       position:fixed;top:0;left:0;width:100%;height:100%;
-      pointer-events:none;z-index:0;opacity:0.45;
+      pointer-events:none;z-index:0;opacity:0.75;
     }
     #wh-shader canvas{display:block;width:100%!important;height:100%!important;}
 
@@ -316,10 +316,16 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.mod
   window.addEventListener('resize', resize);
   resize();
 
+  // Triangle-wave ping-pong: ripples expand out, then collapse back in, loop
+  let _t = 0, _dir = 1;
+  const _speed = 0.05, _max = 35;
   let animId;
   function animate() {
     animId = requestAnimationFrame(animate);
-    uniforms.time.value += 0.05;
+    _t += _speed * _dir;
+    if (_t >= _max) { _t = _max; _dir = -1; }
+    if (_t <= 0)    { _t = 0;    _dir =  1; }
+    uniforms.time.value = _t;
     renderer.render(scene, camera);
   }
   animate();
