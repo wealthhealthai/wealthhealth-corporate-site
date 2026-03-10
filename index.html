@@ -20,7 +20,7 @@
     /* Shader canvas — fixed full-screen behind everything */
     #wh-shader{
       position:fixed;top:0;left:0;width:100%;height:100%;
-      pointer-events:none;z-index:0;opacity:0.55;
+      pointer-events:none;z-index:0;opacity:0.45;
     }
     #wh-shader canvas{display:block;width:100%!important;height:100%!important;}
 
@@ -286,15 +286,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.mod
         }
       }
 
-      // Remap raw RGB → WealthHealth blue/indigo palette
-      // raw[0]=red-layer, raw[1]=green-layer, raw[2]=blue-layer
-      vec3 blue   = vec3(0.10, 0.35, 1.00);  // #2667FF
-      vec3 indigo = vec3(0.35, 0.18, 0.90);  // #7B5EFF
-      vec3 cyan   = vec3(0.05, 0.60, 1.00);  // deep sky
-
-      vec3 color = raw[0] * blue + raw[1] * indigo + raw[2] * cyan;
-
-      gl_FragColor = vec4(color, 1.0);
+      gl_FragColor = vec4(raw[0], raw[1], raw[2], 1.0);
     }
   `;
 
