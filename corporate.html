@@ -1091,7 +1091,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     let _t = 0, _dir = 1;
     (function animate() {
       requestAnimationFrame(animate);
-      _t += 0.03 * _dir;
+      _t += 0.044 * _dir;
       if (_t >= 12) { _t = 12; _dir = -1; }
       if (_t <= 0)  { _t = 0;  _dir =  1; }
       uniforms.time.value = _t;
