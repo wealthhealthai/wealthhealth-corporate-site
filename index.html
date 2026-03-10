@@ -17,11 +17,12 @@
       background:#0A0918;
     }
 
-    /* Warped mesh canvas — fixed full-screen behind everything */
-    #wh-mesh{
+    /* Shader canvas — fixed full-screen behind everything */
+    #wh-shader{
       position:fixed;top:0;left:0;width:100%;height:100%;
-      pointer-events:none;z-index:0;
+      pointer-events:none;z-index:0;opacity:0.55;
     }
+    #wh-shader canvas{display:block;width:100%!important;height:100%!important;}
 
     /* Ambient glow blobs */
     .glow-top{
@@ -182,8 +183,8 @@
 </head>
 <body>
 
-<!-- Warped mesh background -->
-<canvas id="wh-mesh"></canvas>
+<!-- Shader background -->
+<div id="wh-shader"></div>
 <div class="glow-top"></div>
 <div class="glow-bottom"></div>
 
@@ -246,39 +247,90 @@
   <div class="footer-text">© 2026 WealthHealth AI Inc. &nbsp;·&nbsp; Irvine, California</div>
 </div>
 
-<!-- Warped mesh animation -->
-<script>
+<!-- WebGL Shader Animation (ported from aliimam/shader-animation @ 21st.dev) -->
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
+
 (function() {
-  const canvas = document.getElementById('wh-mesh');
-  const ctx = canvas.getContext('2d');
-  const COLS = 20, ROWS = 14;
-  let W, H, t = 0;
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  window.addEventListener('resize', resize); resize();
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    const cW = W/(COLS-1), cH = H/(ROWS-1);
-    const pts = [];
-    for (let r=0;r<ROWS;r++) { pts[r]=[];
-      for (let c=0;c<COLS;c++) {
-        const nx=c/(COLS-1),ny=r/(ROWS-1);
-        const dx=Math.sin(ny*3.4+t*0.9)*cW*0.45+Math.sin(nx*2.2+t*0.55+1.2)*cW*0.22;
-        const dy=Math.cos(nx*3.1+t*0.75)*cH*0.38+Math.cos(ny*2.0+t*0.42+0.8)*cH*0.18;
-        pts[r][c]={x:c*cW+dx,y:r*cH+dy};
+  const container = document.getElementById('wh-shader');
+
+  const vertexShader = `
+    void main() {
+      gl_Position = vec4(position, 1.0);
+    }
+  `;
+
+  // Fragment shader — WealthHealth palette tint (blue/indigo/cyan)
+  const fragmentShader = `
+    #define TWO_PI 6.2831853072
+    #define PI 3.14159265359
+
+    precision highp float;
+    uniform vec2 resolution;
+    uniform float time;
+
+    void main(void) {
+      vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+      float t = time * 0.05;
+      float lineWidth = 0.002;
+
+      // Raw ripple layers (same as original)
+      vec3 raw = vec3(0.0);
+      for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 5; i++) {
+          raw[j] += lineWidth * float(i * i) / abs(
+            fract(t - 0.01 * float(j) + float(i) * 0.01) * 5.0
+            - length(uv)
+            + mod(uv.x + uv.y, 0.2)
+          );
+        }
       }
+
+      // Remap raw RGB → WealthHealth blue/indigo palette
+      // raw[0]=red-layer, raw[1]=green-layer, raw[2]=blue-layer
+      vec3 blue   = vec3(0.10, 0.35, 1.00);  // #2667FF
+      vec3 indigo = vec3(0.35, 0.18, 0.90);  // #7B5EFF
+      vec3 cyan   = vec3(0.05, 0.60, 1.00);  // deep sky
+
+      vec3 color = raw[0] * blue + raw[1] * indigo + raw[2] * cyan;
+
+      gl_FragColor = vec4(color, 1.0);
     }
-    ctx.strokeStyle='rgba(38,103,255,1)'; ctx.lineWidth=1.2; ctx.globalAlpha=0.22;
-    ctx.beginPath();
-    for (let r=0;r<ROWS;r++) for (let c=0;c<COLS-1;c++) {
-      ctx.moveTo(pts[r][c].x,pts[r][c].y); ctx.lineTo(pts[r][c+1].x,pts[r][c+1].y);
-    }
-    for (let c=0;c<COLS;c++) for (let r=0;r<ROWS-1;r++) {
-      ctx.moveTo(pts[r][c].x,pts[r][c].y); ctx.lineTo(pts[r+1][c].x,pts[r+1][c].y);
-    }
-    ctx.stroke(); ctx.globalAlpha=1;
-    t+=0.004; requestAnimationFrame(draw);
+  `;
+
+  const camera = new THREE.Camera();
+  camera.position.z = 1;
+
+  const scene = new THREE.Scene();
+  const geometry = new THREE.PlaneGeometry(2, 2);
+
+  const uniforms = {
+    time:       { value: 1.0 },
+    resolution: { value: new THREE.Vector2() },
+  };
+
+  const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
+  scene.add(new THREE.Mesh(geometry, material));
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  function resize() {
+    const w = container.clientWidth, h = container.clientHeight;
+    renderer.setSize(w, h);
+    uniforms.resolution.value.set(renderer.domElement.width, renderer.domElement.height);
   }
-  draw();
+  window.addEventListener('resize', resize);
+  resize();
+
+  let animId;
+  function animate() {
+    animId = requestAnimationFrame(animate);
+    uniforms.time.value += 0.05;
+    renderer.render(scene, camera);
+  }
+  animate();
 })();
 </script>
 
