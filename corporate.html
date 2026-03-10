@@ -232,8 +232,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .scroll-hint{
       margin-top:64px;
       display:flex;align-items:center;justify-content:center;gap:10px;
-      color:rgba(255,255,255,.22);
-      font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+      color:rgba(255,255,255,.52);
+      font-size:14px;letter-spacing:.12em;text-transform:uppercase;
       position:relative;z-index:1;
       animation:bob 2.2s ease-in-out infinite;
       user-select:none;
@@ -242,10 +242,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .section-scroll{
       display:flex;align-items:center;justify-content:center;gap:10px;
       padding:60px 0 80px;
-      color:rgba(255,255,255,.18);
-      font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(255,255,255,.48);
+      font-size:14px;letter-spacing:.14em;text-transform:uppercase;
       position:relative;z-index:3;
-
     }
 
 
@@ -1087,15 +1086,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     window.addEventListener('resize', resize);
     resize();
 
-    // Triangle-wave ping-pong: ripples expand out, then collapse back in, loop
-    let _t = 0, _dir = 1;
-    const _speed = 0.05, _max = 35;
+    // Cosine oscillation: smooth ease-in/out at both ends — guaranteed no visual pop
+    // phase 0→π = outward, π→2π = inward; one full cycle ≈ 18s at 60fps
+    let _phase = 0;
     (function animate() {
       requestAnimationFrame(animate);
-      _t += _speed * _dir;
-      if (_t >= _max) { _t = _max; _dir = -1; }
-      if (_t <= 0)    { _t = 0;    _dir =  1; }
-      uniforms.time.value = _t;
+      _phase += 0.0058;
+      uniforms.time.value = (1 - Math.cos(_phase)) / 2 * 30;
       renderer.render(scene, camera);
     })();
   })();

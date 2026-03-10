@@ -316,16 +316,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.mod
   window.addEventListener('resize', resize);
   resize();
 
-  // Triangle-wave ping-pong: ripples expand out, then collapse back in, loop
-  let _t = 0, _dir = 1;
-  const _speed = 0.05, _max = 35;
+  // Cosine oscillation: smooth ease-in/out at both ends — guaranteed no visual pop
+  let _phase = 0;
   let animId;
   function animate() {
     animId = requestAnimationFrame(animate);
-    _t += _speed * _dir;
-    if (_t >= _max) { _t = _max; _dir = -1; }
-    if (_t <= 0)    { _t = 0;    _dir =  1; }
-    uniforms.time.value = _t;
+    _phase += 0.0058;
+    uniforms.time.value = (1 - Math.cos(_phase)) / 2 * 30;
     renderer.render(scene, camera);
   }
   animate();
