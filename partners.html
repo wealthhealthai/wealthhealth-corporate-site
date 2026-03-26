@@ -152,10 +152,10 @@
       width: 248px;
       transform: translate(-50%, -50%);
     }
-    .card-anchor--prometheus { top: 24%;  left: 19%; }
-    .card-anchor--forge      { top: 24%;  left: 81%; }
-    .card-anchor--midas      { top: 76%;  left: 19%; }
-    .card-anchor--olympus    { top: 76%;  left: 81%; }
+    .card-anchor--prometheus { top: 11%;  left: 4%;  }
+    .card-anchor--forge      { top: 29%;  left: 72%; }
+    .card-anchor--midas      { top: 67%;  left: 5%;  }
+    .card-anchor--olympus    { top: 53%;  left: 71%; }
 
     .card {
       position: relative;
@@ -538,155 +538,165 @@
     });
   })();
 
-  // ── HUD Lines ─────────────────────────────────────────────
+  // ── HUD Lines (bent routing) ──────────────────────────────
   (function() {
     const NS = 'http://www.w3.org/2000/svg';
 
+    // outset: how far to travel straight out from blob before first bend
+    // bend2: optional second intermediate waypoint offset [dx, dy] from P2
+    // hFirst: after outset, go horizontal to align X then vertical (vs vertical first)
     const CARDS = [
-      { selector: '.card-anchor--prometheus', color: '#F46411' },
-      { selector: '.card-anchor--forge',      color: '#C0392B' },
-      { selector: '.card-anchor--midas',      color: '#8054FF' },
-      { selector: '.card-anchor--olympus',    color: '#107C10' },
+      { sel: '.card-anchor--prometheus', color: '#F46411', outset: 60, hFirst: false },
+      { sel: '.card-anchor--forge',      color: '#C0392B', outset: 52, hFirst: true  },
+      { sel: '.card-anchor--midas',      color: '#8054FF', outset: 65, hFirst: true  },
+      { sel: '.card-anchor--olympus',    color: '#107C10', outset: 50, hFirst: false },
     ];
 
     function draw() {
-      // Remove existing HUD svg
       const old = document.getElementById('hud-svg');
       if (old) old.remove();
 
       const hero = document.querySelector('.hero');
       if (!hero) return;
-      const heroRect = hero.getBoundingClientRect();
-      const cx = heroRect.width  / 2;
-      const cy = heroRect.height / 2;
-
-      // Blob visual radius — IcosahedronGeometry r=1.2, camera z=3, FOV 75°
-      // At viewport height H: radius_px ≈ H * 0.275, with noise swell +0.2 → * 0.305
-      const blobR = heroRect.height * 0.265;
+      const hr = hero.getBoundingClientRect();
+      const cx = hr.width / 2, cy = hr.height / 2;
+      const blobR = hr.height * 0.265;
 
       const svg = document.createElementNS(NS, 'svg');
       svg.id = 'hud-svg';
       svg.setAttribute('style',
         'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:15;overflow:visible');
 
-      // Glow filter
+      // Glow filters
       const defs = document.createElementNS(NS, 'defs');
-      ['prom','forge','midas','oly'].forEach((id, i) => {
-        const colors = ['#F46411','#C0392B','#8054FF','#107C10'];
+      ['prom','forge','midas','oly'].forEach(id => {
         const f = document.createElementNS(NS, 'filter');
-        f.setAttribute('id', 'glow-' + id);
-        f.setAttribute('x', '-50%'); f.setAttribute('y', '-50%');
-        f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+        f.id = 'glow-' + id;
+        f.setAttribute('x','-100%'); f.setAttribute('y','-100%');
+        f.setAttribute('width','300%'); f.setAttribute('height','300%');
         const blur = document.createElementNS(NS, 'feGaussianBlur');
-        blur.setAttribute('stdDeviation', '2');
-        blur.setAttribute('result', 'b');
+        blur.setAttribute('stdDeviation','2.5'); blur.setAttribute('result','b');
         const merge = document.createElementNS(NS, 'feMerge');
-        const n1 = document.createElementNS(NS, 'feMergeNode'); n1.setAttribute('in', 'b');
-        const n2 = document.createElementNS(NS, 'feMergeNode'); n2.setAttribute('in', 'SourceGraphic');
-        merge.appendChild(n1); merge.appendChild(n2);
-        f.appendChild(blur); f.appendChild(merge);
-        defs.appendChild(f);
+        ['b','SourceGraphic'].forEach(i => {
+          const n = document.createElementNS(NS, 'feMergeNode');
+          n.setAttribute('in', i); merge.appendChild(n);
+        });
+        f.appendChild(blur); f.appendChild(merge); defs.appendChild(f);
       });
       svg.appendChild(defs);
 
-      const filterIds = ['prom','forge','midas','oly'];
+      const fIds = ['prom','forge','midas','oly'];
 
-      CARDS.forEach(({ selector, color }, idx) => {
-        const anchor = document.querySelector(selector);
+      CARDS.forEach(({ sel, color, outset, hFirst }, idx) => {
+        const anchor = document.querySelector(sel);
         if (!anchor) return;
         const r = anchor.getBoundingClientRect();
 
-        // Card center in hero coords
-        const cardCx = r.left - heroRect.left + r.width  / 2;
-        const cardCy = r.top  - heroRect.top  + r.height / 2;
-
-        // Direction from hero center → card center
-        const dx = cardCx - cx;
-        const dy = cardCy - cy;
+        // Card center → direction from hero center
+        const cardCx = r.left - hr.left + r.width  / 2;
+        const cardCy = r.top  - hr.top  + r.height / 2;
+        const dx = cardCx - cx, dy = cardCy - cy;
         const mag = Math.sqrt(dx*dx + dy*dy);
-        const nx  = dx / mag;
-        const ny  = dy / mag;
+        const nx = dx/mag, ny = dy/mag;
 
-        // Blob edge point (line start)
-        const bx = cx + nx * blobR;
-        const by = cy + ny * blobR;
+        // P0: blob surface
+        const p0x = cx + nx * blobR, p0y = cy + ny * blobR;
+        // P1: straight outset from blob
+        const p1x = p0x + nx * outset, p1y = p0y + ny * outset;
 
-        // Card corner nearest to hero center (line end)
-        const corners = [
-          { x: r.left,  y: r.top    },
-          { x: r.right, y: r.top    },
-          { x: r.left,  y: r.bottom },
-          { x: r.right, y: r.bottom },
-        ];
-        const nearest = corners.reduce((a, b) => {
-          const da = (a.x - heroRect.left - cx)**2 + (a.y - heroRect.top - cy)**2;
-          const db = (b.x - heroRect.left - cx)**2 + (b.y - heroRect.top - cy)**2;
+        // Card corner nearest to center (terminus)
+        const nearest = [
+          [r.left, r.top], [r.right, r.top],
+          [r.left, r.bottom], [r.right, r.bottom],
+        ].reduce((a, b) => {
+          const da = (a[0]-hr.left-cx)**2 + (a[1]-hr.top-cy)**2;
+          const db = (b[0]-hr.left-cx)**2 + (b[1]-hr.top-cy)**2;
           return da < db ? a : b;
         });
-        const ex = nearest.x - heroRect.left;
-        const ey = nearest.y - heroRect.top;
+        const ex = nearest[0] - hr.left, ey = nearest[1] - hr.top;
 
-        const fId = 'url(#glow-' + filterIds[idx] + ')';
+        // Bend routing: P1 → P2 → P3(ex,ey)
+        // hFirst: go horizontal (to ex) then vertical (to ey)
+        // !hFirst: go vertical (to ey) then horizontal (to ex)
+        const p2x = hFirst ? ex   : p1x;
+        const p2y = hFirst ? p1y  : ey;
 
-        // Main dashed line
-        const line = document.createElementNS(NS, 'line');
-        line.setAttribute('x1', bx); line.setAttribute('y1', by);
-        line.setAttribute('x2', ex); line.setAttribute('y2', ey);
-        line.setAttribute('stroke', color);
-        line.setAttribute('stroke-width', '1');
-        line.setAttribute('stroke-opacity', '0.55');
-        line.setAttribute('stroke-dasharray', '5 7');
-        line.setAttribute('filter', fId);
-        line.style.animation = 'hud-dash 1.4s linear infinite';
-        svg.appendChild(line);
+        // For a second micro-bend, add a small jog ~20px past P2 along the final segment
+        // This breaks the 90° corner into a short chamfer, giving a 2-bend feel
+        const segDx = ex - p2x, segDy = ey - p2y;
+        const segMag = Math.sqrt(segDx*segDx + segDy*segDy) || 1;
+        const jogDist = Math.min(28, segMag * 0.35);
+        const p3x = p2x + (segDx/segMag) * jogDist;
+        const p3y = p2y + (segDy/segMag) * jogDist;
 
-        // Solid accent line (thinner, slightly offset along normal for depth)
-        const line2 = document.createElementNS(NS, 'line');
-        line2.setAttribute('x1', bx); line2.setAttribute('y1', by);
-        line2.setAttribute('x2', ex); line2.setAttribute('y2', ey);
-        line2.setAttribute('stroke', color);
-        line2.setAttribute('stroke-width', '0.4');
-        line2.setAttribute('stroke-opacity', '0.25');
-        svg.appendChild(line2);
+        const d = `M${p0x},${p0y} L${p1x},${p1y} L${p2x},${p2y} L${p3x},${p3y} L${ex},${ey}`;
+        const fId = `url(#glow-${fIds[idx]})`;
 
-        // Dot at blob edge — pulsing origin
+        // Glow ghost (wide, blurred)
+        const glow = document.createElementNS(NS, 'path');
+        glow.setAttribute('d', d); glow.setAttribute('fill', 'none');
+        glow.setAttribute('stroke', color); glow.setAttribute('stroke-width', '2.5');
+        glow.setAttribute('stroke-opacity', '0.18'); glow.setAttribute('filter', fId);
+        glow.setAttribute('stroke-linecap', 'round'); glow.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(glow);
+
+        // Hairline base
+        const base = document.createElementNS(NS, 'path');
+        base.setAttribute('d', d); base.setAttribute('fill', 'none');
+        base.setAttribute('stroke', color); base.setAttribute('stroke-width', '0.5');
+        base.setAttribute('stroke-opacity', '0.28');
+        base.setAttribute('stroke-linecap', 'round'); base.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(base);
+
+        // Animated dashes
+        const dashes = document.createElementNS(NS, 'path');
+        dashes.setAttribute('d', d); dashes.setAttribute('fill', 'none');
+        dashes.setAttribute('stroke', color); dashes.setAttribute('stroke-width', '1');
+        dashes.setAttribute('stroke-opacity', '0.6');
+        dashes.setAttribute('stroke-dasharray', '5 8');
+        dashes.setAttribute('stroke-linecap', 'round'); dashes.setAttribute('stroke-linejoin', 'round');
+        dashes.setAttribute('filter', fId);
+        dashes.style.animation = 'hud-dash 1.6s linear infinite';
+        svg.appendChild(dashes);
+
+        // Origin: dot + ring on blob surface
         const dot = document.createElementNS(NS, 'circle');
-        dot.setAttribute('cx', bx); dot.setAttribute('cy', by);
-        dot.setAttribute('r', '3');
-        dot.setAttribute('fill', color);
-        dot.setAttribute('opacity', '0.85');
-        dot.setAttribute('filter', fId);
+        dot.setAttribute('cx', p0x); dot.setAttribute('cy', p0y);
+        dot.setAttribute('r', '2.5'); dot.setAttribute('fill', color);
+        dot.setAttribute('opacity', '0.9'); dot.setAttribute('filter', fId);
         svg.appendChild(dot);
 
-        // Small ring around blob dot
         const ring = document.createElementNS(NS, 'circle');
-        ring.setAttribute('cx', bx); ring.setAttribute('cy', by);
-        ring.setAttribute('r', '6');
-        ring.setAttribute('fill', 'none');
-        ring.setAttribute('stroke', color);
-        ring.setAttribute('stroke-width', '0.8');
+        ring.setAttribute('cx', p0x); ring.setAttribute('cy', p0y);
+        ring.setAttribute('r', '6'); ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', color); ring.setAttribute('stroke-width', '0.7');
         ring.setAttribute('stroke-opacity', '0.35');
         svg.appendChild(ring);
 
-        // Diamond at card corner
+        // Terminus: diamond at card corner
         const s = 4;
-        const diamond = document.createElementNS(NS, 'polygon');
-        diamond.setAttribute('points',
-          `${ex},${ey-s} ${ex+s},${ey} ${ex},${ey+s} ${ex-s},${ey}`);
-        diamond.setAttribute('fill', color);
-        diamond.setAttribute('opacity', '0.7');
-        diamond.setAttribute('filter', fId);
-        svg.appendChild(diamond);
+        const dia = document.createElementNS(NS, 'polygon');
+        dia.setAttribute('points', `${ex},${ey-s} ${ex+s},${ey} ${ex},${ey+s} ${ex-s},${ey}`);
+        dia.setAttribute('fill', color); dia.setAttribute('opacity', '0.75');
+        dia.setAttribute('filter', fId);
+        svg.appendChild(dia);
+
+        // Small tick marks at each bend corner for HUD detail
+        [{ x: p1x, y: p1y }, { x: p2x, y: p2y }].forEach(pt => {
+          const tick = document.createElementNS(NS, 'circle');
+          tick.setAttribute('cx', pt.x); tick.setAttribute('cy', pt.y);
+          tick.setAttribute('r', '1.5'); tick.setAttribute('fill', color);
+          tick.setAttribute('opacity', '0.45');
+          svg.appendChild(tick);
+        });
       });
 
       hero.appendChild(svg);
     }
 
-    // Draw after layout settles
-    window.addEventListener('load', function() { setTimeout(draw, 120); });
-    window.addEventListener('resize', function() { setTimeout(draw, 60); });
-    // Fallback if load already fired
-    if (document.readyState === 'complete') setTimeout(draw, 200);
+    window.addEventListener('load', () => setTimeout(draw, 150));
+    window.addEventListener('resize', () => setTimeout(draw, 80));
+    if (document.readyState === 'complete') setTimeout(draw, 250);
   })();
   </script>
 </body>
