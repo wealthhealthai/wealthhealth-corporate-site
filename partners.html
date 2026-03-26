@@ -380,8 +380,8 @@
     <a href="https://wealthhealth.ai">← Back to wealthhealth.ai</a>
   </footer>
 
-  <!-- THREE.JS — r183 matches Archon's package.json (three@0.183.2) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.183.0/build/three.min.js"></script>
+  <!-- THREE.JS r128 UMD (reliable CDN) + sRGBEncoding set manually below to match r183 defaults -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <script>
   (function() {
@@ -479,6 +479,9 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Force sRGB output — matches Three.js r152+ default (r183 is what Archon uses).
+    // Without this, r128 renders in linear space and looks too bright.
+    renderer.outputEncoding = THREE.sRGBEncoding;
     mount.appendChild(renderer.domElement);
 
     const geometry = new THREE.IcosahedronGeometry(1.2, 64);
