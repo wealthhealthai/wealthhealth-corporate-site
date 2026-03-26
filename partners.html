@@ -15,15 +15,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg0:      #0C0C0E;
-      --bg1:      #111113;
-      --s2:       #1C1C1C;
-      --s3:       #242424;
-      --fg:       #F2EDE8;
-      --muted:    rgba(242,237,232,.60);
-      --muted2:   rgba(242,237,232,.38);
-      --hairline: rgba(255,255,255,.09);
-      --glass:    rgba(255,255,255,.04);
+      --bg:       #000000;
+      --fg:       #e2e8f0;
+      --muted:    rgba(226,232,240,.62);
+      --muted2:   rgba(226,232,240,.38);
+      --hairline: rgba(255,255,255,.10);
+      --glass:    rgba(0,0,0,.55);
       --blue:     #2667FF;
       --prom:     #F46411;
       --midas:    #8054FF;
@@ -31,343 +28,268 @@
       --forge:    #C0392B;
     }
 
-    html { scroll-behavior: smooth; }
+    html, body {
+      width: 100%; height: 100%;
+      overflow-x: hidden;
+    }
 
     body {
       font-family: 'Geist', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: var(--bg0);
+      background: var(--bg);
       color: var(--fg);
-      overflow-x: hidden;
-      min-height: 100vh;
     }
 
     /* ─── NAV ─────────────────────────────────────── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 0 48px;
-      height: 64px;
+      z-index: 200;
+      padding: 0 40px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(12,12,14,.85);
+      background: rgba(0,0,0,.6);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--hairline);
     }
-
     nav a.home-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--fg);
-      opacity: .85;
-      transition: opacity .2s;
+      display: flex; align-items: center;
+      text-decoration: none; color: var(--fg);
+      opacity: .85; transition: opacity .2s;
     }
     nav a.home-link:hover { opacity: 1; }
-    nav a.home-link img { height: 26px; width: auto; }
-
+    nav a.home-link img { height: 24px; width: auto; }
     .nav-badge {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
       color: var(--muted2);
       padding: 4px 10px;
-      border: 1px solid var(--hairline);
-      border-radius: 20px;
+      border: 1px solid var(--hairline); border-radius: 20px;
     }
 
     /* ─── HERO ────────────────────────────────────── */
     .hero {
       position: relative;
-      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* Three.js canvas mount */
+    #blob-mount {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    #blob-mount canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Bottom fade so page content flows in naturally */
+    .hero-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, #000 0%, transparent 100%);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* Center content */
+    .hero-center {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 24px 80px;
-      overflow: hidden;
-    }
-
-    /* dot grid */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,.055) 1px, transparent 1px);
-      background-size: 32px 32px;
-      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
       pointer-events: none;
     }
-
-    /* subtle blue radial glow */
-    .hero::after {
-      content: '';
-      position: absolute;
-      top: -10%; left: 50%;
-      transform: translateX(-50%);
-      width: 800px; height: 500px;
-      background: radial-gradient(ellipse, rgba(38,103,255,.10) 0%, transparent 70%);
-      pointer-events: none;
+    .hero-center img.wh-logo {
+      height: 28px; width: auto;
+      margin-bottom: 18px;
+      opacity: .9;
     }
-
     .hero-eyebrow {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: .14em;
+      letter-spacing: .16em;
       text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
+      color: rgba(38,103,255,.85);
+      margin-bottom: 16px;
     }
-
-    .hero h1 {
-      font-size: clamp(40px, 6vw, 72px);
+    .hero-title {
+      font-size: clamp(42px, 5.5vw, 76px);
       font-weight: 800;
-      line-height: 1.05;
+      line-height: 1.0;
       letter-spacing: -.03em;
-      color: var(--fg);
-      max-width: 820px;
-      position: relative;
-      z-index: 1;
+      color: #fff;
+      max-width: 680px;
     }
-
-    .hero h1 span {
-      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,.5));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
     .hero-sub {
-      margin-top: 20px;
-      font-size: 18px;
+      margin-top: 16px;
+      font-size: 16px;
       font-weight: 400;
-      line-height: 1.6;
-      color: var(--muted);
-      max-width: 560px;
-      position: relative;
-      z-index: 1;
+      line-height: 1.65;
+      color: rgba(226,232,240,.65);
+      max-width: 420px;
     }
 
-    .hero-divider {
-      margin: 56px auto 0;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-divider span {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--muted2);
-    }
-    .hero-divider::before,
-    .hero-divider::after {
-      content: '';
-      width: 64px; height: 1px;
-      background: var(--hairline);
-    }
-
-    /* ─── CARDS ───────────────────────────────────── */
-    .cards-section {
-      padding: 0 48px 120px;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
+    /* ─── CORNER CARDS ────────────────────────────── */
     .card {
-      position: relative;
-      background: var(--bg1);
-      border: 1px solid var(--hairline);
-      border-radius: 20px;
-      padding: 40px;
+      position: absolute;
+      z-index: 20;
+      width: 260px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: 22px 22px 20px;
       display: flex;
       flex-direction: column;
-      gap: 0;
-      transition: border-color .3s, box-shadow .3s, transform .25s;
-      overflow: hidden;
+      gap: 10px;
       text-decoration: none;
-      color: inherit;
+      color: var(--fg);
+      transition: border-color .3s, box-shadow .3s, transform .25s, background .3s;
     }
 
     .card:not(.card--disabled):hover {
-      transform: translateY(-3px);
+      transform: scale(1.025);
+      background: rgba(0,0,0,.72);
     }
 
-    /* per-product top accent bar */
+    /* product-color top line on hover */
     .card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: -1px; left: 16px; right: 16px;
       height: 2px;
-      border-radius: 20px 20px 0 0;
+      border-radius: 4px;
       opacity: 0;
       transition: opacity .3s;
     }
     .card:not(.card--disabled):hover::before { opacity: 1; }
 
-    .card--prometheus::before  { background: var(--prom); box-shadow: 0 0 20px var(--prom); }
-    .card--midas::before       { background: var(--midas); box-shadow: 0 0 20px var(--midas); }
-    .card--olympus::before     { background: var(--oly); box-shadow: 0 0 20px var(--oly); }
-    .card--forge::before       { background: var(--forge); box-shadow: 0 0 20px var(--forge); }
+    .card--prometheus  { top: 88px; left: 40px; }
+    .card--forge       { top: 88px; right: 40px; }
+    .card--midas       { bottom: 48px; left: 40px; }
+    .card--olympus     { bottom: 48px; right: 40px; }
 
-    .card:not(.card--disabled):hover {
-      border-color: rgba(255,255,255,.16);
-    }
-    .card--prometheus:not(.card--disabled):hover { box-shadow: 0 20px 60px rgba(244,100,17,.10); }
-    .card--midas:not(.card--disabled):hover      { box-shadow: 0 20px 60px rgba(128,84,255,.10); }
-    .card--olympus:not(.card--disabled):hover    { box-shadow: 0 20px 60px rgba(16,124,16,.10); }
-    .card--forge:not(.card--disabled):hover      { box-shadow: 0 20px 60px rgba(192,57,43,.10); }
+    .card--prometheus::before  { background: var(--prom); box-shadow: 0 0 12px var(--prom); }
+    .card--forge::before       { background: #E05A48;     box-shadow: 0 0 12px #E05A48; }
+    .card--midas::before       { background: var(--midas);box-shadow: 0 0 12px var(--midas); }
+    .card--olympus::before     { background: var(--oly);  box-shadow: 0 0 12px var(--oly); }
 
-    /* disabled / coming soon */
-    .card--disabled {
-      cursor: default;
-      opacity: .55;
-    }
+    .card--prometheus:hover { border-color: rgba(244,100,17,.32); box-shadow: 0 16px 48px rgba(244,100,17,.12); }
+    .card--forge:hover      { border-color: rgba(192,57,43,.32);  box-shadow: 0 16px 48px rgba(192,57,43,.12); }
 
-    /* logo area */
+    .card--disabled { cursor: default; opacity: .48; }
+
     .card-logo {
-      height: 56px;
+      height: 30px;
       display: flex;
       align-items: center;
-      margin-bottom: 28px;
     }
     .card-logo img {
       max-height: 100%;
-      max-width: 240px;
-      width: auto;
+      max-width: 200px;
       object-fit: contain;
       object-position: left center;
     }
 
-    /* coming soon badge */
     .card-badge {
-      position: absolute;
-      top: 20px; right: 20px;
-      font-size: 10px;
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: .1em;
+      letter-spacing: .09em;
       text-transform: uppercase;
       color: var(--muted2);
-      background: var(--s2);
+      background: rgba(255,255,255,.06);
       border: 1px solid var(--hairline);
       border-radius: 20px;
-      padding: 4px 10px;
+      padding: 3px 8px;
+      margin-top: -4px;
     }
 
     .card-desc {
-      font-size: 15px;
-      line-height: 1.65;
-      color: var(--muted);
-      flex: 1;
-      margin-bottom: 32px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted2);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card-cta {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-size: 14px;
+      gap: 5px;
+      font-size: 12px;
       font-weight: 600;
-      padding: 10px 22px;
-      border-radius: 10px;
-      align-self: flex-start;
-      transition: all .2s;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
+      margin-top: 2px;
     }
+    .card--prometheus .card-cta  { color: var(--prom); }
+    .card--forge .card-cta       { color: #E05A48; }
+    .card--midas .card-cta,
+    .card--olympus .card-cta     { color: var(--muted2); }
 
-    .card--prometheus .card-cta {
-      background: rgba(244,100,17,.14);
-      color: var(--prom);
-      border: 1px solid rgba(244,100,17,.25);
-    }
-    .card--prometheus:hover .card-cta {
-      background: rgba(244,100,17,.22);
-      border-color: rgba(244,100,17,.45);
-    }
-
-    .card--forge .card-cta {
-      background: rgba(192,57,43,.14);
-      color: #E05A48;
-      border: 1px solid rgba(192,57,43,.25);
-    }
-    .card--forge:hover .card-cta {
-      background: rgba(192,57,43,.22);
-      border-color: rgba(192,57,43,.45);
-    }
-
-    .card--disabled .card-cta {
-      background: var(--s2);
-      color: var(--muted2);
-      border: 1px solid var(--hairline);
-      cursor: default;
-      pointer-events: none;
-    }
-
-    /* arrow icon */
-    .card-cta svg {
-      transition: transform .2s;
-    }
-    .card:not(.card--disabled):hover .card-cta svg {
-      transform: translateX(3px);
-    }
+    .card-cta svg { transition: transform .2s; }
+    .card:not(.card--disabled):hover .card-cta svg { transform: translateX(3px); }
 
     /* ─── FOOTER ──────────────────────────────────── */
     footer {
-      border-top: 1px solid var(--hairline);
-      padding: 32px 48px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 28px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1280px;
-      margin: 0 auto;
+      background: #000;
     }
-
-    footer p {
-      font-size: 13px;
-      color: var(--muted2);
-    }
-
-    footer a {
-      font-size: 13px;
-      color: var(--muted2);
+    footer p, footer a {
+      font-size: 12px;
+      color: rgba(226,232,240,.30);
       text-decoration: none;
       transition: color .2s;
     }
-    footer a:hover { color: var(--fg); }
+    footer a:hover { color: rgba(226,232,240,.65); }
 
     /* ─── RESPONSIVE ──────────────────────────────── */
-    @media (max-width: 768px) {
-      nav { padding: 0 20px; }
-      .cards-section { padding: 0 20px 80px; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .card { padding: 28px; }
-      footer { flex-direction: column; gap: 8px; padding: 24px 20px; text-align: center; }
+    @media (max-width: 900px) {
+      /* On small screens, drop corner cards below the hero in a grid */
+      .card {
+        position: static;
+        width: 100%;
+        border-radius: 14px;
+        opacity: 1 !important;
+      }
+      .hero { height: 60vh; min-height: 400px; }
+      .cards-mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        padding: 24px 20px 60px;
+        background: #000;
+      }
+      .hero-fade { height: 120px; }
     }
-
-    @media (max-width: 480px) {
-      .hero { padding: 100px 20px 60px; }
-      .hero h1 { font-size: 34px; }
-      .hero-sub { font-size: 16px; }
+    @media (min-width: 901px) {
+      .cards-mobile { display: none; }
+    }
+    @media (max-width: 540px) {
+      .cards-mobile { grid-template-columns: 1fr; }
+      nav { padding: 0 20px; }
+      footer { flex-direction: column; gap: 6px; padding: 20px; text-align: center; }
     }
   </style>
 </head>
@@ -383,75 +305,74 @@
 
   <!-- HERO -->
   <section class="hero">
-    <p class="hero-eyebrow">WealthHealth AI</p>
-    <h1><span>The Partner Ecosystem</span></h1>
-    <p class="hero-sub">
-      A suite of AI-native tools built for health &amp; wellness brands.
-      Grow smarter, reach further, and keep customers longer.
-    </p>
-    <div class="hero-divider">
-      <span>Platform Suite</span>
+    <div id="blob-mount"></div>
+    <div class="hero-fade"></div>
+
+    <!-- Center text -->
+    <div class="hero-center">
+      <p class="hero-eyebrow">WealthHealth AI · Partner Ecosystem</p>
+      <h1 class="hero-title">The Partner<br>Ecosystem</h1>
+      <p class="hero-sub">AI-native tools built for health &amp; wellness brands. Grow smarter, reach further, keep customers longer.</p>
+    </div>
+
+    <!-- CORNER CARDS — desktop only -->
+
+    <!-- Prometheus: top-left -->
+    <a class="card card--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
+      <div class="card-logo"><img src="logo-prometheus-full-new.png" alt="Prometheus" /></div>
+      <p class="card-desc">AI-powered growth engine. Target behavioral leads and automate outreach across health &amp; wellness verticals.</p>
+      <span class="card-cta">Get started <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
+
+    <!-- Forge Enterprise: top-right -->
+    <a class="card card--forge" href="mailto:partnerships@wealthhealth.ai">
+      <div class="card-logo"><img src="logo-forge-enterprise-full.png" alt="Forge Enterprise" /></div>
+      <p class="card-desc">Custom AI agent deployments for your organization — purpose-built for sales, operations, and support.</p>
+      <span class="card-cta">Inquire for information <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
+
+    <!-- Midas: bottom-left -->
+    <div class="card card--midas card--disabled">
+      <div class="card-logo"><img src="logo-midas-full-new.png" alt="Midas" /></div>
+      <span class="card-badge">Coming Soon</span>
+      <p class="card-desc">Loyalty and rewards ecosystem for health-conscious consumers. Embed token-based rewards into your brand.</p>
+      <span class="card-cta">Coming soon</span>
+    </div>
+
+    <!-- Olympus: bottom-right -->
+    <div class="card card--olympus card--disabled">
+      <div class="card-logo"><img src="logo-olympus-full-new.png" alt="Olympus" /></div>
+      <span class="card-badge">Coming Soon</span>
+      <p class="card-desc">The health &amp; wellness marketplace. Connect your brand to high-intent buyers across the WealthHealth network.</p>
+      <span class="card-cta">Coming soon</span>
     </div>
   </section>
 
-  <!-- CARDS -->
-  <section class="cards-section">
-    <div class="cards-grid">
-
-      <!-- PROMETHEUS -->
-      <a class="card card--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
-        <div class="card-logo">
-          <img src="logo-prometheus-full-new.png" alt="Prometheus" />
-        </div>
-        <p class="card-desc">
-          AI-powered growth engine for health &amp; wellness brands. Target behavioral leads — people actively discussing health topics online — and automate outreach campaigns that reach audiences no ad platform can find.
-        </p>
-        <span class="card-cta">
-          Get started
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9m0 0L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
-
-      <!-- FORGE ENTERPRISE -->
-      <a class="card card--forge" href="mailto:partnerships@wealthhealth.ai">
-        <div class="card-logo">
-          <img src="logo-forge-enterprise-full.png" alt="Forge Enterprise" />
-        </div>
-        <p class="card-desc">
-          Purpose-built AI agents deployed inside your organization. From sales automation and operations support to patient-facing workflows — Forge Enterprise is a custom deployment, built to your exact requirements.
-        </p>
-        <span class="card-cta">
-          Inquire for information
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9m0 0L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
-
-      <!-- MIDAS (coming soon) -->
-      <div class="card card--midas card--disabled">
-        <span class="card-badge">Coming Soon</span>
-        <div class="card-logo">
-          <img src="logo-midas-full-new.png" alt="Midas" />
-        </div>
-        <p class="card-desc">
-          A loyalty and rewards ecosystem built for health-conscious consumers. Embed token-based rewards seamlessly into your brand — and tap into a shared network of engaged, high-intent buyers.
-        </p>
-        <span class="card-cta">Coming soon</span>
-      </div>
-
-      <!-- OLYMPUS (coming soon) -->
-      <div class="card card--olympus card--disabled">
-        <span class="card-badge">Coming Soon</span>
-        <div class="card-logo">
-          <img src="logo-olympus-full-new.png" alt="Olympus" />
-        </div>
-        <p class="card-desc">
-          The health &amp; wellness marketplace. Connect your brand to high-intent buyers across the WealthHealth network — and close the loop on the full customer journey from discovery to purchase.
-        </p>
-        <span class="card-cta">Coming soon</span>
-      </div>
-
+  <!-- MOBILE CARDS (< 900px) -->
+  <div class="cards-mobile">
+    <a class="card card--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
+      <div class="card-logo"><img src="logo-prometheus-full-new.png" alt="Prometheus" /></div>
+      <p class="card-desc">AI-powered growth engine. Target behavioral leads and automate outreach across health &amp; wellness verticals.</p>
+      <span class="card-cta">Get started <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
+    <a class="card card--forge" href="mailto:partnerships@wealthhealth.ai">
+      <div class="card-logo"><img src="logo-forge-enterprise-full.png" alt="Forge Enterprise" /></div>
+      <p class="card-desc">Custom AI agent deployments — purpose-built for sales, operations, and support workflows.</p>
+      <span class="card-cta">Inquire <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
+    <div class="card card--midas card--disabled">
+      <div class="card-logo"><img src="logo-midas-full-new.png" alt="Midas" /></div>
+      <span class="card-badge">Coming Soon</span>
+      <p class="card-desc">Loyalty and rewards ecosystem for health-conscious consumers.</p>
+      <span class="card-cta">Coming soon</span>
     </div>
-  </section>
+    <div class="card card--olympus card--disabled">
+      <div class="card-logo"><img src="logo-olympus-full-new.png" alt="Olympus" /></div>
+      <span class="card-badge">Coming Soon</span>
+      <p class="card-desc">The health &amp; wellness marketplace across the WealthHealth network.</p>
+      <span class="card-cta">Coming soon</span>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -459,5 +380,154 @@
     <a href="https://wealthhealth.ai">← Back to wealthhealth.ai</a>
   </footer>
 
+  <!-- THREE.JS CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+  (function() {
+    const mount = document.getElementById('blob-mount');
+    if (!mount || typeof THREE === 'undefined') return;
+
+    // Scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
+    camera.position.z = 3;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    mount.appendChild(renderer.domElement);
+
+    // Geometry
+    const geometry = new THREE.IcosahedronGeometry(1.2, 64);
+
+    // WH Blue — same as Archon's Operations Hub
+    const blobColor = new THREE.Color('#2667FF');
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        time:          { value: 0 },
+        pointLightPos: { value: new THREE.Vector3(0, 0, 5) },
+        color:         { value: blobColor },
+      },
+      vertexShader: `
+        uniform float time;
+        varying vec3 vNormal;
+        varying vec3 vPosition;
+
+        vec3 mod289v3(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 mod289v4(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 permute(vec4 x)  { return mod289v4(((x * 34.0) + 1.0) * x); }
+        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+        float snoise(vec3 v) {
+          const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+          const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+          vec3 i  = floor(v + dot(v, C.yyy));
+          vec3 x0 = v - i + dot(i, C.xxx);
+          vec3 g = step(x0.yzx, x0.xyz);
+          vec3 l = 1.0 - g;
+          vec3 i1 = min(g.xyz, l.zxy);
+          vec3 i2 = max(g.xyz, l.zxy);
+          vec3 x1 = x0 - i1 + C.xxx;
+          vec3 x2 = x0 - i2 + C.yyy;
+          vec3 x3 = x0 - D.yyy;
+          i = mod289v3(i);
+          vec4 p = permute(permute(permute(
+            i.z + vec4(0.0, i1.z, i2.z, 1.0))
+            + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+            + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+          float n_ = 0.142857142857;
+          vec3 ns = n_ * D.wyz - D.xzx;
+          vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+          vec4 x_ = floor(j * ns.z);
+          vec4 y_ = floor(j - 7.0 * x_);
+          vec4 x = x_ * ns.x + ns.yyyy;
+          vec4 y = y_ * ns.x + ns.yyyy;
+          vec4 h = 1.0 - abs(x) - abs(y);
+          vec4 b0 = vec4(x.xy, y.xy);
+          vec4 b1 = vec4(x.zw, y.zw);
+          vec4 s0 = floor(b0) * 2.0 + 1.0;
+          vec4 s1 = floor(b1) * 2.0 + 1.0;
+          vec4 sh = -step(h, vec4(0.0));
+          vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+          vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+          vec3 p0 = vec3(a0.xy, h.x);
+          vec3 p1 = vec3(a0.zw, h.y);
+          vec3 p2 = vec3(a1.xy, h.z);
+          vec3 p3 = vec3(a1.zw, h.w);
+          vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+          p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+          vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+          m = m * m;
+          return 42.0 * dot(m * m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+        }
+
+        void main() {
+          vNormal   = normal;
+          vPosition = position;
+          float displacement = snoise(position * 2.0 + time * 0.5) * 0.2;
+          vec3 newPosition = position + normal * displacement;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 color;
+        uniform vec3 pointLightPos;
+        varying vec3 vNormal;
+        varying vec3 vPosition;
+
+        void main() {
+          vec3 normal   = normalize(vNormal);
+          vec3 lightDir = normalize(pointLightPos - vPosition);
+          float diffuse = max(dot(normal, lightDir), 0.0);
+          float fresnel = 1.0 - dot(normal, vec3(0.0, 0.0, 1.0));
+          fresnel = pow(fresnel, 2.0);
+          vec3 finalColor = color * diffuse + color * fresnel * 0.5;
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `,
+      wireframe: true,
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+    pointLight.position.set(0, 0, 5);
+    scene.add(pointLight);
+
+    // Animate
+    let frameId;
+    function animate(t) {
+      frameId = requestAnimationFrame(animate);
+      material.uniforms.time.value = t * 0.0003;
+      mesh.rotation.y += 0.0005;
+      mesh.rotation.x += 0.0002;
+      renderer.render(scene, camera);
+    }
+    animate(0);
+
+    // Mouse light tracking
+    window.addEventListener('mousemove', function(e) {
+      const x = (e.clientX / window.innerWidth)  * 2 - 1;
+      const y = -(e.clientY / window.innerHeight) * 2 + 1;
+      const vec = new THREE.Vector3(x, y, 0.5).unproject(camera);
+      const dir = vec.sub(camera.position).normalize();
+      const dist = -camera.position.z / dir.z;
+      const pos = camera.position.clone().add(dir.multiplyScalar(dist));
+      pointLight.position.copy(pos);
+      material.uniforms.pointLightPos.value = pos;
+    });
+
+    // Resize
+    window.addEventListener('resize', function() {
+      camera.aspect = mount.clientWidth / mount.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(mount.clientWidth, mount.clientHeight);
+    });
+  })();
+  </script>
 </body>
 </html>
