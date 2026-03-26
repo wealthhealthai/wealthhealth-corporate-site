@@ -144,34 +144,46 @@
     }
 
     /* ─── CORNER CARDS ────────────────────────────── */
-    .card {
+
+    /* Anchor handles absolute positioning; card handles appearance */
+    .card-anchor {
       position: absolute;
       z-index: 20;
-      width: 260px;
-      background: rgba(0,0,0,.58);
+      width: 248px;
+      transform: translate(-50%, -50%);
+    }
+    .card-anchor--prometheus { top: 24%;  left: 19%; }
+    .card-anchor--forge      { top: 24%;  left: 81%; }
+    .card-anchor--midas      { top: 76%;  left: 19%; }
+    .card-anchor--olympus    { top: 76%;  left: 81%; }
+
+    .card {
+      position: relative;
+      width: 100%;
+      background: rgba(12,12,14,.68);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 16px;
-      padding: 22px 22px 20px;
+      padding: 20px 20px 18px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       text-decoration: none;
       color: var(--fg);
-      transition: border-color .3s, box-shadow .3s, transform .25s, background .3s;
+      transition: border-color .3s, box-shadow .3s, transform .2s, background .3s;
     }
 
     .card:not(.card--disabled):hover {
-      transform: scale(1.025);
-      background: rgba(0,0,0,.72);
+      transform: scale(1.03);
+      background: rgba(12,12,14,.82);
     }
 
-    /* product-color top line on hover */
+    /* product-color top accent on hover */
     .card::before {
       content: '';
       position: absolute;
-      top: -1px; left: 16px; right: 16px;
+      top: -1px; left: 14px; right: 14px;
       height: 2px;
       border-radius: 4px;
       opacity: 0;
@@ -179,20 +191,23 @@
     }
     .card:not(.card--disabled):hover::before { opacity: 1; }
 
-    .card--prometheus  { top: 88px; left: 40px; }
-    .card--forge       { top: 88px; right: 40px; }
-    .card--midas       { bottom: 48px; left: 40px; }
-    .card--olympus     { bottom: 48px; right: 40px; }
+    .card--prometheus::before  { background: var(--prom); box-shadow: 0 0 10px var(--prom); }
+    .card--forge::before       { background: #E05A48;     box-shadow: 0 0 10px #E05A48; }
+    .card--midas::before       { background: var(--midas);box-shadow: 0 0 10px var(--midas); }
+    .card--olympus::before     { background: var(--oly);  box-shadow: 0 0 10px var(--oly); }
 
-    .card--prometheus::before  { background: var(--prom); box-shadow: 0 0 12px var(--prom); }
-    .card--forge::before       { background: #E05A48;     box-shadow: 0 0 12px #E05A48; }
-    .card--midas::before       { background: var(--midas);box-shadow: 0 0 12px var(--midas); }
-    .card--olympus::before     { background: var(--oly);  box-shadow: 0 0 12px var(--oly); }
+    .card--prometheus:hover { border-color: rgba(244,100,17,.30); box-shadow: 0 12px 40px rgba(244,100,17,.10); }
+    .card--forge:hover      { border-color: rgba(192,57,43,.30);  box-shadow: 0 12px 40px rgba(192,57,43,.10); }
+    .card--midas:hover      { border-color: rgba(128,84,255,.30); box-shadow: 0 12px 40px rgba(128,84,255,.10); }
+    .card--olympus:hover    { border-color: rgba(16,124,16,.30);  box-shadow: 0 12px 40px rgba(16,124,16,.10); }
 
-    .card--prometheus:hover { border-color: rgba(244,100,17,.32); box-shadow: 0 16px 48px rgba(244,100,17,.12); }
-    .card--forge:hover      { border-color: rgba(192,57,43,.32);  box-shadow: 0 16px 48px rgba(192,57,43,.12); }
+    .card--disabled { cursor: default; opacity: .42; }
 
-    .card--disabled { cursor: default; opacity: .48; }
+    /* HUD SVG lines */
+    @keyframes hud-dash {
+      from { stroke-dashoffset: 24; }
+      to   { stroke-dashoffset: 0;  }
+    }
 
     .card-logo {
       height: 30px;
@@ -266,14 +281,9 @@
 
     /* ─── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 900px) {
-      /* On small screens, drop corner cards below the hero in a grid */
-      .card {
-        position: static;
-        width: 100%;
-        border-radius: 14px;
-        opacity: 1 !important;
-      }
-      .hero { height: 60vh; min-height: 400px; }
+      .card-anchor { display: none; }
+      #hud-svg     { display: none; }
+      .hero { height: 60vh; min-height: 380px; }
       .cards-mobile {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -315,37 +325,43 @@
       <p class="hero-sub">AI-native tools built for health &amp; wellness brands. Grow smarter, reach further, keep customers longer.</p>
     </div>
 
-    <!-- CORNER CARDS — desktop only -->
+    <!-- CORNER CARDS — desktop only, anchored close to blob -->
 
-    <!-- Prometheus: top-left -->
-    <a class="card card--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
-      <div class="card-logo"><img src="logo-prometheus-full-new.png" alt="Prometheus" /></div>
-      <p class="card-desc">AI-powered growth engine. Target behavioral leads and automate outreach across health &amp; wellness verticals.</p>
-      <span class="card-cta">Get started <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </a>
-
-    <!-- Forge Enterprise: top-right -->
-    <a class="card card--forge" href="mailto:partnerships@wealthhealth.ai">
-      <div class="card-logo"><img src="logo-forge-enterprise-full.png" alt="Forge Enterprise" /></div>
-      <p class="card-desc">Custom AI agent deployments for your organization — purpose-built for sales, operations, and support.</p>
-      <span class="card-cta">Inquire for information <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </a>
-
-    <!-- Midas: bottom-left -->
-    <div class="card card--midas card--disabled">
-      <div class="card-logo"><img src="logo-midas-full-new.png" alt="Midas" /></div>
-      <span class="card-badge">Coming Soon</span>
-      <p class="card-desc">Loyalty and rewards ecosystem for health-conscious consumers. Embed token-based rewards into your brand.</p>
-      <span class="card-cta">Coming soon</span>
+    <div class="card-anchor card-anchor--prometheus">
+      <a class="card card--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
+        <div class="card-logo"><img src="logo-prometheus-full-new.png" alt="Prometheus" /></div>
+        <p class="card-desc">AI-powered growth engine. Target behavioral leads and automate outreach across health &amp; wellness verticals.</p>
+        <span class="card-cta">Get started <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
     </div>
 
-    <!-- Olympus: bottom-right -->
-    <div class="card card--olympus card--disabled">
-      <div class="card-logo"><img src="logo-olympus-full-new.png" alt="Olympus" /></div>
-      <span class="card-badge">Coming Soon</span>
-      <p class="card-desc">The health &amp; wellness marketplace. Connect your brand to high-intent buyers across the WealthHealth network.</p>
-      <span class="card-cta">Coming soon</span>
+    <div class="card-anchor card-anchor--forge">
+      <a class="card card--forge" href="mailto:partnerships@wealthhealth.ai">
+        <div class="card-logo"><img src="logo-forge-enterprise-full.png" alt="Forge Enterprise" /></div>
+        <p class="card-desc">Custom AI agent deployments — purpose-built for sales, operations, and support workflows.</p>
+        <span class="card-cta">Inquire for information <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
     </div>
+
+    <div class="card-anchor card-anchor--midas">
+      <div class="card card--midas card--disabled">
+        <div class="card-logo"><img src="logo-midas-full-new.png" alt="Midas" /></div>
+        <span class="card-badge">Coming Soon</span>
+        <p class="card-desc">Loyalty and rewards ecosystem for health-conscious consumers. Embed token-based rewards into your brand.</p>
+        <span class="card-cta">Coming soon</span>
+      </div>
+    </div>
+
+    <div class="card-anchor card-anchor--olympus">
+      <div class="card card--olympus card--disabled">
+        <div class="card-logo"><img src="logo-olympus-full-new.png" alt="Olympus" /></div>
+        <span class="card-badge">Coming Soon</span>
+        <p class="card-desc">The health &amp; wellness marketplace. Connect your brand to high-intent buyers across the WealthHealth network.</p>
+        <span class="card-cta">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- HUD SVG lines — drawn by JS below -->
   </section>
 
   <!-- MOBILE CARDS (< 900px) -->
@@ -520,6 +536,157 @@
       camera.updateProjectionMatrix();
       renderer.setSize(mount.clientWidth, mount.clientHeight);
     });
+  })();
+
+  // ── HUD Lines ─────────────────────────────────────────────
+  (function() {
+    const NS = 'http://www.w3.org/2000/svg';
+
+    const CARDS = [
+      { selector: '.card-anchor--prometheus', color: '#F46411' },
+      { selector: '.card-anchor--forge',      color: '#C0392B' },
+      { selector: '.card-anchor--midas',      color: '#8054FF' },
+      { selector: '.card-anchor--olympus',    color: '#107C10' },
+    ];
+
+    function draw() {
+      // Remove existing HUD svg
+      const old = document.getElementById('hud-svg');
+      if (old) old.remove();
+
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      const heroRect = hero.getBoundingClientRect();
+      const cx = heroRect.width  / 2;
+      const cy = heroRect.height / 2;
+
+      // Blob visual radius — IcosahedronGeometry r=1.2, camera z=3, FOV 75°
+      // At viewport height H: radius_px ≈ H * 0.275, with noise swell +0.2 → * 0.305
+      const blobR = heroRect.height * 0.265;
+
+      const svg = document.createElementNS(NS, 'svg');
+      svg.id = 'hud-svg';
+      svg.setAttribute('style',
+        'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:15;overflow:visible');
+
+      // Glow filter
+      const defs = document.createElementNS(NS, 'defs');
+      ['prom','forge','midas','oly'].forEach((id, i) => {
+        const colors = ['#F46411','#C0392B','#8054FF','#107C10'];
+        const f = document.createElementNS(NS, 'filter');
+        f.setAttribute('id', 'glow-' + id);
+        f.setAttribute('x', '-50%'); f.setAttribute('y', '-50%');
+        f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+        const blur = document.createElementNS(NS, 'feGaussianBlur');
+        blur.setAttribute('stdDeviation', '2');
+        blur.setAttribute('result', 'b');
+        const merge = document.createElementNS(NS, 'feMerge');
+        const n1 = document.createElementNS(NS, 'feMergeNode'); n1.setAttribute('in', 'b');
+        const n2 = document.createElementNS(NS, 'feMergeNode'); n2.setAttribute('in', 'SourceGraphic');
+        merge.appendChild(n1); merge.appendChild(n2);
+        f.appendChild(blur); f.appendChild(merge);
+        defs.appendChild(f);
+      });
+      svg.appendChild(defs);
+
+      const filterIds = ['prom','forge','midas','oly'];
+
+      CARDS.forEach(({ selector, color }, idx) => {
+        const anchor = document.querySelector(selector);
+        if (!anchor) return;
+        const r = anchor.getBoundingClientRect();
+
+        // Card center in hero coords
+        const cardCx = r.left - heroRect.left + r.width  / 2;
+        const cardCy = r.top  - heroRect.top  + r.height / 2;
+
+        // Direction from hero center → card center
+        const dx = cardCx - cx;
+        const dy = cardCy - cy;
+        const mag = Math.sqrt(dx*dx + dy*dy);
+        const nx  = dx / mag;
+        const ny  = dy / mag;
+
+        // Blob edge point (line start)
+        const bx = cx + nx * blobR;
+        const by = cy + ny * blobR;
+
+        // Card corner nearest to hero center (line end)
+        const corners = [
+          { x: r.left,  y: r.top    },
+          { x: r.right, y: r.top    },
+          { x: r.left,  y: r.bottom },
+          { x: r.right, y: r.bottom },
+        ];
+        const nearest = corners.reduce((a, b) => {
+          const da = (a.x - heroRect.left - cx)**2 + (a.y - heroRect.top - cy)**2;
+          const db = (b.x - heroRect.left - cx)**2 + (b.y - heroRect.top - cy)**2;
+          return da < db ? a : b;
+        });
+        const ex = nearest.x - heroRect.left;
+        const ey = nearest.y - heroRect.top;
+
+        const fId = 'url(#glow-' + filterIds[idx] + ')';
+
+        // Main dashed line
+        const line = document.createElementNS(NS, 'line');
+        line.setAttribute('x1', bx); line.setAttribute('y1', by);
+        line.setAttribute('x2', ex); line.setAttribute('y2', ey);
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-width', '1');
+        line.setAttribute('stroke-opacity', '0.55');
+        line.setAttribute('stroke-dasharray', '5 7');
+        line.setAttribute('filter', fId);
+        line.style.animation = 'hud-dash 1.4s linear infinite';
+        svg.appendChild(line);
+
+        // Solid accent line (thinner, slightly offset along normal for depth)
+        const line2 = document.createElementNS(NS, 'line');
+        line2.setAttribute('x1', bx); line2.setAttribute('y1', by);
+        line2.setAttribute('x2', ex); line2.setAttribute('y2', ey);
+        line2.setAttribute('stroke', color);
+        line2.setAttribute('stroke-width', '0.4');
+        line2.setAttribute('stroke-opacity', '0.25');
+        svg.appendChild(line2);
+
+        // Dot at blob edge — pulsing origin
+        const dot = document.createElementNS(NS, 'circle');
+        dot.setAttribute('cx', bx); dot.setAttribute('cy', by);
+        dot.setAttribute('r', '3');
+        dot.setAttribute('fill', color);
+        dot.setAttribute('opacity', '0.85');
+        dot.setAttribute('filter', fId);
+        svg.appendChild(dot);
+
+        // Small ring around blob dot
+        const ring = document.createElementNS(NS, 'circle');
+        ring.setAttribute('cx', bx); ring.setAttribute('cy', by);
+        ring.setAttribute('r', '6');
+        ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', color);
+        ring.setAttribute('stroke-width', '0.8');
+        ring.setAttribute('stroke-opacity', '0.35');
+        svg.appendChild(ring);
+
+        // Diamond at card corner
+        const s = 4;
+        const diamond = document.createElementNS(NS, 'polygon');
+        diamond.setAttribute('points',
+          `${ex},${ey-s} ${ex+s},${ey} ${ex},${ey+s} ${ex-s},${ey}`);
+        diamond.setAttribute('fill', color);
+        diamond.setAttribute('opacity', '0.7');
+        diamond.setAttribute('filter', fId);
+        svg.appendChild(diamond);
+      });
+
+      hero.appendChild(svg);
+    }
+
+    // Draw after layout settles
+    window.addEventListener('load', function() { setTimeout(draw, 120); });
+    window.addEventListener('resize', function() { setTimeout(draw, 60); });
+    // Fallback if load already fired
+    if (document.readyState === 'complete') setTimeout(draw, 200);
   })();
   </script>
 </body>
