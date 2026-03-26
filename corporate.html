@@ -177,6 +177,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       z-index: 5;
     }
         .hero{
+      position:relative;z-index:2; /* sits above wh-vignette (z-index:1) */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -207,10 +208,23 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
       animation:gradientShift 5s ease infinite;
     }
+    /* Option A — dark radial vignette: dims particles at center where text lives */
+    #wh-vignette{
+      position:absolute;top:0;left:0;width:100%;height:100%;
+      pointer-events:none;
+      z-index:1;
+      background:radial-gradient(ellipse 70% 58% at 50% 44%,
+        rgba(12,12,14,.68) 0%,
+        rgba(12,12,14,.22) 52%,
+        transparent 78%
+      );
+    }
+    /* Option B — text-shadow lifts subtitle off particle field */
     .hero-sub{
       font-size:18px;line-height:1.7;color:var(--muted);
       max-width:640px;
       margin-bottom:28px;
+      text-shadow:0 1px 18px rgba(0,0,0,.95),0 0 48px rgba(12,12,14,.9);
     }
     .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
     .btn{
@@ -570,6 +584,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
     <div id="wh-shader"></div>
+    <div id="wh-vignette"></div>
     <div class="glow"></div>
 
     <section class="hero">
