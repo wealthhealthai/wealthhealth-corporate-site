@@ -485,12 +485,15 @@
     mount.appendChild(renderer.domElement);
 
     const geometry = new THREE.IcosahedronGeometry(1.2, 64);
+
+    // r183 auto-converts new THREE.Color('#hex') from sRGB → linear.
+    // r128 doesn't — so manually linearize to match Archon's exact output.
     const material = new THREE.ShaderMaterial({
       uniforms: {
         time:        { value: 0 },
-        colorLo:     { value: new THREE.Color('#3d4f62') }, // dark steel grey
-        colorHi:     { value: new THREE.Color('#8fa8c0') }, // silver grey
-        accentColor: { value: new THREE.Color('#5b9bff') }, // blue rim
+        colorLo:     { value: new THREE.Color('#3d4f62').convertSRGBToLinear() },
+        colorHi:     { value: new THREE.Color('#8fa8c0').convertSRGBToLinear() },
+        accentColor: { value: new THREE.Color('#5b9bff').convertSRGBToLinear() },
       },
       vertexShader,
       fragmentShader,
