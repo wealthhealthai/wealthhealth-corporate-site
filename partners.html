@@ -152,18 +152,18 @@
       width: 248px;
       transform: translate(-50%, -50%);
     }
-    .card-anchor--prometheus { top: 19%;  left: 22%; }
-    .card-anchor--forge      { top: 29%;  left: 73%; }
-    .card-anchor--midas      { top: 64%;  left: 22%; }
-    .card-anchor--olympus    { top: 53%;  left: 72%; }
+    .card-anchor--prometheus { top: 13%;  left: 28%; }
+    .card-anchor--forge      { top: 26%;  left: 62%; }
+    .card-anchor--midas      { top: 64%;  left: 21%; }
+    .card-anchor--olympus    { top: 50%;  left: 61%; }
 
     .card {
       position: relative;
       width: 100%;
-      background: rgba(12,12,14,.68);
+      background: rgba(12,12,14,.72);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px dashed rgba(255,255,255,.28);
       border-radius: 16px;
       padding: 20px 20px 18px;
       display: flex;
@@ -196,10 +196,10 @@
     .card--midas::before       { background: var(--midas);box-shadow: 0 0 10px var(--midas); }
     .card--olympus::before     { background: var(--oly);  box-shadow: 0 0 10px var(--oly); }
 
-    .card--prometheus:hover { border-color: rgba(244,100,17,.30); box-shadow: 0 12px 40px rgba(244,100,17,.10); }
-    .card--forge:hover      { border-color: rgba(192,57,43,.30);  box-shadow: 0 12px 40px rgba(192,57,43,.10); }
-    .card--midas:hover      { border-color: rgba(128,84,255,.30); box-shadow: 0 12px 40px rgba(128,84,255,.10); }
-    .card--olympus:hover    { border-color: rgba(16,124,16,.30);  box-shadow: 0 12px 40px rgba(16,124,16,.10); }
+    .card--prometheus:hover { border-color: rgba(255,255,255,.55); box-shadow: 0 12px 40px rgba(244,100,17,.12); }
+    .card--forge:hover      { border-color: rgba(255,255,255,.55); box-shadow: 0 12px 40px rgba(192,57,43,.12); }
+    .card--midas:hover      { border-color: rgba(255,255,255,.55); box-shadow: 0 12px 40px rgba(128,84,255,.12); }
+    .card--olympus:hover    { border-color: rgba(255,255,255,.55); box-shadow: 0 12px 40px rgba(16,124,16,.12); }
 
     .card--disabled { cursor: default; opacity: .42; }
 
@@ -546,11 +546,14 @@
     //         false = start V then H then V (S-shape)
     // mid: fraction (0–1) along primary axis where first bend occurs
     const CARDS = [
-      { sel: '.card-anchor--prometheus', color: '#F46411', hFirst: false, mid: 0.42 },
-      { sel: '.card-anchor--forge',      color: '#C0392B', hFirst: true,  mid: 0.50 },
-      { sel: '.card-anchor--midas',      color: '#8054FF', hFirst: true,  mid: 0.38 },
-      { sel: '.card-anchor--olympus',    color: '#107C10', hFirst: false, mid: 0.55 },
+      { sel: '.card-anchor--prometheus', hFirst: false, mid: 0.42 },
+      { sel: '.card-anchor--forge',      hFirst: true,  mid: 0.50 },
+      { sel: '.card-anchor--midas',      hFirst: true,  mid: 0.38 },
+      { sel: '.card-anchor--olympus',    hFirst: false, mid: 0.55 },
     ];
+    const WHITE      = 'rgba(255,255,255,0.7)';
+    const WHITE_DIM  = 'rgba(255,255,255,0.18)';
+    const WHITE_HAIR = 'rgba(255,255,255,0.25)';
 
     function draw() {
       const old = document.getElementById('hud-svg');
@@ -567,27 +570,23 @@
       svg.setAttribute('style',
         'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:15;overflow:visible');
 
-      // Glow filters
+      // Single white glow filter
       const defs = document.createElementNS(NS, 'defs');
-      ['prom','forge','midas','oly'].forEach(id => {
-        const f = document.createElementNS(NS, 'filter');
-        f.id = 'glow-' + id;
-        f.setAttribute('x','-100%'); f.setAttribute('y','-100%');
-        f.setAttribute('width','300%'); f.setAttribute('height','300%');
-        const blur = document.createElementNS(NS, 'feGaussianBlur');
-        blur.setAttribute('stdDeviation','2.5'); blur.setAttribute('result','b');
-        const merge = document.createElementNS(NS, 'feMerge');
-        ['b','SourceGraphic'].forEach(i => {
-          const n = document.createElementNS(NS, 'feMergeNode');
-          n.setAttribute('in', i); merge.appendChild(n);
-        });
-        f.appendChild(blur); f.appendChild(merge); defs.appendChild(f);
+      const f = document.createElementNS(NS, 'filter');
+      f.id = 'glow-white';
+      f.setAttribute('x','-80%'); f.setAttribute('y','-80%');
+      f.setAttribute('width','260%'); f.setAttribute('height','260%');
+      const fblur = document.createElementNS(NS, 'feGaussianBlur');
+      fblur.setAttribute('stdDeviation','2'); fblur.setAttribute('result','b');
+      const fmerge = document.createElementNS(NS, 'feMerge');
+      ['b','SourceGraphic'].forEach(i => {
+        const n = document.createElementNS(NS, 'feMergeNode');
+        n.setAttribute('in', i); fmerge.appendChild(n);
       });
+      f.appendChild(fblur); f.appendChild(fmerge); defs.appendChild(f);
       svg.appendChild(defs);
 
-      const fIds = ['prom','forge','midas','oly'];
-
-      CARDS.forEach(({ sel, color, hFirst, mid }, idx) => {
+      CARDS.forEach(({ sel, hFirst, mid }, idx) => {
         const anchor = document.querySelector(sel);
         if (!anchor) return;
         const r = anchor.getBoundingClientRect();
@@ -625,58 +624,58 @@
           d = `M${p0x},${p0y} V${midY} H${ex} V${ey}`;
         }
 
-        const fId = `url(#glow-${fIds[idx]})`;
+        const fId = 'url(#glow-white)';
 
         // Glow ghost
         const glow = document.createElementNS(NS, 'path');
         glow.setAttribute('d', d); glow.setAttribute('fill', 'none');
-        glow.setAttribute('stroke', color); glow.setAttribute('stroke-width', '3');
-        glow.setAttribute('stroke-opacity', '0.15'); glow.setAttribute('filter', fId);
+        glow.setAttribute('stroke', 'white'); glow.setAttribute('stroke-width', '3');
+        glow.setAttribute('stroke-opacity', '0.08'); glow.setAttribute('filter', fId);
         glow.setAttribute('stroke-linejoin', 'miter');
         svg.appendChild(glow);
 
         // Hairline base
         const base = document.createElementNS(NS, 'path');
         base.setAttribute('d', d); base.setAttribute('fill', 'none');
-        base.setAttribute('stroke', color); base.setAttribute('stroke-width', '0.5');
-        base.setAttribute('stroke-opacity', '0.3');
+        base.setAttribute('stroke', 'white'); base.setAttribute('stroke-width', '0.5');
+        base.setAttribute('stroke-opacity', '0.22');
         base.setAttribute('stroke-linejoin', 'miter');
         svg.appendChild(base);
 
-        // Animated dashes
+        // Animated white dashes
         const dashes = document.createElementNS(NS, 'path');
         dashes.setAttribute('d', d); dashes.setAttribute('fill', 'none');
-        dashes.setAttribute('stroke', color); dashes.setAttribute('stroke-width', '1');
-        dashes.setAttribute('stroke-opacity', '0.6');
+        dashes.setAttribute('stroke', 'white'); dashes.setAttribute('stroke-width', '1');
+        dashes.setAttribute('stroke-opacity', '0.55');
         dashes.setAttribute('stroke-dasharray', '5 8');
         dashes.setAttribute('stroke-linejoin', 'miter');
         dashes.setAttribute('filter', fId);
-        dashes.style.animation = `hud-dash ${1.4 + idx * 0.15}s linear infinite`;
+        dashes.style.animation = `hud-dash ${1.4 + idx * 0.18}s linear infinite`;
         svg.appendChild(dashes);
 
         // Origin: dot + ring on blob surface
         const dot = document.createElementNS(NS, 'circle');
         dot.setAttribute('cx', p0x); dot.setAttribute('cy', p0y);
-        dot.setAttribute('r', '2.5'); dot.setAttribute('fill', color);
-        dot.setAttribute('opacity', '0.9'); dot.setAttribute('filter', fId);
+        dot.setAttribute('r', '2.5'); dot.setAttribute('fill', 'white');
+        dot.setAttribute('opacity', '0.75'); dot.setAttribute('filter', fId);
         svg.appendChild(dot);
 
         const ring = document.createElementNS(NS, 'circle');
         ring.setAttribute('cx', p0x); ring.setAttribute('cy', p0y);
         ring.setAttribute('r', '6.5'); ring.setAttribute('fill', 'none');
-        ring.setAttribute('stroke', color); ring.setAttribute('stroke-width', '0.7');
-        ring.setAttribute('stroke-opacity', '0.3');
+        ring.setAttribute('stroke', 'white'); ring.setAttribute('stroke-width', '0.7');
+        ring.setAttribute('stroke-opacity', '0.25');
         svg.appendChild(ring);
 
         // Terminus: diamond at card corner
         const s = 4;
         const dia = document.createElementNS(NS, 'polygon');
         dia.setAttribute('points', `${ex},${ey-s} ${ex+s},${ey} ${ex},${ey+s} ${ex-s},${ey}`);
-        dia.setAttribute('fill', color); dia.setAttribute('opacity', '0.8');
+        dia.setAttribute('fill', 'white'); dia.setAttribute('opacity', '0.6');
         dia.setAttribute('filter', fId);
         svg.appendChild(dia);
 
-        // Small square at the bend corner(s) for HUD detail
+        // Small squares at bend corners
         const bendPts = hFirst
           ? [{ x: p0x + (ex - p0x) * mid, y: p0y }, { x: p0x + (ex - p0x) * mid, y: ey }]
           : [{ x: p0x, y: p0y + (ey - p0y) * mid }, { x: ex, y: p0y + (ey - p0y) * mid }];
@@ -685,8 +684,8 @@
           sq.setAttribute('x', pt.x - 2); sq.setAttribute('y', pt.y - 2);
           sq.setAttribute('width', '4'); sq.setAttribute('height', '4');
           sq.setAttribute('fill', 'none');
-          sq.setAttribute('stroke', color); sq.setAttribute('stroke-width', '0.8');
-          sq.setAttribute('stroke-opacity', '0.5');
+          sq.setAttribute('stroke', 'white'); sq.setAttribute('stroke-width', '0.8');
+          sq.setAttribute('stroke-opacity', '0.4');
           svg.appendChild(sq);
         });
       });
