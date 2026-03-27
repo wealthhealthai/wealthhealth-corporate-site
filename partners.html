@@ -316,10 +316,12 @@
       <img src="logo-prometheus-full-new.png" alt="Prometheus" />
       <p class="logo-desc">Find hard-to-reach leads and automate outreach using our AI growth engine.</p>
     </a>
-    <a class="logo-anchor logo-anchor--forge" href="mailto:partnerships@wealthhealth.ai">
+    <div class="logo-anchor logo-anchor--forge" role="button" tabindex="0"
+         onclick="openForgeModal()" onkeydown="if(event.key==='Enter')openForgeModal()"
+         style="cursor:pointer;">
       <img src="logo-forge-enterprise-v2.png" alt="Forge Enterprise" />
       <p class="logo-desc">Deploy custom AI agents that run 24/7 for your business.</p>
-    </a>
+    </div>
     <div class="logo-anchor logo-anchor--midas logo-anchor--dim">
       <img src="logo-midas-full-new.png" alt="Midas" />
       <p class="logo-desc">Increase conversion and gain incremental shoppers via reward ecosystem.</p>
@@ -353,6 +355,175 @@
       <p class="logo-desc">List your product on our central marketplace and enter a flywheel of growth.</p>
     </div>
   </div>
+
+  <!-- FORGE ENTERPRISE INQUIRY MODAL -->
+  <div id="forge-modal" role="dialog" aria-modal="true" aria-labelledby="forge-modal-title"
+       style="display:none" onclick="if(event.target===this)closeForgeModal()">
+
+    <div id="forge-modal-card">
+      <button id="forge-modal-close" onclick="closeForgeModal()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <img src="logo-forge-enterprise-v2.png" alt="Forge Enterprise" id="forge-modal-logo" />
+
+      <h2 id="forge-modal-title">Enterprise Inquiry</h2>
+      <p id="forge-modal-sub">Tell us about your business and what you need — we'll follow up within one business day.</p>
+
+      <form id="forge-contact-form" onsubmit="handleForgeForm(event)">
+        <div class="frow">
+          <input type="text"  name="name"    placeholder="Your name"    required class="finput" />
+          <input type="text"  name="company" placeholder="Company name"  required class="finput" />
+        </div>
+        <input type="email" name="email"   placeholder="Work email"    required class="finput" />
+        <textarea name="message" rows="4" required class="finput ftextarea"
+          placeholder="What are you looking to automate or solve? Any detail on team size or industry helps."></textarea>
+        <button type="submit" id="forge-submit-btn">Send inquiry →</button>
+        <div id="forge-status"></div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+  /* ── Forge Modal ── */
+  #forge-modal {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    animation: modal-in .22s ease;
+  }
+  @keyframes modal-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  #forge-modal-card {
+    position: relative;
+    background: #111113;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%; max-width: 480px;
+    box-shadow: 0 32px 80px rgba(0,0,0,.6);
+    animation: card-in .25s cubic-bezier(.22,.68,0,1.05);
+  }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(16px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);   }
+  }
+  #forge-modal-close {
+    position: absolute; top: 18px; right: 18px;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.10);
+    border-radius: 8px; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,.5); cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  #forge-modal-close:hover { background: rgba(255,255,255,.12); color: #fff; }
+  #forge-modal-logo {
+    height: 32px; width: auto; max-width: 240px;
+    object-fit: contain; display: block; margin-bottom: 24px;
+  }
+  #forge-modal-title {
+    font-size: 22px; font-weight: 700; letter-spacing: -.02em;
+    color: #F2EDE8; margin-bottom: 8px;
+  }
+  #forge-modal-sub {
+    font-size: 14px; line-height: 1.6;
+    color: rgba(242,237,232,.5); margin-bottom: 28px;
+  }
+  #forge-contact-form { display: flex; flex-direction: column; gap: 12px; }
+  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .finput {
+    width: 100%;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px; color: #F2EDE8;
+    font-family: 'Geist', system-ui, sans-serif;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .finput::placeholder { color: rgba(255,255,255,.28); }
+  .finput:focus { border-color: rgba(192,57,43,.6); }
+  .ftextarea { resize: vertical; min-height: 100px; }
+  #forge-submit-btn {
+    background: linear-gradient(135deg, #C0392B, #8e2118);
+    border: none; border-radius: 10px;
+    padding: 13px 24px;
+    font-size: 15px; font-weight: 700; color: #fff;
+    font-family: 'Geist', system-ui, sans-serif;
+    cursor: pointer; align-self: flex-start;
+    transition: opacity .15s, transform .15s;
+    margin-top: 4px;
+  }
+  #forge-submit-btn:hover { opacity: .88; transform: translateY(-1px); }
+  #forge-submit-btn:disabled { opacity: .55; transform: none; cursor: default; }
+  #forge-status {
+    font-size: 13px; min-height: 20px;
+    color: rgba(255,255,255,.5);
+  }
+  @media (max-width: 520px) {
+    #forge-modal-card { padding: 28px 20px; }
+    .frow { grid-template-columns: 1fr; }
+  }
+  </style>
+
+  <script>
+  function openForgeModal() {
+    const m = document.getElementById('forge-modal');
+    m.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => m.querySelector('input').focus(), 100);
+  }
+  function closeForgeModal() {
+    document.getElementById('forge-modal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeForgeModal();
+  });
+
+  function handleForgeForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = document.getElementById('forge-submit-btn');
+    const status = document.getElementById('forge-status');
+    const data = new FormData(form);
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    status.textContent = '';
+
+    data.append('access_key', '92d2b10b-3b07-4473-ad77-1b5be348a42f');
+    data.append('subject', 'Forge Enterprise Inquiry — ' + (data.get('company') || data.get('name')));
+    data.append('from_name', data.get('name') + ' @ ' + data.get('company') + ' via wealthhealth.ai/partners');
+
+    fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
+      .then(r => r.json())
+      .then(result => {
+        if (result.success) {
+          btn.textContent = '✓ Inquiry sent';
+          btn.style.background = 'linear-gradient(135deg,rgba(16,124,16,.9),rgba(16,124,16,.7))';
+          btn.disabled = false;
+          status.textContent = "We'll be in touch at " + data.get('email') + " within one business day.";
+          status.style.color = 'rgba(78,205,115,.85)';
+          form.reset();
+        } else { throw new Error(result.message); }
+      })
+      .catch(() => {
+        btn.textContent = 'Send inquiry →';
+        btn.disabled = false;
+        status.textContent = 'Something went wrong — email us at partnerships@wealthhealth.ai';
+        status.style.color = 'rgba(255,100,80,.85)';
+      });
+  }
+  </script>
 
   <!-- FOOTER -->
   <footer>
