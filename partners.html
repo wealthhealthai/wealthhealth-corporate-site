@@ -167,10 +167,23 @@
       max-width: 100%;
       object-fit: contain;
       filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
+      transition: filter .35s ease;
     }
     a.logo-anchor:hover {
-      transform: translate(-50%, -50%) scale(1.05);
+      transform: translate(-50%, -50%) scale(1.07);
     }
+    /* Product color glow on logo hover */
+    .logo-anchor--prometheus:hover img { filter: drop-shadow(0 0 22px rgba(244,100,17,.65)) drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
+    .logo-anchor--forge:hover      img { filter: drop-shadow(0 0 22px rgba(192,57,43,.65))  drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
+    .logo-anchor--midas:hover      img { filter: drop-shadow(0 0 22px rgba(128,84,255,.65)) drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
+    .logo-anchor--olympus:hover    img { filter: drop-shadow(0 0 22px rgba(16,124,16,.65))  drop-shadow(0 2px 8px rgba(0,0,0,.5)); }
+
+    /* Descriptor + coming-soon brighten on hover */
+    .logo-anchor .logo-desc,
+    .logo-anchor .coming-soon { transition: color .25s, opacity .25s; }
+    .logo-anchor:hover .logo-desc    { color: rgba(242,237,232,.88); }
+    .logo-anchor:hover .coming-soon  { color: rgba(242,237,232,.88); }
+
     .logo-anchor--dim { opacity: .42; cursor: default; }
 
     /* Per-logo size overrides */
@@ -556,6 +569,8 @@
         return 'url(#' + id + ')';
       }
 
+      const hoverTargets = [];
+
       CARDS.forEach(({ sel, hFirst, mid }, idx) => {
         const anchor = document.querySelector(sel);
         if (!anchor) return;
@@ -638,6 +653,9 @@
         ring.setAttribute('stroke-opacity', '0.25');
         svg.appendChild(ring);
 
+        // Store for hover interaction
+        hoverTargets.push({ anchor, dashes, dot, ring, gradId: 'fade-' + idx });
+
         // Small squares at bend corners (HUD detail — only where line is still visible)
         const bendPts = hFirst
           ? [{ x: p0x + (ex - p0x) * mid, y: p0y }, { x: p0x + (ex - p0x) * mid, y: ey }]
@@ -654,6 +672,40 @@
       });
 
       hero.appendChild(svg);
+
+      // ── Hover interactions — line reacts to logo hover ──
+      hoverTargets.forEach(({ anchor, dashes, dot, ring, gradId }) => {
+        if (!anchor) return;
+
+        anchor.addEventListener('mouseenter', () => {
+          // Speed up dash animation
+          dashes.style.animationDuration = '0.55s';
+          // Brighten line gradient
+          const grad = document.getElementById(gradId);
+          if (grad) {
+            const stops = grad.querySelectorAll('stop');
+            if (stops[0]) stops[0].setAttribute('stop-opacity', '0.75');
+            if (stops[1]) stops[1].setAttribute('stop-opacity', '0.50');
+          }
+          // Expand blob origin dot
+          dot.setAttribute('r', '4');
+          ring.setAttribute('r', '9');
+          ring.setAttribute('stroke-opacity', '0.55');
+        });
+
+        anchor.addEventListener('mouseleave', () => {
+          dashes.style.animationDuration = '';
+          const grad = document.getElementById(gradId);
+          if (grad) {
+            const stops = grad.querySelectorAll('stop');
+            if (stops[0]) stops[0].setAttribute('stop-opacity', '0.38');
+            if (stops[1]) stops[1].setAttribute('stop-opacity', '0.25');
+          }
+          dot.setAttribute('r', '2.5');
+          ring.setAttribute('r', '6.5');
+          ring.setAttribute('stroke-opacity', '0.25');
+        });
+      });
     }
 
     window.addEventListener('load', () => setTimeout(draw, 150));
