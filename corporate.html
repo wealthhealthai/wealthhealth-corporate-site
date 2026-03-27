@@ -120,6 +120,15 @@
       white-space:nowrap;
     }
     .nav-cta:hover{transform:translateY(-1px);border-color:rgba(38,103,255,.6);box-shadow:0 14px 36px rgba(38,103,255,.28)}
+    .nav-cta-hub{
+      font-size:13px;font-weight:700;padding:10px 16px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.05);
+      color:rgba(255,255,255,.85);
+      white-space:nowrap;
+      transition:transform .15s, border-color .15s, background .15s;
+    }
+    .nav-cta-hub:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.09);}
 
     .nav-mobile{display:none;}
     @media(max-width:760px){
@@ -574,10 +583,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       <ul class="nav-links">
         <li><a href="#products">Products</a></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#partners">Partners</a></li>
+        <li><a href="#enterprise-hub-section">B2B</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
 
+      <a href="/partners.html" class="nav-cta-hub" style="text-decoration:none;">Enterprise Hub</a>
       <a href="https://forgeai.bot" class="nav-cta" target="_blank" rel="noopener">Try Forge</a>
     </div>
   </nav>
