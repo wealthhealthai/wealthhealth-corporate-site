@@ -667,8 +667,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
 
+    (function() {
     const mount = document.getElementById('mini-blob-mount');
-    if (!mount) return;  // nothing to do outside this page
+    if (!mount) return;
+
+    // Wait for layout if dimensions not yet available
+    const W = mount.clientWidth  || 320;
+    const H = mount.clientHeight || 320;
 
     const scene    = new THREE.Scene();
     const W = mount.clientWidth, H = mount.clientHeight;
@@ -790,11 +795,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     animate(0);
 
     window.addEventListener('resize', () => {
-      const w = mount.clientWidth, h = mount.clientHeight;
+      const w = mount.clientWidth || 320;
+      const h = mount.clientHeight || 320;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     });
+    })(); // end IIFE
     </script>
 
   </div>
