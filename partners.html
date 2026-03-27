@@ -173,7 +173,7 @@
     .logo-anchor--forge img      { height: 57px; }   /* +30% */
     .logo-anchor--midas img      { height: 57px; }   /* +30% — large icon */
 
-    /* Descriptor text — large, aligned toward the blob center per side */
+    /* Descriptor text — large, always left-aligned to match logo flow */
     .logo-desc {
       margin-top: 10px;
       font-size: 14px;
@@ -181,13 +181,8 @@
       color: rgba(242,237,232,.55);
       font-weight: 400;
       letter-spacing: .01em;
+      text-align: left;
     }
-    /* Left side (Prometheus, Midas): right-align toward center */
-    .logo-anchor--prometheus .logo-desc,
-    .logo-anchor--midas      .logo-desc { text-align: right; }
-    /* Right side (Forge, Olympus): left-align toward center */
-    .logo-anchor--forge   .logo-desc,
-    .logo-anchor--olympus .logo-desc   { text-align: left; }
 
     /* Centered at blob diagonal corners — close to the sphere */
     .logo-anchor--prometheus { top: 22%; left: 26%; }
@@ -540,7 +535,9 @@
       CARDS.forEach(({ sel, hFirst, mid }, idx) => {
         const anchor = document.querySelector(sel);
         if (!anchor) return;
-        const r = anchor.getBoundingClientRect();
+        // Connect line to the logo image itself, not the full anchor (which includes the text below)
+        const logoImg = anchor.querySelector('img');
+        const r = (logoImg || anchor).getBoundingClientRect();
 
         // Direction: hero center → card center
         const cardCx = r.left - hr.left + r.width  / 2;
