@@ -9,7 +9,7 @@
   <link rel="icon" href="wh-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -178,19 +178,33 @@
     .logo-anchor--forge img      { height: 57px; }   /* +30% */
     .logo-anchor--midas img      { height: 57px; }   /* +30% — large icon */
 
-    /* Descriptor text */
+    /* Descriptor text — Fira Code monospace, matches page code aesthetic */
     .logo-desc {
       margin-top: 10px;
-      font-size: 16px;
-      line-height: 1.55;
-      color: rgba(242,237,232,.55);
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(242,237,232,.52);
       font-weight: 400;
+      font-family: 'Fira Code', 'Geist Mono', 'Courier New', monospace;
       letter-spacing: .01em;
       text-align: left;
+      max-width: 260px;
     }
-    /* Left-side logos: right-align descriptor */
+    /* Left-side logos: right-align descriptor to share edge with logo */
     .logo-anchor--prometheus .logo-desc,
     .logo-anchor--midas      .logo-desc { text-align: right; }
+
+    /* Coming soon badge — above logo for Midas + Olympus */
+    .coming-soon {
+      display: block;
+      font-family: 'Fira Code', 'Geist Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(242,237,232,.38);
+      margin-bottom: 8px;
+    }
 
     /* Centered at blob diagonal corners — close to the sphere */
     .logo-anchor--prometheus { top: 22%; left: 26%; }
@@ -294,10 +308,12 @@
       <p class="logo-desc">Deploy custom AI agents that run 24/7 for your business.</p>
     </a>
     <div class="logo-anchor logo-anchor--midas logo-anchor--dim">
+      <span class="coming-soon">Coming soon</span>
       <img src="logo-midas-full-new.png" alt="Midas" />
       <p class="logo-desc">Increase conversion and gain incremental shoppers via reward ecosystem.</p>
     </div>
     <div class="logo-anchor logo-anchor--olympus logo-anchor--dim">
+      <span class="coming-soon">Coming soon</span>
       <img src="logo-olympus-full-new.png" alt="Olympus" />
       <p class="logo-desc">List your product on our central marketplace and enter a flywheel of growth.</p>
     </div>
