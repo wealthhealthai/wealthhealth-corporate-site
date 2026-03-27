@@ -163,9 +163,23 @@
       filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
     }
     a.logo-anchor:hover {
-      transform: translate(-50%, -50%) scale(1.07);
+      transform: translate(-50%, -50%) scale(1.05);
     }
     .logo-anchor--dim { opacity: .42; cursor: default; }
+
+    /* Midas icon is oversized relative to wordmark — bump 30% */
+    .logo-anchor--midas img { height: 57px; }
+
+    .logo-desc {
+      margin-top: 9px;
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: rgba(242,237,232,.52);
+      font-weight: 400;
+      text-align: center;
+      max-width: 220px;
+      letter-spacing: .01em;
+    }
 
     /* Centered at blob diagonal corners — close to the sphere */
     .logo-anchor--prometheus { top: 22%; left: 26%; }
@@ -209,12 +223,20 @@
         background: #0C0C0E;
         place-items: center;
       }
+      .logos-mobile a, .logos-mobile div {
+        display: flex; flex-direction: column; align-items: center; gap: 8px;
+        text-decoration: none;
+      }
       .logos-mobile img {
-        max-width: 160px;
-        max-height: 36px;
-        width: auto; height: auto;
+        max-width: 150px;
+        height: 30px;
+        width: auto;
         object-fit: contain;
         opacity: .8;
+      }
+      .logos-mobile .logo-desc {
+        font-size: 11px; color: rgba(242,237,232,.45);
+        text-align: center; line-height: 1.5; max-width: 160px;
       }
       .logos-mobile .dim { opacity: .35; }
       .hero-fade { height: 120px; }
@@ -254,30 +276,42 @@
     <!-- FLOATING LOGOS — desktop only -->
     <a class="logo-anchor logo-anchor--prometheus" href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
       <img src="logo-prometheus-full-new.png" alt="Prometheus" />
+      <p class="logo-desc">Find hard-to-reach leads and automate outreach using our AI growth engine.</p>
     </a>
     <a class="logo-anchor logo-anchor--forge" href="mailto:partnerships@wealthhealth.ai">
       <img src="logo-forge-enterprise-v2.png" alt="Forge Enterprise" />
+      <p class="logo-desc">Deploy custom AI agents that run 24/7 for your business.</p>
     </a>
     <div class="logo-anchor logo-anchor--midas logo-anchor--dim">
       <img src="logo-midas-full-new.png" alt="Midas" />
+      <p class="logo-desc">Increase conversion and gain incremental shoppers via reward ecosystem.</p>
     </div>
     <div class="logo-anchor logo-anchor--olympus logo-anchor--dim">
       <img src="logo-olympus-full-new.png" alt="Olympus" />
+      <p class="logo-desc">List your product on our central marketplace and enter a flywheel of growth.</p>
     </div>
 
     <!-- HUD SVG lines — drawn by JS below -->
   </section>
 
-  <!-- MOBILE LOGOS (< 900px) — simple 2×2 grid -->
+  <!-- MOBILE LOGOS (< 900px) — 2×2 grid with descriptors -->
   <div class="logos-mobile">
     <a href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
       <img src="logo-prometheus-full-new.png" alt="Prometheus" />
+      <p class="logo-desc">Find hard-to-reach leads and automate outreach using our AI growth engine.</p>
     </a>
     <a href="mailto:partnerships@wealthhealth.ai">
       <img src="logo-forge-enterprise-v2.png" alt="Forge Enterprise" />
+      <p class="logo-desc">Deploy custom AI agents that run 24/7 for your business.</p>
     </a>
-    <div class="dim"><img src="logo-midas-full-new.png" alt="Midas" /></div>
-    <div class="dim"><img src="logo-olympus-full-new.png" alt="Olympus" /></div>
+    <div class="dim">
+      <img src="logo-midas-full-new.png" alt="Midas" />
+      <p class="logo-desc">Increase conversion and gain incremental shoppers via reward ecosystem.</p>
+    </div>
+    <div class="dim">
+      <img src="logo-olympus-full-new.png" alt="Olympus" />
+      <p class="logo-desc">List your product on our central marketplace and enter a flywheel of growth.</p>
+    </div>
   </div>
 
   <!-- FOOTER -->
