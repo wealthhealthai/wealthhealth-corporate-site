@@ -153,12 +153,13 @@
       display: block;
       text-decoration: none;
       transition: transform .22s, opacity .22s;
+      max-width: 300px;
     }
     .logo-anchor img {
       display: block;
-      height: 44px;        /* fixed height — all logos the same */
+      height: 44px;
       width: auto;
-      max-width: 300px;
+      max-width: 100%;
       object-fit: contain;
       filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
     }
@@ -167,19 +168,26 @@
     }
     .logo-anchor--dim { opacity: .42; cursor: default; }
 
-    /* Midas icon is oversized relative to wordmark — bump 30% */
-    .logo-anchor--midas img { height: 57px; }
+    /* Per-logo size overrides */
+    .logo-anchor--prometheus img { height: 36px; }   /* reduce — was overpowering */
+    .logo-anchor--forge img      { height: 57px; }   /* +30% */
+    .logo-anchor--midas img      { height: 57px; }   /* +30% — large icon */
 
+    /* Descriptor text — large, aligned toward the blob center per side */
     .logo-desc {
-      margin-top: 9px;
-      font-size: 11.5px;
+      margin-top: 10px;
+      font-size: 14px;
       line-height: 1.55;
-      color: rgba(242,237,232,.52);
+      color: rgba(242,237,232,.55);
       font-weight: 400;
-      text-align: center;
-      max-width: 220px;
       letter-spacing: .01em;
     }
+    /* Left side (Prometheus, Midas): right-align toward center */
+    .logo-anchor--prometheus .logo-desc,
+    .logo-anchor--midas      .logo-desc { text-align: right; }
+    /* Right side (Forge, Olympus): left-align toward center */
+    .logo-anchor--forge   .logo-desc,
+    .logo-anchor--olympus .logo-desc   { text-align: left; }
 
     /* Centered at blob diagonal corners — close to the sphere */
     .logo-anchor--prometheus { top: 22%; left: 26%; }
@@ -235,8 +243,8 @@
         opacity: .8;
       }
       .logos-mobile .logo-desc {
-        font-size: 11px; color: rgba(242,237,232,.45);
-        text-align: center; line-height: 1.5; max-width: 160px;
+        font-size: 13px; color: rgba(242,237,232,.5);
+        text-align: center; line-height: 1.5;
       }
       .logos-mobile .dim { opacity: .35; }
       .hero-fade { height: 120px; }
