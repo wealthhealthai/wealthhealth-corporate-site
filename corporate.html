@@ -664,16 +664,16 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       #mini-hub-link:hover span { color: #fff; }
     </style>
 
-    <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
-
+    <!-- r128 UMD for mini blob — same proven setup as partners.html -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+    window.addEventListener('load', function() {
     (function() {
+    if (typeof THREE === 'undefined') return;
     const mount = document.getElementById('mini-blob-mount');
     if (!mount) return;
 
-    // Wait for layout if dimensions not yet available
-    const W = mount.clientWidth  || 320;
-    const H = mount.clientHeight || 320;
+    const W = 320, H = 320;
 
     const scene    = new THREE.Scene();
     const W = mount.clientWidth, H = mount.clientHeight;
@@ -683,6 +683,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding; // match partners.html
     mount.appendChild(renderer.domElement);
 
     // ── Archon's exact vertex shader (simplex noise displacement) ──
@@ -760,9 +761,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     const material = new THREE.ShaderMaterial({
       uniforms: {
         time:        { value: 0 },
-        colorLo:     { value: new THREE.Color('#3d4f62') },
-        colorHi:     { value: new THREE.Color('#8fa8c0') },
-        accentColor: { value: new THREE.Color('#5b9bff') },
+        colorLo:     { value: new THREE.Color('#3d4f62').convertSRGBToLinear() },
+        colorHi:     { value: new THREE.Color('#8fa8c0').convertSRGBToLinear() },
+        accentColor: { value: new THREE.Color('#5b9bff').convertSRGBToLinear() },
       },
       vertexShader, fragmentShader, wireframe: true,
     });
@@ -794,14 +795,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     }
     animate(0);
 
-    window.addEventListener('resize', () => {
-      const w = mount.clientWidth || 320;
-      const h = mount.clientHeight || 320;
-      camera.aspect = w / h;
+    window.addEventListener('resize', function() {
+      camera.aspect = 1;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(320, 320);
     });
     })(); // end IIFE
+    }); // end load
     </script>
 
   </div>
