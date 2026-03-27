@@ -173,16 +173,19 @@
     .logo-anchor--forge img      { height: 57px; }   /* +30% */
     .logo-anchor--midas img      { height: 57px; }   /* +30% — large icon */
 
-    /* Descriptor text — large, always left-aligned to match logo flow */
+    /* Descriptor text */
     .logo-desc {
       margin-top: 10px;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.55;
       color: rgba(242,237,232,.55);
       font-weight: 400;
       letter-spacing: .01em;
       text-align: left;
     }
+    /* Left-side logos: right-align descriptor */
+    .logo-anchor--prometheus .logo-desc,
+    .logo-anchor--midas      .logo-desc { text-align: right; }
 
     /* Centered at blob diagonal corners — close to the sphere */
     .logo-anchor--prometheus { top: 22%; left: 26%; }
@@ -521,7 +524,7 @@
         g.setAttribute('gradientUnits', 'userSpaceOnUse');
         g.setAttribute('x1', x1); g.setAttribute('y1', y1);
         g.setAttribute('x2', x2); g.setAttribute('y2', y2);
-        [['0%','0.65'],['65%','0.5'],['100%','0']].forEach(([offset, opacity]) => {
+        [['0%','0.38'],['65%','0.25'],['100%','0']].forEach(([offset, opacity]) => {
           const s = document.createElementNS(NS, 'stop');
           s.setAttribute('offset', offset);
           s.setAttribute('stop-color', 'white');
@@ -579,7 +582,7 @@
         // Glow ghost — fades toward logo
         const glow = document.createElementNS(NS, 'path');
         glow.setAttribute('d', d); glow.setAttribute('fill', 'none');
-        glow.setAttribute('stroke', gradId); glow.setAttribute('stroke-width', '4');
+        glow.setAttribute('stroke', gradId); glow.setAttribute('stroke-width', '2.5');
         glow.setAttribute('filter', fId); glow.setAttribute('stroke-linejoin', 'miter');
         svg.appendChild(glow);
 
