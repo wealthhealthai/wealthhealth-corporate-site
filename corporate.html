@@ -134,7 +134,31 @@
     @media(max-width:760px){
       .nav-links{display:none;}
       .nav-mobile{display:block;color:rgba(255,255,255,.6);font-size:12px;letter-spacing:.12em;text-transform:uppercase;}
-      .nav-cta{padding:9px 14px;}
+      .nav-cta{padding:9px 14px;font-size:12px;}
+      /* Hide Enterprise Hub button on mobile — keep only Try Forge */
+      .nav-cta-hub{display:none;}
+    }
+    /* Enterprise Hub section — shorter on mobile, hide blob for performance */
+    @media(max-width:760px){
+      #enterprise-hub-section{
+        height: 72vw !important;
+        min-height: 280px;
+        max-height: 420px;
+      }
+      #mini-blob-mount canvas { display: none; }
+      #enterprise-hub-section::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 70% 60% at 50% 55%,
+          rgba(91,155,255,.18) 0%, rgba(38,103,255,.06) 50%, transparent 80%);
+        pointer-events: none;
+      }
+      #enterprise-hub-section span {
+        font-size: clamp(22px, 6vw, 36px) !important;
+      }
+      #enterprise-hub-section p {
+        font-size: 11px !important;
+      }
     }
 
     /* ─── HERO ─── */

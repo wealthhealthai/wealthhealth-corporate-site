@@ -250,42 +250,92 @@
 
     /* ─── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 900px) {
+      /* Hide desktop HUD elements */
       .logo-anchor { display: none; }
       #hud-svg     { display: none; }
-      .hero { height: 60vh; min-height: 380px; }
+
+      /* Shorter hero blob on mobile */
+      .hero { height: 55vh; min-height: 320px; }
+      .hero-fade { height: 100px; }
+
+      /* Hero text tighter on mobile */
+      .hero-title { font-size: clamp(32px, 8vw, 56px); }
+      .hero-sub   { font-size: 15px; }
+      .hero-eyebrow { font-size: 10px; margin-bottom: 12px; }
+
+      /* Nav — stack buttons tighter on mobile */
+      nav { padding: 0 20px; height: 56px; }
+      .nav-badge { font-size: 10px; padding: 3px 8px; }
+
+      /* Mobile logo grid — 2 columns, left-aligned cells */
       .logos-mobile {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 28px 16px;
-        padding: 36px 24px 60px;
+        gap: 0;
+        padding: 0;
         background: #0C0C0E;
-        place-items: center;
       }
       .logos-mobile a, .logos-mobile div {
-        display: flex; flex-direction: column; align-items: center; gap: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
         text-decoration: none;
+        padding: 28px 20px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        border-right: 1px solid rgba(255,255,255,.06);
       }
+      /* Remove right border on right-column cells */
+      .logos-mobile a:nth-child(even),
+      .logos-mobile div:nth-child(even) { border-right: none; }
+      /* Remove bottom border on last row */
+      .logos-mobile a:nth-last-child(-n+2),
+      .logos-mobile div:nth-last-child(-n+2) { border-bottom: none; }
+
       .logos-mobile img {
-        max-width: 150px;
-        height: 30px;
+        height: 28px;
         width: auto;
+        max-width: 100%;
         object-fit: contain;
-        opacity: .8;
+        object-position: left center;
       }
       .logos-mobile .logo-desc {
-        font-size: 13px; color: rgba(242,237,232,.5);
-        text-align: center; line-height: 1.5;
+        font-family: 'Fira Code', 'Geist Mono', 'Courier New', monospace;
+        font-size: 11px;
+        color: rgba(242,237,232,.48);
+        text-align: left;
+        line-height: 1.55;
       }
-      .logos-mobile .dim { opacity: .35; }
-      .hero-fade { height: 120px; }
+      .logos-mobile .coming-soon-mobile {
+        font-family: 'Fira Code', monospace;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: rgba(242,237,232,.32);
+        margin-bottom: -4px;
+      }
+      .logos-mobile .dim { opacity: .4; }
+
+      /* Footer */
+      footer { flex-direction: column; gap: 6px; padding: 20px; text-align: center; }
     }
+
+    @media (max-width: 480px) {
+      /* Single column on small phones */
+      .logos-mobile { grid-template-columns: 1fr; }
+      .logos-mobile a, .logos-mobile div {
+        border-right: none;
+        padding: 24px 20px;
+      }
+      .logos-mobile a:nth-last-child(-n+2),
+      .logos-mobile div:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.06); }
+      .logos-mobile a:last-child,
+      .logos-mobile div:last-child { border-bottom: none; }
+    }
+
     @media (min-width: 901px) {
       .logos-mobile { display: none; }
-    }
-    @media (max-width: 540px) {
-      .cards-mobile { grid-template-columns: 1fr; }
-      nav { padding: 0 20px; }
-      footer { flex-direction: column; gap: 6px; padding: 20px; text-align: center; }
     }
   </style>
 </head>
@@ -336,21 +386,23 @@
     <!-- HUD SVG lines — drawn by JS below -->
   </section>
 
-  <!-- MOBILE LOGOS (< 900px) — 2×2 grid with descriptors -->
+  <!-- MOBILE LOGOS (< 900px) — grid with descriptors -->
   <div class="logos-mobile">
     <a href="https://prometheus.wealthhealth.ai" target="_blank" rel="noopener">
       <img src="logo-prometheus-full-new.png" alt="Prometheus" />
       <p class="logo-desc">Find hard-to-reach leads and automate outreach using our AI growth engine.</p>
     </a>
-    <a href="mailto:partnerships@wealthhealth.ai">
+    <div onclick="openForgeModal()" style="cursor:pointer;">
       <img src="logo-forge-enterprise-v2.png" alt="Forge Enterprise" />
       <p class="logo-desc">Deploy custom AI agents that run 24/7 for your business.</p>
-    </a>
+    </div>
     <div class="dim">
+      <span class="coming-soon-mobile">Coming soon</span>
       <img src="logo-midas-full-new.png" alt="Midas" />
       <p class="logo-desc">Increase conversion and gain incremental shoppers via reward ecosystem.</p>
     </div>
     <div class="dim">
+      <span class="coming-soon-mobile">Coming soon</span>
       <img src="logo-olympus-full-new.png" alt="Olympus" />
       <p class="logo-desc">List your product on our central marketplace and enter a flywheel of growth.</p>
     </div>
