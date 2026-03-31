@@ -380,10 +380,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     
     .prod-center-top{display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:44px;position:relative;z-index:1;}
     .prod-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
-    .prod-section[id="forge" data-product="forge"] .prod-eyebrow{color:#E05A4E;}
-    .prod-section[id="prometheus" data-product="prometheus"] .prod-eyebrow{color:#F46411;}
-    .prod-section[id="midas" data-product="midas"] .prod-eyebrow{color:#8054FF;}
-    .prod-section[id="olympus" data-product="olympus"] .prod-eyebrow{color:#4caf50;}
+    .prod-section[data-product="forge"] .prod-eyebrow{color:#E05A4E;}
+    .prod-section[data-product="prometheus"] .prod-eyebrow{color:#F46411;}
+    .prod-section[data-product="midas"] .prod-eyebrow{color:#8054FF;}
+    .prod-section[data-product="olympus"] .prod-eyebrow{color:#4caf50;}
     .prod-lockup{height:44px;width:auto;display:block;}
     .prod-section[data-product="forge"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(192,57,43,.4));}
     .prod-section[data-product="prometheus"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(244,100,17,.35));}
@@ -680,7 +680,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       <div class="container" style="text-align:center;">
         <div class="eyebrow reveal" style="color:rgba(38,103,255,.85);margin-bottom:16px;">Partner Ecosystem</div>
         <h2 class="reveal" style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:#F2EDE8;margin-bottom:12px;">One gateway. Every platform.</h2>
-        <p class="reveal" style="font-size:16px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 48px;line-height:1.6;">Click any node to enter a platform or submit an inquiry.</p>
+        <p class="reveal" style="font-size:16px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 48px;line-height:1.6;">Already a partner or interested in using our platforms for enterprise? Visit our central Hub, or learn more about each platform below.</p>
 
         <!-- Orbital container -->
         <div id="orbital-wrap" style="position:relative;width:560px;height:560px;margin:0 auto;">
@@ -689,12 +689,15 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none;"></div>
 
           <!-- Center hub -->
-          <div id="orbital-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;pointer-events:none;">
-            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2667FF,#2714B8);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(38,103,255,.12),0 0 0 24px rgba(38,103,255,.06);">
-              <img src="wh-slash-icon.png" style="height:34px;width:auto;display:block;" alt="WH"/>
+          <div id="orbital-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;" onclick="window.location.href='/partners.html'">
+            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2667FF,#2714B8);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(38,103,255,.12),0 0 0 24px rgba(38,103,255,.06);transition:transform .2s,box-shadow .2s;" id="orbital-center-circle"
+              onmouseenter="this.style.transform='scale(1.12)';this.style.boxShadow='0 0 0 12px rgba(38,103,255,.2),0 0 0 24px rgba(38,103,255,.1),0 0 28px rgba(38,103,255,.5)'"
+              onmouseleave="this.style.transform='';this.style.boxShadow='0 0 0 12px rgba(38,103,255,.12),0 0 0 24px rgba(38,103,255,.06)'">
+              <img src="wh-slash-icon.png" style="height:34px;width:auto;display:block;pointer-events:none;" alt="WH"/>
             </div>
-            <div class="orb-ping" style="position:absolute;width:106px;height:106px;border-radius:50%;border:1px solid rgba(38,103,255,.35);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite;"></div>
-            <div class="orb-ping" style="position:absolute;width:132px;height:132px;border-radius:50%;border:1px solid rgba(38,103,255,.18);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite .55s;"></div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85);white-space:nowrap;pointer-events:none;">Enterprise Hub</div>
+            <div class="orb-ping" style="position:absolute;width:106px;height:106px;border-radius:50%;border:1px solid rgba(38,103,255,.35);top:40px;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite;pointer-events:none;"></div>
+            <div class="orb-ping" style="position:absolute;width:132px;height:132px;border-radius:50%;border:1px solid rgba(38,103,255,.18);top:40px;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite .55s;pointer-events:none;"></div>
           </div>
 
           <!-- Nodes injected by JS -->
@@ -721,7 +724,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── FORGE ── -->
-      <div class="prod-section reveal" data-product="forge" id="prod-forge">
+      <div class="prod-section reveal" id="forge" data-product="forge" id="prod-forge">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Forge Platform</span>
@@ -786,7 +789,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── PROMETHEUS ── -->
-      <div class="prod-section reveal" data-product="prometheus" id="prod-prometheus">
+      <div class="prod-section reveal" id="prometheus" data-product="prometheus" id="prod-prometheus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Prometheus Platform</span>
@@ -863,7 +866,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── MIDAS ── -->
-      <div class="prod-section reveal" data-product="midas" id="prod-midas">
+      <div class="prod-section reveal" id="midas" data-product="midas" id="prod-midas">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Midas Platform</span>
@@ -893,7 +896,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── OLYMPUS ── -->
-      <div class="prod-section reveal" data-product="olympus" id="prod-olympus">
+      <div class="prod-section reveal" id="olympus" data-product="olympus" id="prod-olympus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Olympus Platform</span>
@@ -1490,11 +1493,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <script>
   (function() {
     var PLATFORMS = [
-      { label:'Prometheus',     color:'#F46411', img:'logo-prometheus.png', url:'#prometheus', live:true              },
-      { label:'Forge',          color:'#C0392B', img:'logo-forge.png',      url:'#forge',       live:true              },
-      { label:'Enterprise Hub', color:'#2667FF', img:'wh-icon.png',         url:'/partners.html',live:true              },
-      { label:'Midas',          color:'#8054FF', img:'logo-midas.png',      url:'#midas',       live:true, soon:true    },
-      { label:'Olympus',        color:'#107C10', img:'logo-olympus.png',    url:'#olympus',     live:true, soon:true    },
+      { label:'Prometheus', color:'#F46411', img:'logo-prometheus.png', url:'#prometheus' },
+      { label:'Forge',      color:'#C0392B', img:'logo-forge.png',      url:'#forge'      },
+      { label:'Midas',      color:'#8054FF', img:'logo-midas.png',      url:'#midas',   soon:true },
+      { label:'Olympus',    color:'#107C10', img:'logo-olympus.png',    url:'#olympus', soon:true },
     ];
 
     var wrap  = document.getElementById('orbital-wrap');
@@ -1538,7 +1540,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       outer.appendChild(inner);
       nodes.appendChild(outer);
 
-      // Hover + click
+      // Hover + click — all nodes are navigable
       circle.addEventListener('mouseenter', function() {
         circle.style.transform = 'scale(1.18)';
         circle.style.boxShadow = '0 0 24px ' + p.color + '99';
@@ -1549,10 +1551,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       });
       outer.addEventListener('click', function(e) {
         e.stopPropagation();
-        if (p.url.startsWith('#')) {
+        if (p.url && p.url.startsWith('#')) {
           var target = document.querySelector(p.url);
-          if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
-        } else {
+          if (target) {
+            var navH = (document.querySelector('nav') || {offsetHeight:64}).offsetHeight;
+            window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - navH - 16, behavior:'smooth' });
+          }
+        } else if (p.url) {
           window.location.href = p.url;
         }
       });
