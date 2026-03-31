@@ -702,8 +702,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     <!-- Centered logo -->
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
-      <img src="logo-wh-nav.png" alt="WealthHealth AI"
-           style="width:min(260px,45vw);height:auto;display:block;opacity:.95;filter:drop-shadow(0 0 40px rgba(255,255,255,.08)) brightness(1.05);"/>
+      <img src="wh-slash-icon.png" alt="WealthHealth AI"
+           style="width:min(100px,18vw);height:auto;display:block;opacity:.92;filter:drop-shadow(0 0 50px rgba(255,255,255,.12));"/>
     </div>
 
     <!-- Scroll hint -->
@@ -1727,99 +1727,107 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   })();
   </script>
 
-  <!-- ═══ SHADER HERO INIT — shader-lines (plain WebGL, no dependencies) ═══ -->
+  <!-- ═══ SHADER HERO — shader-lines plain WebGL ═══ -->
   <script>
   (function() {
     var canvas = document.getElementById('shader-hero-canvas');
     if (!canvas) return;
-    var gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return;
 
-    var W = window.innerWidth, H = window.innerHeight;
+    // Force WebGL1 — GLSL ES 1.0 (avoids gl_FragColor issue in WebGL2)
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) { console.warn('WebGL not available'); return; }
+
     function resize() {
-      W = window.innerWidth; H = window.innerHeight;
-      canvas.width = W; canvas.height = H;
+      var W = canvas.parentElement.offsetWidth || window.innerWidth;
+      var H = canvas.parentElement.offsetHeight || window.innerHeight;
+      canvas.width  = W;
+      canvas.height = H;
       gl.viewport(0, 0, W, H);
     }
     resize();
     window.addEventListener('resize', resize);
 
-    var VS = 'void main(){gl_Position=vec4(position,1.0);}';
-    // Shader from aliimam/shader-lines — chromatic concentric ring lines
-    var FS = [
-      '#define TWO_PI 6.2831853072',
-      '#define PI 3.14159265359',
-      'precision highp float;',
-      'uniform vec2 resolution;',
-      'uniform float time;',
-      'float random(in float x){return fract(sin(x)*1e4);}',
-      'float random(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}',
-      'void main(void){',
-      '  vec2 uv=(gl_FragCoord.xy*2.0-resolution.xy)/min(resolution.x,resolution.y);',
-      '  vec2 fMosaicScal=vec2(4.0,2.0);',
-      '  vec2 vScreenSize=vec2(256.0,256.0);',
-      '  uv.x=floor(uv.x*vScreenSize.x/fMosaicScal.x)/(vScreenSize.x/fMosaicScal.x);',
-      '  uv.y=floor(uv.y*vScreenSize.y/fMosaicScal.y)/(vScreenSize.y/fMosaicScal.y);',
-      '  float t=time*0.06+random(uv.x)*0.4;',
-      '  float lineWidth=0.0008;',
-      '  vec3 color=vec3(0.0);',
-      '  for(int i=0;i<5;i++){',
-      '    float base=lineWidth*float(i*i);',
-      '    color.r+=base/abs(fract(t+float(i)*0.01)*1.0-length(uv));',
-      '    color.g+=base/abs(fract(t-0.01+float(i)*0.01)*1.0-length(uv));',
-      '    color.b+=base/abs(fract(t-0.02+float(i)*0.01)*1.0-length(uv));',
-      '  }',
-      '  gl_FragColor=vec4(color.b,color.g,color.r,1.0);',
-      '}'
-    ].join('
-');
+    var VSrc = [
+      'attribute vec2 pos;',
+      'void main(){gl_Position=vec4(pos,0.0,1.0);}'
+    ].join('\n');
 
-    function compile(type, src) {
+    var FSrc = [
+      'precision mediump float;',
+      'uniform vec2  resolution;',
+      'uniform float time;',
+      'float rnd(float x){return fract(sin(x)*1e4);}',
+      'float rnd2(vec2 s){return fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);}',
+      'void main(){',
+      '  vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);',
+      '  float sx=256.0/4.0; float sy=256.0/2.0;',
+      '  uv.x=floor(uv.x*sx)/sx; uv.y=floor(uv.y*sy)/sy;',
+      '  float t=time*0.06+rnd2(vec2(uv.x,0.0))*0.4;',
+      '  float lw=0.0008; float r=length(uv);',
+      '  float cr=0.0,cg=0.0,cb=0.0;',
+      '  for(int i=0;i<5;i++){',
+      '    float f=lw*float(i*i);',
+      '    cr+=f/abs(fract(t          +float(i)*0.01)-r);',
+      '    cg+=f/abs(fract(t-0.01     +float(i)*0.01)-r);',
+      '    cb+=f/abs(fract(t-0.02     +float(i)*0.01)-r);',
+      '  }',
+      '  gl_FragColor=vec4(cb,cg,cr,1.0);',
+      '}'
+    ].join('\n');
+
+    function mkShader(type, src) {
       var s = gl.createShader(type);
-      gl.shaderSource(s, src); gl.compileShader(s);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+        console.error('Shader compile error:', gl.getShaderInfoLog(s));
       return s;
     }
+
     var prog = gl.createProgram();
-    // Simple vertex shader using a full-screen triangle trick
-    var VSsrc = 'attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}';
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VSsrc));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER,   VSrc));
+    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FSrc));
     gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+      console.error('Program link error:', gl.getProgramInfoLog(prog));
     gl.useProgram(prog);
 
     var buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-    var pos = gl.getAttribLocation(prog, 'position');
-    gl.enableVertexAttribArray(pos);
-    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+    gl.bufferData(gl.ARRAY_BUFFER,
+      new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    var aPos = gl.getAttribLocation(prog, 'pos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
     var uTime = gl.getUniformLocation(prog, 'time');
     var uRes  = gl.getUniformLocation(prog, 'resolution');
-    gl.uniform2f(uRes, W, H);
+    var t = 0.0;
 
-    var t = 0, visible = false, rafId = null;
+    function setRes() {
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+    }
+    setRes();
+
+    var visible = true, rafId = null;
+
     function frame() {
-      if (!visible) return;
-      rafId = requestAnimationFrame(frame);
       t += 0.05;
       gl.uniform1f(uTime, t);
-      gl.uniform2f(uRes, W, H);
+      setRes();
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      rafId = requestAnimationFrame(frame);
     }
 
     var io = new IntersectionObserver(function(e) {
       visible = e[0].isIntersecting;
-      if (visible && !rafId) rafId = requestAnimationFrame(frame);
-      else if (!visible) { cancelAnimationFrame(rafId); rafId = null; }
+      if (visible && !rafId) { rafId = requestAnimationFrame(frame); }
+      else if (!visible && rafId) { cancelAnimationFrame(rafId); rafId = null; }
     }, { threshold: 0.01 });
     io.observe(canvas);
 
-    // Start immediately if visible
-    visible = true;
     rafId = requestAnimationFrame(frame);
   })();
   </script>
 
 </body>
-</html>
