@@ -1723,9 +1723,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     function resize() {
       var W = container.offsetWidth  || window.innerWidth;
       var H = container.offsetHeight || window.innerHeight;
-      canvas.width  = W;
-      canvas.height = H;
-      gl.viewport(0, 0, W, H);
+      // Render at 50% resolution — mosaic shader makes this invisible, 4× fewer pixels
+      canvas.width  = Math.floor(W * 0.5);
+      canvas.height = Math.floor(H * 0.5);
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      gl.viewport(0, 0, canvas.width, canvas.height);
     }
     resize();
     window.addEventListener('resize', resize);
@@ -1794,12 +1797,17 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     var visible = true, rafId = null;
 
-    function frame() {
+    var lastFrame = 0;
+    var FPS_INTERVAL = 1000 / 30; // 30fps cap
+    function frame(ts) {
+      rafId = requestAnimationFrame(frame);
+      if (!visible) return;
+      if (ts - lastFrame < FPS_INTERVAL) return;
+      lastFrame = ts;
       t += 0.05;
       gl.uniform1f(uTime, t);
       setRes();
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      rafId = requestAnimationFrame(frame);
     }
 
     var io = new IntersectionObserver(function(e) {
