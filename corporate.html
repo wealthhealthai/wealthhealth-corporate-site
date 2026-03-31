@@ -6,11 +6,7 @@
   <title>WealthHealth AI Intelligent Products for a Better Life</title>
   <meta name="description" content="WealthHealth AI Inc builds AI-powered products that make people healthier, wealthier, and more productive."/>
   <link rel="icon" href="wh-icon.png" type="image/png"/>
-  <!-- Spline viewer web component -->
-  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.76/build/spline-viewer.js"></script>
-  <!-- Hide Spline watermark -->
-  <style>spline-viewer::part(logo){display:none!important;}spline-viewer{--logo:none;}</style>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
   <style>
@@ -696,12 +692,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
-    <!-- Galaxy hero — Spline scene (erikx/galaxy-interactive-hero-section) -->
-    <spline-viewer
-      id="wh-shader"
-      url="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
-      style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"
-    ></spline-viewer>
+    <div id="wh-shader"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
