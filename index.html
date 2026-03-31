@@ -27,20 +27,13 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
   height:clamp(220px,28vmin,340px);
   border-radius:50%;
   cursor:pointer;
-  /* subtle ring so it's clearly a button */
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(0,0,0,.15);
-  backdrop-filter:blur(2px);
-  -webkit-backdrop-filter:blur(2px);
-  transition:border-color .25s,background .25s,transform .25s;
+  background:transparent;
+  border:none;
   -webkit-font-smoothing:antialiased;
   font-family:'Geist',system-ui,sans-serif;
+  transition:transform .25s;
 }
-#enter-circle:hover{
-  border-color:rgba(255,255,255,.35);
-  background:rgba(255,255,255,.06);
-  transform:scale(1.04);
-}
+#enter-circle:hover{ transform:scale(1.04); }
 #enter-circle img{
   height:clamp(28px,4vmin,44px);
   width:auto;
@@ -139,7 +132,7 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
       var sw = 400 * sizeFactor / depth;
       ctx.lineWidth = sw;
       ctx.beginPath();
-      ctx.arc(x, y, 0.5, 0, Math.PI * 2);
+      ctx.arc(x, y, 0.625, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -254,7 +247,7 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
       var rx = mx + r2 * (1 + bounce) * Math.cos(ang + o2 * Math.PI * easeOutElastic(eP));
       var ry = my + r2 * (1 + bounce) * Math.sin(ang + o2 * Math.PI * easeOutElastic(eP));
       ctx.beginPath();
-      ctx.arc(rx, ry, sw / 2, 0, Math.PI * 2);
+      ctx.arc(rx, ry, sw * 0.625, 0, Math.PI * 2);
       ctx.fill();
     }
 
