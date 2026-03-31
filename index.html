@@ -1,367 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>WealthHealth AI — Coming Soon</title>
-  <link rel="icon" href="wh-icon.png" type="image/png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html,body{height:100%;font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WealthHealth AI</title>
+<link rel="icon" href="wh-icon.png" type="image/png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:#000;}
 
-    body{
-      min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      padding:40px 24px;position:relative;overflow:hidden;
-      background:#0A0918;
-    }
+#spiral-canvas{
+  position:fixed;inset:0;
+  display:block;width:100%;height:100%;
+}
 
-    /* Shader canvas — fixed full-screen behind everything */
-    #wh-shader{
-      position:fixed;top:0;left:0;width:100%;height:100%;
-      pointer-events:none;z-index:0;opacity:0.75;
-    }
-    #wh-shader canvas{display:block;width:100%!important;height:100%!important;}
+/* Overlay UI */
+#overlay{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  pointer-events:none;
+  font-family:'Geist',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  z-index:10;
+  transition:opacity .6s ease;
+}
 
-    /* Ambient glow blobs */
-    .glow-top{
-      position:fixed;top:-15%;left:50%;transform:translateX(-50%);
-      width:800px;height:500px;
-      background:radial-gradient(ellipse,rgba(38,103,255,.14) 0%,transparent 65%);
-      pointer-events:none;z-index:0;
-    }
-    .glow-bottom{
-      position:fixed;bottom:-20%;left:50%;transform:translateX(-50%);
-      width:600px;height:400px;
-      background:radial-gradient(ellipse,rgba(39,20,184,.12) 0%,transparent 65%);
-      pointer-events:none;z-index:0;
-    }
+.wh-logo{
+  height:52px;width:auto;
+  margin-bottom:24px;
+  filter:drop-shadow(0 0 20px rgba(255,255,255,.3));
+}
 
-    /* Main card */
-    .card{
-      width:100%;max-width:500px;text-align:center;
-      position:relative;z-index:1;
-      animation:fadeUp .8s cubic-bezier(.22,.68,0,1) both;
-    }
-    @keyframes fadeUp{
-      from{opacity:0;transform:translateY(28px);}
-      to{opacity:1;transform:translateY(0);}
-    }
+.wh-name{
+  font-size:clamp(28px,5vw,52px);
+  font-weight:800;
+  letter-spacing:-.04em;
+  color:#fff;
+  margin-bottom:10px;
+  text-shadow:0 0 60px rgba(255,255,255,.15);
+}
 
-    /* Logo */
-    .wh-logo{
-      margin-bottom:44px;
-      display:flex;justify-content:center;
-      animation:fadeUp .8s .1s cubic-bezier(.22,.68,0,1) both;
-    }
+.wh-tagline{
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  color:rgba(255,255,255,.45);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-bottom:52px;
+}
 
-    /* Status badge */
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
-      color:rgba(255,255,255,.45);
-      border:1px solid rgba(38,103,255,.25);
-      background:rgba(38,103,255,.07);
-      padding:5px 14px;border-radius:20px;margin-bottom:30px;
-      animation:fadeUp .8s .15s cubic-bezier(.22,.68,0,1) both;
-    }
-    .badge-dot{
-      width:6px;height:6px;border-radius:50%;
-      background:#2667FF;box-shadow:0 0 10px rgba(38,103,255,.8);
-      animation:pulse 2.2s ease-in-out infinite;
-    }
-    @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 10px rgba(38,103,255,.8);}50%{opacity:.5;box-shadow:0 0 4px rgba(38,103,255,.4);}}
-
-    h1{
-      font-size:clamp(34px,5.5vw,52px);font-weight:800;color:#fff;
-      letter-spacing:-.05em;line-height:1.08;margin-bottom:16px;
-      animation:fadeUp .8s .2s cubic-bezier(.22,.68,0,1) both;
-    }
-    h1 em{
-      font-style:normal;
-      background:linear-gradient(125deg,#4d8cff 0%,#2667FF 50%,#7B5EFF 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-
-    .tagline{
-      font-size:16px;color:rgba(255,255,255,.42);line-height:1.7;
-      max-width:380px;margin:0 auto 44px;
-      animation:fadeUp .8s .25s cubic-bezier(.22,.68,0,1) both;
-    }
-
-    /* Email form */
-    .form-wrap{
-      animation:fadeUp .8s .3s cubic-bezier(.22,.68,0,1) both;
-    }
-    .form-label{
-      font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
-      color:rgba(255,255,255,.3);margin-bottom:12px;
-    }
-    .form{
-      display:flex;gap:8px;max-width:400px;margin:0 auto;
-    }
-    input[type="email"]{
-      flex:1;background:rgba(255,255,255,.05);
-      border:1.5px solid rgba(255,255,255,.1);
-      border-radius:10px;padding:13px 16px;
-      color:#fff;font-size:14px;font-family:inherit;outline:none;
-      transition:border-color .2s,background .2s;
-    }
-    input[type="email"]:focus{
-      border-color:rgba(38,103,255,.6);
-      background:rgba(38,103,255,.05);
-    }
-    input[type="email"]::placeholder{color:rgba(255,255,255,.22);}
-    .btn-notify{
-      background:#2667FF;color:#fff;border:none;border-radius:10px;
-      padding:13px 20px;font-size:14px;font-weight:600;cursor:pointer;
-      font-family:inherit;white-space:nowrap;
-      box-shadow:0 4px 20px rgba(38,103,255,.35);
-      transition:all .18s;
-    }
-    .btn-notify:hover{
-      background:#3876ff;transform:translateY(-1px);
-      box-shadow:0 6px 28px rgba(38,103,255,.5);
-    }
-    .btn-notify:active{transform:translateY(0);}
-    .form-note{font-size:12px;color:rgba(255,255,255,.18);margin-top:12px;}
-    .form-success{
-      font-size:14px;color:rgba(255,255,255,.6);
-      display:none;margin-top:16px;
-    }
-    .form-success.show{display:block;}
-
-    /* Access code section */
-    .divider{
-      display:flex;align-items:center;gap:14px;
-      max-width:400px;margin:28px auto;
-      color:rgba(255,255,255,.15);font-size:12px;
-    }
-    .divider::before,.divider::after{
-      content:'';flex:1;height:1px;background:rgba(255,255,255,.1);
-    }
-    .input-row{display:flex;gap:8px;max-width:400px;margin:0 auto;}
-    input[type="password"]{
-      flex:1;background:rgba(255,255,255,.05);
-      border:1.5px solid rgba(255,255,255,.1);
-      border-radius:10px;padding:13px 16px;
-      color:#fff;font-size:14px;font-family:inherit;outline:none;
-      text-align:center;letter-spacing:.12em;
-      transition:border-color .2s,background .2s;
-    }
-    input[type="password"]:focus{
-      border-color:rgba(38,103,255,.6);
-      background:rgba(38,103,255,.05);
-    }
-    input[type="password"]::placeholder{letter-spacing:0;color:rgba(255,255,255,.2);}
-    .btn-enter{
-      background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);
-      border:1.5px solid rgba(255,255,255,.12);
-      border-radius:10px;padding:13px 20px;font-size:14px;font-weight:600;cursor:pointer;
-      font-family:inherit;white-space:nowrap;
-      transition:all .18s;
-    }
-    .btn-enter:hover{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.22);}
-    .err{font-size:13px;color:#FF6B6B;min-height:18px;text-align:center;margin-top:10px;}
-
-    /* Footer */
-    .footer-text{
-      margin-top:56px;font-size:12px;color:rgba(255,255,255,.14);
-      letter-spacing:.04em;
-      animation:fadeUp .8s .4s cubic-bezier(.22,.68,0,1) both;
-    }
-
-    /* WH logo SVG inline */
-    .wh-wordmark-svg{display:block;}
-
-    @media(max-width:480px){
-      .form{flex-direction:column;}
-      .input-row{flex-direction:column;}
-    }
-  </style>
+#enter-btn{
+  pointer-events:all;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 36px;
+  font-family:'Geist',system-ui,sans-serif;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;
+  color:#fff;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+  text-decoration:none;
+}
+#enter-btn:hover{
+  background:rgba(255,255,255,.15);
+  border-color:rgba(255,255,255,.5);
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(255,255,255,.08);
+}
+#enter-btn svg{transition:transform .2s;}
+#enter-btn:hover svg{transform:translateX(3px);}
+</style>
 </head>
 <body>
 
-<!-- Shader background -->
-<div id="wh-shader"></div>
-<div class="glow-top"></div>
-<div class="glow-bottom"></div>
+<canvas id="spiral-canvas"></canvas>
 
-<div class="card">
-
-  <!-- WealthHealth Wordmark -->
-  <div class="wh-logo">
-    <svg class="wh-wordmark-svg" width="220" height="24" viewBox="0 0 622 67" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WealthHealth">
-      <g clip-path="url(#wh-cs)">
-        <path d="M67.9219 48.2924L62.7107 57.307L60.7559 60.6834L57.4995 66.3124H38.35L0 0H29.5719L57.7357 48.704L62.9469 39.6847L39.999 0H95.8448L70.099 44.5228L67.9219 48.2924Z" fill="white"/>
-        <path d="M135.843 0L97.498 66.3124H67.9167L73.1326 57.3024L73.1372 57.307L106.271 0H135.843Z" fill="#2667FF"/>
-      </g>
-      <path d="M145.501 0H156.579L167.658 50.3247H167.839L180.915 0H191.994L205.161 50.3247H205.342L216.421 0H227.499L211.245 64.9498H199.894L186.545 14.08H186.364L173.106 64.9498H161.664L145.501 0Z" fill="white"/>
-      <path d="M244.039 58.5002C251.939 58.5002 255.117 53.5949 255.934 50.7789H265.469C263.108 59.5903 256.207 66.3124 244.311 66.3124C229.873 66.3124 221.065 56.3201 221.065 41.7859C221.065 26.7066 229.873 17.2594 243.857 17.2594C258.84 17.2594 266.195 27.7059 266.195 44.2385H230.599C230.599 52.0507 235.594 58.5002 244.039 58.5002ZM243.857 24.799C236.139 24.799 230.599 29.9768 230.599 37.1531H256.661C256.661 29.9768 251.576 24.799 243.857 24.799Z" fill="white"/>
-      <path d="M296.252 30.7035C296.252 27.3425 294.254 24.799 287.898 24.799C280.27 24.799 277.455 27.1608 277.001 33.1562H267.738C268.193 24.254 273.913 17.2594 287.898 17.2594C298.159 17.2594 305.786 21.1655 305.786 33.5195V55.5934C305.786 58.8636 306.513 60.5895 310.236 60.2262V64.7681C308.057 65.5857 306.513 65.7673 304.697 65.7673C299.612 65.7673 297.251 63.9506 296.343 59.4086H296.161C293.255 63.4964 287.988 66.3124 280.815 66.3124C271.371 66.3124 265.559 60.862 265.559 53.0499C265.559 42.8759 273.096 39.6966 284.719 37.4256C291.893 36.063 296.252 35.1546 296.252 30.7035ZM282.903 58.7727C290.803 58.7727 296.252 54.8667 296.252 47.327V40.3325C294.708 41.4225 290.985 42.5126 286.535 43.421C278.635 45.1469 275.185 47.4179 275.185 52.1415C275.185 56.4109 277.727 58.7727 282.903 58.7727Z" fill="white"/>
-      <path d="M311.454 0H321.08V64.9498H311.454V0Z" fill="white"/>
-      <path d="M347.955 26.3433H339.237V51.5056C339.237 56.7743 341.78 57.4102 347.955 57.0468V64.8589C346.048 65.3131 343.959 65.5857 341.417 65.5857C333.789 65.5857 329.612 62.1338 329.612 52.3232V26.3433H322.892V18.5311H329.612V3.90607H339.237V18.5311H347.955V26.3433Z" fill="white"/>
-      <path d="M375.134 17.2594C383.943 17.2594 390.753 22.2555 390.753 32.8837V64.9498H381.128V35.6088C381.128 29.341 378.494 25.344 371.865 25.344C364.873 25.344 359.879 29.7951 359.879 36.6989V64.9498H350.344V0H359.879V24.5265H360.06C362.512 20.8929 367.325 17.2594 375.134 17.2594Z" fill="white"/>
-      <path d="M395.93 0H406.736V26.8883H437.429V0H448.235V64.9498H437.429V36.1539H406.736V64.9498H395.93V0Z" fill="white"/>
-      <path d="M475.205 58.5002C483.106 58.5002 486.284 53.5949 487.101 50.7789H496.636C494.275 59.5903 487.373 66.3124 475.478 66.3124C461.04 66.3124 452.231 56.3201 452.231 41.7859C452.231 26.7066 461.04 17.2594 475.024 17.2594C490.007 17.2594 497.362 27.7059 497.362 44.2385H461.766C461.766 52.0507 466.76 58.5002 475.205 58.5002ZM475.024 24.799C467.305 24.799 461.766 29.9768 461.766 37.1531H487.827C487.827 29.9768 482.742 24.799 475.024 24.799Z" fill="white"/>
-      <path d="M527.418 30.7035C527.418 27.3425 525.421 24.799 519.064 24.799C511.436 24.799 508.622 27.1608 508.167 33.1562H498.905C499.359 24.254 505.08 17.2594 519.064 17.2594C529.325 17.2594 536.953 21.1655 536.953 33.5195V55.5934C536.953 58.8636 537.68 60.5895 541.403 60.2262V64.7681C539.223 65.5857 537.68 65.7673 535.863 65.7673C530.778 65.7673 528.417 63.9506 527.509 59.4086H527.328C524.422 63.4964 519.155 66.3124 511.981 66.3124C502.537 66.3124 496.726 60.862 496.726 53.0499C496.726 42.8759 504.263 39.6966 515.886 37.4256C523.06 36.063 527.418 35.1546 527.418 30.7035ZM514.07 58.7727C521.97 58.7727 527.418 54.8667 527.418 47.327V40.3325C525.875 41.4225 522.152 42.5126 517.702 43.421C509.802 45.1469 506.351 47.4179 506.351 52.1415C506.351 56.4109 508.894 58.7727 514.07 58.7727Z" fill="white"/>
-      <path d="M542.621 0H552.246V64.9498H542.621V0Z" fill="white"/>
-      <path d="M579.121 26.3433H570.404V51.5056C570.404 56.7743 572.947 57.4102 579.121 57.0468V64.8589C577.215 65.3131 575.126 65.5857 572.583 65.5857C564.956 65.5857 560.779 62.1338 560.779 52.3232V26.3433H554.059V18.5311H560.779V3.90607H570.404V18.5311H579.121V26.3433Z" fill="white"/>
-      <path d="M606.301 17.2594C615.109 17.2594 621.92 22.2555 621.92 32.8837V64.9498H612.294V35.6088C612.294 29.341 609.661 25.344 603.032 25.344C596.04 25.344 591.046 29.7951 591.046 36.6989V64.9498H581.511V0H591.046V24.5265H591.227C593.679 20.8929 598.492 17.2594 606.301 17.2594Z" fill="white"/>
-      <defs><clipPath id="wh-cs"><rect width="135.844" height="66.3124" fill="white"/></clipPath></defs>
+<div id="overlay">
+  <img class="wh-logo" src="wh-slash-icon.png" alt="WealthHealth AI"/>
+  <h1 class="wh-name">WealthHealth AI</h1>
+  <p class="wh-tagline">The new DTC growth stack for health and wellness</p>
+  <a id="enter-btn" href="/corporate.html">
+    Enter
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
-  </div>
-
-  <div class="badge">
-    <div class="badge-dot"></div>
-    Building something new
-  </div>
-
-  <h1>The future of<br/><em>health commerce</em><br/>is almost here.</h1>
-
-  <p class="tagline">AI-powered growth infrastructure for health & wellness DTC brands. Launching 2026.</p>
-
-  <!-- Email capture -->
-  <div class="form-wrap">
-    <div class="form-label">Get early access</div>
-    <div class="form">
-      <input type="email" id="email-input" placeholder="Enter your email" autocomplete="email"/>
-      <button class="btn-notify" onclick="submitEmail()">Notify me</button>
-    </div>
-    <div class="form-note">No spam. Unsubscribe anytime.</div>
-    <div class="form-success" id="form-success">
-      ✓ &nbsp;You're on the list. We'll be in touch.
-    </div>
-  </div>
-
-  <!-- Access code -->
-  <div class="divider">or enter access code</div>
-  <div class="input-row">
-    <input type="password" id="pw" placeholder="Access code" autocomplete="off"
-           onkeydown="if(event.key==='Enter')unlock()"/>
-    <button class="btn-enter" onclick="unlock()">Enter →</button>
-  </div>
-  <div class="err" id="err"></div>
-
-  <div class="footer-text">© 2026 WealthHealth AI Inc. &nbsp;·&nbsp; Irvine, California</div>
+  </a>
 </div>
 
-<!-- SHADER V1 — aliimam/shader-animation (concentric ripple) — DISABLED -->
-<!--SHADER-V1-DISABLED
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
+<script>
+// ── Ported from Kain0127/spiral-animation (21st.dev) — vanilla JS ──
+
 (function() {
-  const container = document.getElementById('wh-shader');
-  const vertexShader = `void main() { gl_Position = vec4(position, 1.0); }`;
-  const fragmentShader = `
-    precision highp float; uniform vec2 resolution; uniform float time;
-    void main(void) {
-      vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
-      float t = time * 0.05; float lineWidth = 0.002; vec3 raw = vec3(0.0);
-      for (int j = 0; j < 3; j++) for (int i = 0; i < 5; i++)
-        raw[j] += lineWidth * float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y,0.2));
-      gl_FragColor = vec4(raw[0],raw[1],raw[2],1.0);
-    }`;
-  const camera = new THREE.Camera(); camera.position.z = 1;
-  const scene = new THREE.Scene();
-  const uniforms = { time:{value:1.0}, resolution:{value:new THREE.Vector2()} };
-  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), new THREE.ShaderMaterial({uniforms,vertexShader,fragmentShader})));
-  const renderer = new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(window.devicePixelRatio);
-  container.appendChild(renderer.domElement);
-  function resize(){const w=container.clientWidth,h=container.clientHeight;renderer.setSize(w,h);uniforms.resolution.value.set(renderer.domElement.width,renderer.domElement.height);}
-  window.addEventListener('resize',resize); resize();
-  let _t=0,_dir=1,animId;
-  function animate(){animId=requestAnimationFrame(animate);_t+=0.044*_dir;if(_t>=12){_t=12;_dir=-1;}if(_t<=0){_t=0;_dir=1;}uniforms.time.value=_t;renderer.render(scene,camera);}
-  animate();
-})();
-</script>
-SHADER-V1-DISABLED-->
+  var canvas = document.getElementById('spiral-canvas');
+  var ctx    = canvas.getContext('2d');
 
-<!-- SHADER V2 — aliimam/web-gl-shader (chromatic sine wave) — ACTIVE -->
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
-(function() {
-  const container = document.getElementById('wh-shader');
-
-  const vertexShader = `
-    attribute vec3 position;
-    void main() { gl_Position = vec4(position, 1.0); }
-  `;
-  const fragmentShader = `
-    precision highp float;
-    uniform vec2  resolution;
-    uniform float time;
-    uniform float xScale;
-    uniform float yScale;
-    uniform float distortion;
-
-    void main() {
-      vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-      float d = length(p) * distortion;
-      float rx = p.x * (1.0 + d);
-      float gx = p.x;
-      float bx = p.x * (1.0 - d);
-      float r = 0.05 / abs(p.y + sin((rx + time) * xScale) * yScale);
-      float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);
-      float b = 0.05 / abs(p.y + sin((bx + time) * xScale) * yScale);
-      gl_FragColor = vec4(r, g, b, 1.0);
-    }
-  `;
-
-  const scene    = new THREE.Scene();
-  const camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  container.appendChild(renderer.domElement);
-
-  const uniforms = {
-    resolution: { value: [container.clientWidth, container.clientHeight] },
-    time:       { value: 0.0 },
-    xScale:     { value: 1.0 },
-    yScale:     { value: 0.5 },
-    distortion: { value: 0.05 },
-  };
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
-    -1,-1,0,  1,-1,0,  -1,1,0,  1,-1,0,  -1,1,0,  1,1,0,
-  ]), 3));
-  scene.add(new THREE.Mesh(geo, new THREE.RawShaderMaterial({ vertexShader, fragmentShader, uniforms, side: THREE.DoubleSide })));
+  var dpr  = Math.min(window.devicePixelRatio || 1, 2);
+  var W    = window.innerWidth;
+  var H    = window.innerHeight;
+  var size = Math.max(W, H);
 
   function resize() {
-    const w = container.clientWidth, h = container.clientHeight;
-    renderer.setSize(w, h, false);
-    uniforms.resolution.value = [w * window.devicePixelRatio, h * window.devicePixelRatio];
+    W = window.innerWidth; H = window.innerHeight;
+    size = Math.max(W, H);
+    canvas.width  = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(dpr, dpr);
   }
-  window.addEventListener('resize', resize);
   resize();
+  window.addEventListener('resize', resize);
 
-  (function animate() {
-    requestAnimationFrame(animate);
-    uniforms.time.value += 0.01;
-    renderer.render(scene, camera);
-  })();
-})();
-</script>
+  // ── Constants ──
+  var CHANGE_EVENT_TIME   = 0.32;
+  var CAMERA_Z            = -400;
+  var CAMERA_TRAVEL       = 3400;
+  var START_DOT_Y_OFFSET  = 28;
+  var VIEW_ZOOM           = 100;
+  var NUM_STARS           = 5000;
+  var TRAIL_LENGTH        = 80;
 
-<!-- Password gate removed — redirect all visitors to corporate.html -->
-<script>
-  window.location.replace('/corporate.html');
-
-function submitEmail() {
-  const input = document.getElementById('email-input');
-  const val = input.value.trim();
-  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-    input.focus(); return;
+  // ── Math helpers ──
+  function ease(p, g) {
+    if (p < 0.5) return 0.5 * Math.pow(2 * p, g);
+    return 1 - 0.5 * Math.pow(2 * (1 - p), g);
   }
-  // In production hook to your email capture service
-  input.value = '';
-  document.getElementById('form-success').classList.add('show');
-}
-document.getElementById('email-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') submitEmail();
-});
+  function easeOutElastic(x) {
+    var c4 = (2 * Math.PI) / 4.5;
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    return Math.pow(2, -8 * x) * Math.sin((x * 8 - 0.75) * c4) + 1;
+  }
+  function mapVal(v, s1, e1, s2, e2) { return s2 + (e2 - s2) * ((v - s1) / (e1 - s1)); }
+  function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+  function lerp(a, b, t) { return a * (1 - t) + b * t; }
+
+  function spiralPath(p) {
+    p = clamp(1.2 * p, 0, 1);
+    p = ease(p, 1.8);
+    var turns = 6;
+    var theta = 2 * Math.PI * turns * Math.sqrt(p);
+    var r = 170 * Math.sqrt(p);
+    return { x: r * Math.cos(theta), y: r * Math.sin(theta) + START_DOT_Y_OFFSET };
+  }
+
+  function showProjectedDot(pos, sizeFactor, t) {
+    var t2 = clamp(mapVal(t, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
+    var newCameraZ = CAMERA_Z + ease(Math.pow(t2, 1.2), 1.8) * CAMERA_TRAVEL;
+    if (pos.z > newCameraZ) {
+      var depth = pos.z - newCameraZ;
+      var x  = VIEW_ZOOM * pos.x / depth;
+      var y  = VIEW_ZOOM * pos.y / depth;
+      var sw = 400 * sizeFactor / depth;
+      ctx.lineWidth = sw;
+      ctx.beginPath();
+      ctx.arc(x, y, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ── Star class ──
+  function Star() {
+    this.angle    = Math.random() * Math.PI * 2;
+    this.distance = 30 * Math.random() + 15;
+    this.rotDir   = Math.random() > 0.5 ? 1 : -1;
+    this.expRate  = 1.2 + Math.random() * 0.8;
+    this.finalSc  = 0.7 + Math.random() * 0.6;
+    this.dx = this.distance * Math.cos(this.angle);
+    this.dy = this.distance * Math.sin(this.angle);
+    this.spiralLoc = (1 - Math.pow(1 - Math.random(), 3.0)) / 1.3;
+    this.z = lerp(
+      lerp(0.5 * CAMERA_Z, CAMERA_TRAVEL + CAMERA_Z, Math.random()),
+      CAMERA_TRAVEL / 2,
+      0.3 * this.spiralLoc
+    );
+    this.swFactor = Math.pow(Math.random(), 2.0);
+  }
+
+  Star.prototype.render = function(p, t) {
+    var sp = spiralPath(this.spiralLoc);
+    var q  = p - this.spiralLoc;
+    if (q <= 0) return;
+
+    var dp = clamp(4 * q, 0, 1);
+    var linearE  = dp;
+    var elasticE = easeOutElastic(dp);
+    var powerE   = dp * dp;
+    var easing;
+    if (dp < 0.3)      easing = lerp(linearE, powerE, dp / 0.3);
+    else if (dp < 0.7) easing = lerp(powerE, elasticE, (dp - 0.3) / 0.4);
+    else               easing = elasticE;
+
+    var sx, sy;
+    if (dp < 0.3) {
+      sx = lerp(sp.x, sp.x + this.dx * 0.3, easing / 0.3);
+      sy = lerp(sp.y, sp.y + this.dy * 0.3, easing / 0.3);
+    } else if (dp < 0.7) {
+      var mp  = (dp - 0.3) / 0.4;
+      var cs  = Math.sin(mp * Math.PI) * this.rotDir * 1.5;
+      var bx  = sp.x + this.dx * 0.3, by = sp.y + this.dy * 0.3;
+      var tx2 = sp.x + this.dx * 0.7, ty2 = sp.y + this.dy * 0.7;
+      var px  = -this.dy * 0.4 * cs, py = this.dx * 0.4 * cs;
+      sx = lerp(bx, tx2, mp) + px * mp;
+      sy = lerp(by, ty2, mp) + py * mp;
+    } else {
+      var fp  = (dp - 0.7) / 0.3;
+      var bx2 = sp.x + this.dx * 0.7, by2 = sp.y + this.dy * 0.7;
+      var td  = this.distance * this.expRate * 1.5;
+      var sa  = this.angle + 1.2 * this.rotDir * fp * Math.PI;
+      sx = lerp(bx2, sp.x + td * Math.cos(sa), fp);
+      sy = lerp(by2, sp.y + td * Math.sin(sa), fp);
+    }
+
+    var vx = (this.z - CAMERA_Z) * sx / VIEW_ZOOM;
+    var vy = (this.z - CAMERA_Z) * sy / VIEW_ZOOM;
+
+    var sm = dp < 0.6 ? 1.0 + dp * 0.2 : lerp(1.2, this.finalSc, (dp - 0.6) / 0.4);
+    showProjectedDot({ x: vx, y: vy, z: this.z }, 8.5 * this.swFactor * sm, t);
+  };
+
+  // ── Build stars with seeded random ──
+  var stars = [];
+  (function() {
+    var origRandom = Math.random;
+    var seed = 1234;
+    Math.random = function() {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+    for (var i = 0; i < NUM_STARS; i++) stars.push(new Star());
+    Math.random = origRandom;
+  })();
+
+  // ── Animation loop (replaces GSAP) ──
+  var time     = 0;
+  var lastTs   = null;
+  var DURATION = 15; // seconds per loop
+
+  function render() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, size, size);
+    ctx.save();
+    ctx.translate(size / 2, size / 2);
+
+    var t1 = clamp(mapVal(time, 0, CHANGE_EVENT_TIME + 0.25, 0, 1), 0, 1);
+    var t2 = clamp(mapVal(time, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
+
+    ctx.rotate(-Math.PI * ease(t2, 2.7));
+
+    // Trail
+    for (var i = 0; i < TRAIL_LENGTH; i++) {
+      var f   = mapVal(i, 0, TRAIL_LENGTH, 1.1, 0.1);
+      var sw  = (1.3 * (1 - t1) + 3.0 * Math.sin(Math.PI * t1)) * f;
+      ctx.fillStyle = 'white';
+      ctx.lineWidth = sw;
+      var pt = spiralPath(t1 - 0.00015 * i);
+      var bPos   = pt;
+      var offset = { x: pt.x + 5, y: pt.y + 5 };
+      // rotate helper
+      var mx = (bPos.x + offset.x) / 2, my = (bPos.y + offset.y) / 2;
+      var dx2 = bPos.x - mx, dy2 = bPos.y - my;
+      var ang = Math.atan2(dy2, dx2);
+      var r2  = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+      var o2  = (i % 2 === 0) ? -1 : 1;
+      var eP  = Math.sin(time * Math.PI * 2) * 0.5 + 0.5;
+      var bounce = Math.sin(eP * Math.PI) * 0.05 * (1 - eP);
+      var rx = mx + r2 * (1 + bounce) * Math.cos(ang + o2 * Math.PI * easeOutElastic(eP));
+      var ry = my + r2 * (1 + bounce) * Math.sin(ang + o2 * Math.PI * easeOutElastic(eP));
+      ctx.beginPath();
+      ctx.arc(rx, ry, sw / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Stars
+    ctx.fillStyle = 'white';
+    for (var s = 0; s < stars.length; s++) stars[s].render(t1, time);
+
+    // Start dot
+    if (time > CHANGE_EVENT_TIME) {
+      var dy3 = CAMERA_Z * START_DOT_Y_OFFSET / VIEW_ZOOM;
+      showProjectedDot({ x: 0, y: dy3, z: CAMERA_TRAVEL }, 2.5, time);
+    }
+
+    ctx.restore();
+  }
+
+  function loop(ts) {
+    requestAnimationFrame(loop);
+    if (lastTs === null) { lastTs = ts; }
+    var dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    time = (time + dt / DURATION) % 1;
+    render();
+  }
+
+  requestAnimationFrame(loop);
+
+  // ── Enter button: fade out overlay, navigate ──
+  document.getElementById('enter-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    var overlay = document.getElementById('overlay');
+    overlay.style.opacity = '0';
+    setTimeout(function() { window.location.href = '/corporate.html'; }, 600);
+  });
+
+})();
 </script>
 </body>
 </html>
