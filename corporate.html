@@ -1381,9 +1381,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   SHADER-V2-DISABLED-->
 
   <!-- ═══════════════════════════════════════════════════════════════
-       SHADER V3 — dhileepkumargm/woven-light-hero (21st.dev)
-       Torus knot particle cloud, mouse-reactive spring physics
-       Adapted to WealthHealth brand palette
+       SHADER V4 — efferd/dotted-surface (21st.dev)
+       40×60 wave dot grid, sine-wave Y animation
+       Ported to vanilla JS — WH dark theme (blue dots, dark fog)
        ACTIVE
   ═══════════════════════════════════════════════════════════════ -->
   <script type="module">
@@ -1392,127 +1392,89 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     const container = document.getElementById('wh-shader');
     if (!container) return;
 
-    // Scene + camera
-    const scene    = new THREE.Scene();
-    const camera   = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-    camera.position.z = 5;
+    const SEPARATION = 150;
+    const AMOUNTX    = 40;
+    const AMOUNTY    = 60;
+
+    // Scene
+    const scene = new THREE.Scene();
+    scene.fog   = new THREE.Fog(0x0B0C10, 3000, 9000); // fade to site bg
+
+    // Camera — slightly elevated perspective, looking down at the grid
+    const W = container.offsetWidth  || window.innerWidth;
+    const H = container.offsetHeight || window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(60, W / H, 1, 10000);
+    camera.position.set(0, 355, 1220);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.offsetWidth || window.innerWidth, container.offsetHeight || window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(W, H);
+    renderer.setClearColor(0x0B0C10, 0); // transparent — site bg shows through
     container.appendChild(renderer.domElement);
 
-    // Mouse
-    const mouse = new THREE.Vector2(0, 0);
-    function onMouseMove(e) {
-      mouse.x = (e.clientX / window.innerWidth)  *  2 - 1;
-      mouse.y = (e.clientY / window.innerHeight) * -2 + 1;
-    }
-    window.addEventListener('mousemove', onMouseMove);
+    // Build dot grid geometry
+    const COUNT = AMOUNTX * AMOUNTY;
+    const positions = new Float32Array(COUNT * 3);
+    const colors    = new Float32Array(COUNT * 3);
 
-    // Particle count + base geometry (torus knot)
-    const PARTICLES = 50000;
-    const knot = new THREE.TorusKnotGeometry(1.5, 0.5, 200, 32);
-    const knotPos = knot.attributes.position;
-
-    // Typed arrays: current pos, rest pos, velocity, color
-    const pos  = new Float32Array(PARTICLES * 3);
-    const rest = new Float32Array(PARTICLES * 3);
-    const vel  = new Float32Array(PARTICLES * 3);
-    const col  = new Float32Array(PARTICLES * 3);
-
-    // WH brand palette: electric blue → navy → white accent
-    // hue range 0.55–0.70 (blue to indigo) + occasional white
-    for (let i = 0; i < PARTICLES; i++) {
-      const k = i % knotPos.count;
-      const x = knotPos.getX(k), y = knotPos.getY(k), z = knotPos.getZ(k);
-      pos[i*3]=x;  pos[i*3+1]=y;  pos[i*3+2]=z;
-      rest[i*3]=x; rest[i*3+1]=y; rest[i*3+2]=z;
-
-      const c = new THREE.Color();
-      const r = Math.random();
-      if (r < 0.08) {
-        // 8% white/silver — scattered highlights
-        c.setRGB(0.85, 0.88, 1.0);
-      } else if (r < 0.3) {
-        // 22% electric blue (#2667FF range)
-        c.setHSL(0.60 + Math.random() * 0.03, 1.0, 0.65 + Math.random() * 0.15);
-      } else {
-        // 70% deep blue / indigo
-        c.setHSL(0.63 + Math.random() * 0.09, 0.85, 0.45 + Math.random() * 0.25);
+    let i = 0;
+    for (let ix = 0; ix < AMOUNTX; ix++) {
+      for (let iy = 0; iy < AMOUNTY; iy++) {
+        positions[i*3]     = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
+        positions[i*3 + 1] = 0; // Y animated each frame
+        positions[i*3 + 2] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
+        // WH blue-white — pale blue that reads well on dark bg
+        colors[i*3]     = 0.45;  // R
+        colors[i*3 + 1] = 0.62;  // G
+        colors[i*3 + 2] = 1.0;   // B
+        i++;
       }
-      col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
     }
 
-    // Build geometry
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors,    3));
 
-    const mat = new THREE.PointsMaterial({
-      size: 0.018,
+    const material = new THREE.PointsMaterial({
+      size: 6,
       vertexColors: true,
-      blending: THREE.AdditiveBlending,
       transparent: true,
-      opacity: 0.85,
-      depthWrite: false,
+      opacity: 0.65,
+      sizeAttenuation: true,
     });
 
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
+    scene.add(new THREE.Points(geometry, material));
 
-    // Clock for rotation
-    const clock = new THREE.Clock();
-
-    // Animation loop
+    // Animate
+    let count = 0;
     function animate() {
       requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
-      const cursor = new THREE.Vector3(mouse.x * 3, mouse.y * 3, 0);
 
-      for (let i = 0; i < PARTICLES; i++) {
-        const ix = i*3, iy = i*3+1, iz = i*3+2;
-
-        const px = pos[ix], py = pos[iy], pz = pos[iz];
-        const vx = vel[ix], vy = vel[iy], vz = vel[iz];
-
-        // Mouse repulsion
-        const dx = px - cursor.x, dy = py - cursor.y, dz = pz - cursor.z;
-        const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-        if (dist < 1.5) {
-          const force = (1.5 - dist) * 0.012;
-          const inv   = 1 / (dist + 0.001);
-          vel[ix] += dx * inv * force;
-          vel[iy] += dy * inv * force;
-          vel[iz] += dz * inv * force;
+      const pos = geometry.attributes.position;
+      let j = 0;
+      for (let ix = 0; ix < AMOUNTX; ix++) {
+        for (let iy = 0; iy < AMOUNTY; iy++) {
+          pos.array[j * 3 + 1] =
+            Math.sin((ix + count) * 0.3) * 50 +
+            Math.sin((iy + count) * 0.5) * 50;
+          j++;
         }
-
-        // Spring back toward rest position
-        vel[ix] += (rest[ix] - px) * 0.001;
-        vel[iy] += (rest[iy] - py) * 0.001;
-        vel[iz] += (rest[iz] - pz) * 0.001;
-
-        // Damping
-        vel[ix] *= 0.95; vel[iy] *= 0.95; vel[iz] *= 0.95;
-
-        pos[ix] += vel[ix]; pos[iy] += vel[iy]; pos[iz] += vel[iz];
       }
-
-      geo.attributes.position.needsUpdate = true;
-      points.rotation.y = t * 0.05;
+      pos.needsUpdate = true;
 
       renderer.render(scene, camera);
+      count += 0.1;
     }
     animate();
 
     // Resize
     function onResize() {
-      const w = container.offsetWidth || window.innerWidth;
+      const w = container.offsetWidth  || window.innerWidth;
       const h = container.offsetHeight || window.innerHeight;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h);
     }
     window.addEventListener('resize', onResize);
   })();
