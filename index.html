@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
+html,body{height:100%;overflow:hidden;background:#000;cursor:default;}
 
 #spiral-canvas{position:fixed;inset:0;display:block;width:100%;height:100%;}
 
@@ -35,14 +35,14 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 }
 #enter-circle:hover{ transform:scale(1.04); }
 #enter-circle img{
-  height:clamp(28px,4vmin,44px);
+  height:clamp(42px,6vmin,66px);
   width:auto;
   display:block;
   opacity:.9;
   pointer-events:none;
 }
 #enter-circle span{
-  font-size:clamp(12px,2vmin,15px);
+  font-size:clamp(18px,3vmin,22px);
   font-weight:300;
   letter-spacing:.32em;
   text-transform:uppercase;
