@@ -54,12 +54,12 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
   function resize() {
     W = window.innerWidth; H = window.innerHeight;
-    size = Math.max(W, H);
-    canvas.width  = size * dpr;
-    canvas.height = size * dpr;
+    size = Math.min(W, H);  // scale reference = shorter dimension
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   resize();
   window.addEventListener('resize', resize);
@@ -191,9 +191,12 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
   function render() {
     ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(0, 0, W, H);
     ctx.save();
-    ctx.translate(size / 2, size / 2);
+    ctx.translate(W / 2, H / 2);
+    // Scale so spiral (max r=170 units) fills ~80% of shorter dimension
+    var scale = size * 0.0025;
+    ctx.scale(scale, scale);
 
     var t1 = clamp(mapVal(time, 0, CHANGE_EVENT_TIME + 0.25, 0, 1), 0, 1);
     var t2 = clamp(mapVal(time, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
