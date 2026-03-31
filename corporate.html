@@ -54,6 +54,56 @@
     .container{max-width:var(--max);margin:0 auto;padding:0 28px;position:relative;z-index:1;}
     @media(max-width:640px){.container{padding:0 20px;}}
 
+    /* Orbital section containment */
+    #partners { overflow:hidden; }
+    #orbital-wrap { overflow:hidden; }
+
+    /* Mobile: hide orbital, show static grid */
+    @media(max-width:700px){
+      #orbital-wrap       { display:none !important; }
+      #orbital-mobile     { display:grid !important; }
+    }
+    @media(min-width:701px){
+      #orbital-mobile     { display:none !important; }
+    }
+    #orbital-mobile {
+      display:none;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      max-width:360px;
+      margin:0 auto;
+      padding:0 20px 8px;
+    }
+    .orb-mob-item {
+      display:flex;flex-direction:column;align-items:center;gap:10px;
+      padding:20px 12px;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:14px;
+      text-decoration:none;
+      cursor:pointer;
+      transition:background .2s,border-color .2s;
+    }
+    .orb-mob-item:hover { background:rgba(255,255,255,.05); }
+    .orb-mob-icon {
+      width:52px;height:52px;border-radius:50%;background:#111113;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .orb-mob-icon img { max-height:28px;max-width:28px;object-fit:contain; }
+    .orb-mob-label {
+      font-size:11px;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:rgba(255,255,255,.82);
+      text-align:center;line-height:1.4;
+    }
+    .orb-mob-soon { font-size:9px;opacity:.55;display:block;margin-top:2px; }
+    /* Enterprise Hub takes full width on mobile */
+    .orb-mob-hub {
+      grid-column:1/-1;
+      flex-direction:row;gap:14px;
+      background:rgba(38,103,255,.08);
+      border-color:rgba(38,103,255,.3);
+    }
+    .orb-mob-hub:hover { background:rgba(38,103,255,.15); }
+
     /* Reveal on scroll */
     /* ── Scroll reveal ── */
     .reveal{
@@ -705,6 +755,42 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
           <div id="orbital-nodes" style="position:absolute;top:50%;left:50%;"></div>
         </div>
       </div>
+
+      <!-- Mobile fallback — shown on screens < 700px -->
+      <div id="orbital-mobile">
+        <a class="orb-mob-item" href="https://prometheus.wealthhealth.ai" target="_blank">
+          <div class="orb-mob-icon" style="border:2px solid #F46411;">
+            <img src="logo-prometheus.png" alt="Prometheus"/>
+          </div>
+          <div class="orb-mob-label">Prometheus</div>
+        </a>
+        <div class="orb-mob-item" onclick="window.location.href='#prod-forge'">
+          <div class="orb-mob-icon" style="border:2px solid #C0392B;">
+            <img src="logo-forge.png" alt="Forge"/>
+          </div>
+          <div class="orb-mob-label">Forge</div>
+        </div>
+        <div class="orb-mob-item" onclick="window.location.href='#prod-midas'">
+          <div class="orb-mob-icon" style="border:2px solid #8054FF;">
+            <img src="logo-midas.png" alt="Midas"/>
+          </div>
+          <div class="orb-mob-label">Midas<span class="orb-mob-soon">Coming soon</span></div>
+        </div>
+        <div class="orb-mob-item" onclick="window.location.href='#prod-olympus'">
+          <div class="orb-mob-icon" style="border:2px solid #107C10;">
+            <img src="logo-olympus.png" alt="Olympus"/>
+          </div>
+          <div class="orb-mob-label">Olympus<span class="orb-mob-soon">Coming soon</span></div>
+        </div>
+        <!-- Enterprise Hub — full width -->
+        <a class="orb-mob-item orb-mob-hub" href="/partners.html">
+          <div class="orb-mob-icon" style="border:2px solid #2667FF;background:linear-gradient(135deg,#2667FF,#2714B8);">
+            <img src="wh-slash-icon.png" alt="Enterprise Hub" style="height:24px;"/>
+          </div>
+          <div class="orb-mob-label" style="text-align:left;">Enterprise Hub →</div>
+        </a>
+      </div>
+
     </section>
 
   </div>
