@@ -628,8 +628,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       <div class="container">
         <div class="hero-center reveal">
 
-          <div class="hero-icon-wrap">
-            <img class="hero-icon" src="wh-slash-icon.png" alt="WealthHealth AI"/>
+          <div class="hero-icon-wrap" id="flicker-logo-wrap">
+            <!-- Flickering grid logo — canvas replaces static img -->
+            <canvas id="flicker-logo-canvas" aria-label="WealthHealth AI" style="display:block;"></canvas>
           </div>
 
           <h1><span class="h1-line">The new DTC growth stack</span><span class="h1-line">for <em>health and wellness.</em></span></h1>
@@ -1608,6 +1609,90 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     setTimeout(tick, 300);
     setTimeout(tick, 1000);
   });
+  </script>
+  <!-- ═══════════════════════════════════════════════════════════════
+       FLICKERING GRID LOGO — Kain0127/flickering-grid-hero (21st.dev)
+       Renders wh-slash-icon.png as a masked flickering dot grid.
+       Pixel-samples the logo to build a cell mask — only cells
+       overlapping opaque logo pixels flicker.
+  ═══════════════════════════════════════════════════════════════ -->
+  <script>
+  (function() {
+    const wrap   = document.getElementById('flicker-logo-wrap');
+    const canvas = document.getElementById('flicker-logo-canvas');
+    if (!wrap || !canvas) return;
+
+    const SQUARE  = 3;      // cell size in physical px
+    const GAP     = 2;      // gap between cells
+    const STEP    = SQUARE + GAP;
+    const MAX_OPQ = 0.95;
+    const MIN_OPQ = 0.08;
+    const FLICKER = 0.14;   // per-cell flicker probability per frame
+
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const img = new Image();
+    img.src = 'wh-slash-icon.png';
+    img.onload = function() {
+      const displayH = 60;
+      const displayW = Math.round((img.width / img.height) * displayH);
+      const physW    = displayW * dpr;
+      const physH    = displayH * dpr;
+
+      canvas.style.width  = displayW + 'px';
+      canvas.style.height = displayH + 'px';
+      canvas.width  = physW;
+      canvas.height = physH;
+
+      // Render logo offscreen to sample alpha mask
+      const off  = document.createElement('canvas');
+      off.width  = physW;
+      off.height = physH;
+      const octx = off.getContext('2d');
+      octx.drawImage(img, 0, 0, physW, physH);
+      const px = octx.getImageData(0, 0, physW, physH).data;
+
+      const cols = Math.floor(physW / STEP);
+      const rows = Math.floor(physH / STEP);
+      const mask = new Uint8Array(cols * rows);
+      const opq  = new Float32Array(cols * rows);
+
+      // Check center + four corners of each cell for logo coverage
+      const pts = [[0,0],[SQUARE-1,0],[0,SQUARE-1],[SQUARE-1,SQUARE-1],
+                   [Math.floor(SQUARE/2), Math.floor(SQUARE/2)]];
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          let hit = false;
+          for (let p = 0; p < pts.length && !hit; p++) {
+            const sx = c * STEP + pts[p][0];
+            const sy = r * STEP + pts[p][1];
+            if (sx < physW && sy < physH && px[(sy * physW + sx) * 4 + 3] > 15) hit = true;
+          }
+          if (hit) {
+            mask[c * rows + r] = 1;
+            opq[c * rows + r]  = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, physW, physH);
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const i = c * rows + r;
+            if (!mask[i]) continue;
+            if (Math.random() < FLICKER) opq[i] = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
+            ctx.fillStyle = 'rgba(255,255,255,' + opq[i].toFixed(2) + ')';
+            ctx.fillRect(c * STEP, r * STEP, SQUARE, SQUARE);
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    };
+  })();
   </script>
 </body>
 </html>
