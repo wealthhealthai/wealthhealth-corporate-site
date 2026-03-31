@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 
   <style>
+    html{overflow-x:hidden;}
     :root{
       --bg0:#0C0C0E;
       --bg1:#111113;
@@ -683,10 +684,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <p class="reveal" style="font-size:16px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 48px;line-height:1.6;">Already a partner or interested in using our platforms for enterprise? Visit our central Hub, or learn more about each platform below.</p>
 
         <!-- Orbital container -->
-        <div id="orbital-wrap" style="position:relative;width:560px;height:560px;margin:0 auto;">
+        <div id="orbital-wrap" style="position:relative;width:min(560px,94vw);height:min(560px,94vw);margin:0 auto;">
 
           <!-- Orbit ring -->
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none;"></div>
+          <div id="orbit-ring" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,82vw);height:min(480px,82vw);border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none;"></div>
 
           <!-- Center hub -->
           <div id="orbital-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;" onclick="window.location.href='/partners.html'">
@@ -1503,7 +1504,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     var nodes = document.getElementById('orbital-nodes');
     if (!wrap || !nodes) return;
 
-    var RADIUS = 224, angle = 0, timer = null;
+    // Scale radius to container — responsive on mobile
+    function getRadius() {
+      var w = wrap.offsetWidth || 560;
+      return Math.round(w * 0.40);
+    }
+    var RADIUS = getRadius(), angle = 0, timer = null;
+    window.addEventListener('resize', function() { RADIUS = getRadius(); });
 
     var els = PLATFORMS.map(function(p) {
       // outer: positioned at orbital (x,y)
