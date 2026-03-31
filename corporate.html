@@ -380,10 +380,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     
     .prod-center-top{display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:44px;position:relative;z-index:1;}
     .prod-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
-    .prod-section[data-product="forge"] .prod-eyebrow{color:#E05A4E;}
-    .prod-section[data-product="prometheus"] .prod-eyebrow{color:#F46411;}
-    .prod-section[data-product="midas"] .prod-eyebrow{color:#8054FF;}
-    .prod-section[data-product="olympus"] .prod-eyebrow{color:#4caf50;}
+    .prod-section[id="forge" data-product="forge"] .prod-eyebrow{color:#E05A4E;}
+    .prod-section[id="prometheus" data-product="prometheus"] .prod-eyebrow{color:#F46411;}
+    .prod-section[id="midas" data-product="midas"] .prod-eyebrow{color:#8054FF;}
+    .prod-section[id="olympus" data-product="olympus"] .prod-eyebrow{color:#4caf50;}
     .prod-lockup{height:44px;width:auto;display:block;}
     .prod-section[data-product="forge"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(192,57,43,.4));}
     .prod-section[data-product="prometheus"] .prod-lockup{filter:drop-shadow(0 8px 32px rgba(244,100,17,.35));}
@@ -683,18 +683,18 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <p class="reveal" style="font-size:16px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 48px;line-height:1.6;">Click any node to enter a platform or submit an inquiry.</p>
 
         <!-- Orbital container -->
-        <div id="orbital-wrap" style="position:relative;width:420px;height:420px;margin:0 auto;">
+        <div id="orbital-wrap" style="position:relative;width:560px;height:560px;margin:0 auto;">
 
           <!-- Orbit ring -->
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none;"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none;"></div>
 
           <!-- Center hub -->
           <div id="orbital-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;pointer-events:none;">
-            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2667FF,#2714B8);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 10px rgba(38,103,255,.12),0 0 0 20px rgba(38,103,255,.06);">
-              <img src="wh-slash-icon.png" style="height:26px;width:auto;display:block;" alt="WH"/>
+            <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#2667FF,#2714B8);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(38,103,255,.12),0 0 0 24px rgba(38,103,255,.06);">
+              <img src="wh-slash-icon.png" style="height:34px;width:auto;display:block;" alt="WH"/>
             </div>
-            <div class="orb-ping" style="position:absolute;width:80px;height:80px;border-radius:50%;border:1px solid rgba(38,103,255,.35);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite;"></div>
-            <div class="orb-ping" style="position:absolute;width:102px;height:102px;border-radius:50%;border:1px solid rgba(38,103,255,.18);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite .55s;"></div>
+            <div class="orb-ping" style="position:absolute;width:106px;height:106px;border-radius:50%;border:1px solid rgba(38,103,255,.35);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite;"></div>
+            <div class="orb-ping" style="position:absolute;width:132px;height:132px;border-radius:50%;border:1px solid rgba(38,103,255,.18);top:50%;left:50%;transform:translate(-50%,-50%);animation:orb-ping 2.2s ease-in-out infinite .55s;"></div>
           </div>
 
           <!-- Nodes injected by JS -->
@@ -1490,83 +1490,94 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <script>
   (function() {
     var PLATFORMS = [
-      { label:'Prometheus',       color:'#F46411', img:'logo-prometheus-full-new.png',  url:'https://prometheus.wealthhealth.ai', live:true              },
-      { label:'Forge Enterprise', color:'#C0392B', img:'logo-forge-enterprise-v2.png',  url:null,                                  live:true, modal:true  },
-      { label:'Enterprise Hub',   color:'#2667FF', img:'wh-icon.png',                   url:'/partners.html',                      live:true              },
-      { label:'Midas',            color:'#8054FF', img:'logo-midas-full-new.png',        url:null,                                  live:false             },
-      { label:'Olympus',          color:'#107C10', img:'logo-olympus-full-new.png',      url:null,                                  live:false             },
+      { label:'Prometheus',     color:'#F46411', img:'logo-prometheus.png', url:'#prometheus', live:true              },
+      { label:'Forge',          color:'#C0392B', img:'logo-forge.png',      url:'#forge',       live:true              },
+      { label:'Enterprise Hub', color:'#2667FF', img:'wh-icon.png',         url:'/partners.html',live:true              },
+      { label:'Midas',          color:'#8054FF', img:'logo-midas.png',      url:'#midas',       live:true, soon:true    },
+      { label:'Olympus',        color:'#107C10', img:'logo-olympus.png',    url:'#olympus',     live:true, soon:true    },
     ];
 
     var wrap  = document.getElementById('orbital-wrap');
     var nodes = document.getElementById('orbital-nodes');
     if (!wrap || !nodes) return;
 
-    var RADIUS = 168, angle = 0, timer = null;
+    var RADIUS = 224, angle = 0, timer = null;
 
-    var els = PLATFORMS.map(function(p, i) {
-      var outer  = document.createElement('div');
-      outer.style.cssText = 'position:absolute;transition:opacity .4s;cursor:' + (p.live ? 'pointer' : 'default') + ';';
+    var els = PLATFORMS.map(function(p) {
+      // outer: positioned at orbital (x,y)
+      var outer = document.createElement('div');
+      outer.style.cssText = 'position:absolute;cursor:pointer;';
+
+      // inner: flex column, centered at origin via translate -50%,-50%
+      var inner = document.createElement('div');
+      inner.style.cssText =
+        'display:flex;flex-direction:column;align-items:center;gap:10px;' +
+        'transform:translate(-50%,-50%);';
 
       var circle = document.createElement('div');
       circle.style.cssText =
-        'width:52px;height:52px;border-radius:50%;background:#111113;' +
-        'border:2px solid ' + p.color + ';display:flex;align-items:center;justify-content:center;' +
-        'margin-left:-26px;margin-top:-26px;transition:transform .2s,box-shadow .2s;' +
-        (p.live ? '' : 'opacity:.38;filter:grayscale(.4);');
+        'width:56px;height:56px;border-radius:50%;background:#111113;' +
+        'border:2px solid ' + p.color + ';' +
+        'display:flex;align-items:center;justify-content:center;' +
+        'transition:transform .2s,box-shadow .2s;flex-shrink:0;';
 
       var img = document.createElement('img');
       img.src = p.img;
-      img.style.cssText = 'max-height:28px;max-width:36px;object-fit:contain;display:block;pointer-events:none;';
+      img.style.cssText = 'max-height:30px;max-width:30px;object-fit:contain;display:block;pointer-events:none;';
       circle.appendChild(img);
 
       var lbl = document.createElement('div');
-      lbl.innerHTML = p.label + (!p.live ? '<br><span style="font-size:9px;opacity:.6;letter-spacing:.04em;">Coming soon</span>' : '');
+      lbl.innerHTML = p.label + (p.soon ? '<br><span style="font-size:9px;opacity:.6;letter-spacing:.04em;">Coming soon</span>' : '');
       lbl.style.cssText =
-        'position:absolute;top:calc(100% + 8px);left:50%;white-space:nowrap;text-align:center;' +
-        'transform:translateX(-50%) translateX(-26px);font-size:11px;font-weight:600;' +
-        'letter-spacing:.06em;text-transform:uppercase;line-height:1.5;pointer-events:none;' +
-        'color:' + (p.live ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.32)') + ';';
+        'text-align:center;font-size:11px;font-weight:700;' +
+        'letter-spacing:.08em;text-transform:uppercase;line-height:1.5;' +
+        'pointer-events:none;color:rgba(255,255,255,.82);white-space:nowrap;';
 
-      outer.appendChild(circle);
-      outer.appendChild(lbl);
+      inner.appendChild(circle);
+      inner.appendChild(lbl);
+      outer.appendChild(inner);
       nodes.appendChild(outer);
 
-      if (p.live) {
-        circle.addEventListener('mouseenter', function() {
-          circle.style.transform = 'scale(1.18)';
-          circle.style.boxShadow = '0 0 24px ' + p.color + '99';
-        });
-        circle.addEventListener('mouseleave', function() {
-          circle.style.transform = '';
-          circle.style.boxShadow = '';
-        });
-        outer.addEventListener('click', function(e) {
-          e.stopPropagation();
-          if (p.modal && typeof openForgeModal === 'function') openForgeModal();
-          else if (p.url) window.location.href = p.url;
-        });
-      }
+      // Hover + click
+      circle.addEventListener('mouseenter', function() {
+        circle.style.transform = 'scale(1.18)';
+        circle.style.boxShadow = '0 0 24px ' + p.color + '99';
+      });
+      circle.addEventListener('mouseleave', function() {
+        circle.style.transform = '';
+        circle.style.boxShadow = '';
+      });
+      outer.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (p.url.startsWith('#')) {
+          var target = document.querySelector(p.url);
+          if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+        } else {
+          window.location.href = p.url;
+        }
+      });
+
       return outer;
     });
 
     function tick() {
-      angle = (angle + 0.25) % 360;
+      angle = (angle + 0.22) % 360;
       PLATFORMS.forEach(function(p, i) {
         var rad = ((i / PLATFORMS.length) * 360 + angle) * Math.PI / 180;
         var x   = (RADIUS * Math.cos(rad)).toFixed(1);
         var y   = (RADIUS * Math.sin(rad)).toFixed(1);
-        var opq = p.live ? Math.max(0.42, 0.42 + 0.58 * ((1 + Math.sin(rad)) / 2)) : 0.35;
+        var opq = Math.max(0.45, 0.45 + 0.55 * ((1 + Math.sin(rad)) / 2));
         els[i].style.transform = 'translate(' + x + 'px,' + y + 'px)';
         els[i].style.opacity   = opq.toFixed(2);
-        els[i].style.zIndex    = Math.round(20 + 8 * Math.cos(rad));
+        els[i].style.zIndex    = Math.round(20 + 10 * Math.cos(rad));
       });
     }
     tick();
 
     if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) { if (!timer) timer = setInterval(tick, 50); }
-        else { clearInterval(timer); timer = null; }
+      var io = new IntersectionObserver(function(e) {
+        if (e[0].isIntersecting) { if (!timer) timer = setInterval(tick, 50); }
+        else                     { clearInterval(timer); timer = null; }
       }, { threshold: 0.1 });
       io.observe(wrap);
     } else {
