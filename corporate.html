@@ -6,6 +6,10 @@
   <title>WealthHealth AI Intelligent Products for a Better Life</title>
   <meta name="description" content="WealthHealth AI Inc builds AI-powered products that make people healthier, wealthier, and more productive."/>
   <link rel="icon" href="wh-icon.png" type="image/png"/>
+  <!-- Spline viewer web component -->
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.76/build/spline-viewer.js"></script>
+  <!-- Hide Spline watermark -->
+  <style>spline-viewer::part(logo){display:none!important;}spline-viewer{--logo:none;}</style>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
@@ -692,7 +696,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
-    <div id="wh-shader"></div>
+    <!-- Galaxy hero — Spline scene (erikx/galaxy-interactive-hero-section) -->
+    <spline-viewer
+      id="wh-shader"
+      url="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
+      style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"
+    ></spline-viewer>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
@@ -1707,114 +1716,5 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   })();
   </script>
 
-  <!-- ═══ SHADER HERO — shader-lines plain WebGL ═══ -->
-  <script>
-  (function() {
-    var container = document.getElementById('wh-shader');
-    if (!container) return;
-    var canvas = document.createElement('canvas');
-    canvas.style.cssText = 'display:block;width:100%;height:100%;';
-    container.appendChild(canvas);
-
-    // Force WebGL1 — GLSL ES 1.0 (avoids gl_FragColor issue in WebGL2)
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) { console.warn('WebGL not available'); return; }
-
-    function resize() {
-      var W = container.offsetWidth  || window.innerWidth;
-      var H = container.offsetHeight || window.innerHeight;
-      // Draw at half size — mosaic shader hides quality loss, pixelated=sharp upscale
-      canvas.width  = Math.floor(W * 0.5);
-      canvas.height = Math.floor(H * 0.5);
-      canvas.style.width  = W + 'px';
-      canvas.style.height = H + 'px';
-      canvas.style.imageRendering = 'pixelated';
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    var VSrc = [
-      'attribute vec2 pos;',
-      'void main(){gl_Position=vec4(pos,0.0,1.0);}'
-    ].join('\n');
-
-    var FSrc = [
-      'precision mediump float;',
-      'uniform vec2  resolution;',
-      'uniform float time;',
-      'float rnd2(vec2 s){return fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);}',
-      'void main(){',
-      '  vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);',
-      '  vec2 ms=vec2(4.0,2.0); vec2 vs=vec2(256.0,256.0);',
-      '  uv.x=floor(uv.x*vs.x/ms.x)/(vs.x/ms.x);',
-      '  uv.y=floor(uv.y*vs.y/ms.y)/(vs.y/ms.y);',
-      '  float t=time*0.06+rnd2(vec2(uv.x,0.0))*0.4;',
-      '  float lw=0.0008; float r=length(uv);',
-      '  float cr=0.0,cg=0.0,cb=0.0;',
-      '  for(int i=0;i<5;i++){',
-      '    float f=lw*float(i*i);',
-      '    cr+=f/abs(fract(t         +float(i)*0.01)-r);',
-      '    cg+=f/abs(fract(t-0.01    +float(i)*0.01)-r);',
-      '    cb+=f/abs(fract(t-0.02    +float(i)*0.01)-r);',
-      '  }',
-      '  gl_FragColor=vec4(cb,cg,cr,1.0);',
-      '}'
-    ].join('\n');
-
-    function mkShader(type, src) {
-      var s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-        console.error('Shader compile error:', gl.getShaderInfoLog(s));
-      return s;
-    }
-
-    var prog = gl.createProgram();
-    gl.attachShader(prog, mkShader(gl.VERTEX_SHADER,   VSrc));
-    gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FSrc));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
-      console.error('Program link error:', gl.getProgramInfoLog(prog));
-    gl.useProgram(prog);
-
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER,
-      new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-    var aPos = gl.getAttribLocation(prog, 'pos');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-    var uTime = gl.getUniformLocation(prog, 'time');
-    var uRes  = gl.getUniformLocation(prog, 'resolution');
-    var t = 0.0;
-
-    function setRes() {
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-    }
-    setRes();
-
-    var visible = true, rafId = null;
-
-    function frame() {
-      t += 0.04;
-      gl.uniform1f(uTime, t);
-      setRes();
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      rafId = requestAnimationFrame(frame);
-    }
-
-    var io = new IntersectionObserver(function(e) {
-      visible = e[0].isIntersecting;
-      if (visible && !rafId) { rafId = requestAnimationFrame(frame); }
-      else if (!visible && rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    }, { threshold: 0.01 });
-    io.observe(container);
-
-    rafId = requestAnimationFrame(frame);
-  })();
-  </script>
 
 </body>
