@@ -702,9 +702,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     <!-- Centered logo -->
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
-      <img src="wh-logo-lockup.svg" alt="WealthHealth AI"
-           style="width:min(300px,52vw);height:auto;display:block;opacity:.95;filter:drop-shadow(0 0 40px rgba(255,255,255,.08));"
-           onerror="this.src='logo-wh-nav.png';this.style.width='min(220px,40vw)';"/>
+      <img src="logo-wh-nav.png" alt="WealthHealth AI"
+           style="width:min(260px,45vw);height:auto;display:block;opacity:.95;filter:drop-shadow(0 0 40px rgba(255,255,255,.08)) brightness(1.05);"/>
     </div>
 
     <!-- Scroll hint -->
@@ -1733,7 +1732,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   (function() {
     var canvas = document.getElementById('shader-hero-canvas');
     if (!canvas) return;
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    var gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) return;
 
     var W = window.innerWidth, H = window.innerHeight;
@@ -1764,12 +1763,13 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       '  float t=time*0.06+random(uv.x)*0.4;',
       '  float lineWidth=0.0008;',
       '  vec3 color=vec3(0.0);',
-      '  for(int j=0;j<3;j++){',
-      '    for(int i=0;i<5;i++){',
-      '      color[j]+=lineWidth*float(i*i)/abs(fract(t-0.01*float(j)+float(i)*0.01)*1.0-length(uv));',
-      '    }',
+      '  for(int i=0;i<5;i++){',
+      '    float base=lineWidth*float(i*i);',
+      '    color.r+=base/abs(fract(t+float(i)*0.01)*1.0-length(uv));',
+      '    color.g+=base/abs(fract(t-0.01+float(i)*0.01)*1.0-length(uv));',
+      '    color.b+=base/abs(fract(t-0.02+float(i)*0.01)*1.0-length(uv));',
       '  }',
-      '  gl_FragColor=vec4(color[2],color[1],color[0],1.0);',
+      '  gl_FragColor=vec4(color.b,color.g,color.r,1.0);',
       '}'
     ].join('
 ');
