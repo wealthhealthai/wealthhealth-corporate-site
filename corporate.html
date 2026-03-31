@@ -715,7 +715,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     camera.position.z = 3;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(1); // capped at 1 — off-screen section, retina not needed
     mount.appendChild(renderer.domElement);
 
     function resize() {
@@ -822,15 +822,22 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       lightPos.copy(camera.position).add(dir.multiplyScalar(t));
     });
 
+    // Pause when blob is off-screen — saves significant GPU when user is at hero
+    let blobVisible = false;
     let rafId;
     function animate(ts) {
+      if (!blobVisible) return;
       rafId = requestAnimationFrame(animate);
       material.uniforms.time.value = ts * 0.0003;
       mesh.rotation.y += 0.0005;
       mesh.rotation.x += 0.0002;
       renderer.render(scene, camera);
     }
-    animate(0);
+    const blobIO = new IntersectionObserver(entries => {
+      blobVisible = entries[0].isIntersecting;
+      if (blobVisible && !rafId) rafId = requestAnimationFrame(animate);
+    }, { threshold: 0.01 });
+    blobIO.observe(mount);
 
     window.addEventListener('resize', resize);
 
@@ -1370,8 +1377,16 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     window.addEventListener('resize', resize);
     resize();
 
+    // Pause hero shader when scrolled past — saves GPU on long-scroll
+    let shaderVisible = true;
+    const shaderIO = new IntersectionObserver(entries => {
+      shaderVisible = entries[0].isIntersecting;
+    }, { threshold: 0 });
+    shaderIO.observe(container);
+
     (function animate() {
       requestAnimationFrame(animate);
+      if (!shaderVisible) return;
       uniforms.time.value += 0.01;
       renderer.render(scene, camera);
     })();
