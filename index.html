@@ -50,11 +50,14 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
   var dpr  = Math.min(window.devicePixelRatio || 1, 2);
   var W    = window.innerWidth;
   var H    = window.innerHeight;
-  var size = Math.max(W, H);
+  var size = Math.min(W, H);
+  // SCALE: maps spiral's 170-unit radius to ~42% of shorter viewport dimension
+  var SCALE = size / 405;
 
   function resize() {
     W = window.innerWidth; H = window.innerHeight;
-    size = Math.min(W, H);  // scale reference = shorter dimension
+    size = Math.min(W, H);
+    SCALE = size / 405;
     canvas.width  = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width  = W + 'px';
@@ -92,7 +95,7 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
     p = ease(p, 1.8);
     var turns = 6;
     var theta = 2 * Math.PI * turns * Math.sqrt(p);
-    var r = 170 * Math.sqrt(p);
+    var r = 170 * SCALE * Math.sqrt(p);  // scaled to viewport
     return { x: r * Math.cos(theta), y: r * Math.sin(theta) + START_DOT_Y_OFFSET };
   }
 
@@ -118,8 +121,8 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
     this.rotDir   = Math.random() > 0.5 ? 1 : -1;
     this.expRate  = 1.2 + Math.random() * 0.8;
     this.finalSc  = 0.7 + Math.random() * 0.6;
-    this.dx = this.distance * Math.cos(this.angle);
-    this.dy = this.distance * Math.sin(this.angle);
+    this.dx = this.distance * SCALE * Math.cos(this.angle);
+    this.dy = this.distance * SCALE * Math.sin(this.angle);
     this.spiralLoc = (1 - Math.pow(1 - Math.random(), 3.0)) / 1.3;
     this.z = lerp(
       lerp(0.5 * CAMERA_Z, CAMERA_TRAVEL + CAMERA_Z, Math.random()),
@@ -194,9 +197,7 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
     ctx.fillRect(0, 0, W, H);
     ctx.save();
     ctx.translate(W / 2, H / 2);
-    // Scale so spiral (max r=170 units) fills ~80% of shorter dimension
-    var scale = size * 0.0025;
-    ctx.scale(scale, scale);
+    // No ctx.scale — positions scaled at source, dot sizes stay physically small
 
     var t1 = clamp(mapVal(time, 0, CHANGE_EVENT_TIME + 0.25, 0, 1), 0, 1);
     var t2 = clamp(mapVal(time, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
