@@ -13,22 +13,49 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
 #spiral-canvas{position:fixed;inset:0;display:block;width:100%;height:100%;}
 
-#enter-label{
+/* Center hit zone — the only clickable element */
+#enter-zone{
   position:fixed;inset:0;
   display:flex;align-items:center;justify-content:center;
-  pointer-events:none;
-  font-family:'Geist',system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
   z-index:10;
   transition:opacity .6s ease;
 }
-#enter-label span{
-  font-size:clamp(18px,4vw,28px);
-  font-weight:700;
-  letter-spacing:.28em;
+#enter-circle{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;
+  width:clamp(220px,28vmin,340px);
+  height:clamp(220px,28vmin,340px);
+  border-radius:50%;
+  cursor:pointer;
+  /* subtle ring so it's clearly a button */
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(0,0,0,.15);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+  transition:border-color .25s,background .25s,transform .25s;
+  -webkit-font-smoothing:antialiased;
+  font-family:'Geist',system-ui,sans-serif;
+}
+#enter-circle:hover{
+  border-color:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.06);
+  transform:scale(1.04);
+}
+#enter-circle img{
+  height:clamp(28px,4vmin,44px);
+  width:auto;
+  display:block;
+  opacity:.9;
+  pointer-events:none;
+}
+#enter-circle span{
+  font-size:clamp(12px,2vmin,15px);
+  font-weight:300;
+  letter-spacing:.32em;
   text-transform:uppercase;
-  color:rgba(255,255,255,.9);
-  text-shadow:0 0 30px rgba(255,255,255,.4);
+  color:rgba(255,255,255,.85);
+  text-shadow:0 0 24px rgba(255,255,255,.3);
+  pointer-events:none;
 }
 </style>
 </head>
@@ -36,8 +63,11 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
 <canvas id="spiral-canvas"></canvas>
 
-<div id="enter-label">
-  <span>Enter</span>
+<div id="enter-zone">
+  <div id="enter-circle">
+    <img src="wh-slash-icon.png" alt="WealthHealth AI"/>
+    <span>Enter</span>
+  </div>
 </div>
 
 <script>
@@ -252,12 +282,12 @@ html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
   requestAnimationFrame(loop);
 
-  // ── Click anywhere → fade label and navigate ──
+  // ── Click the center circle only → fade and navigate ──
   var navigating = false;
-  document.addEventListener('click', function() {
+  document.getElementById('enter-circle').addEventListener('click', function() {
     if (navigating) return;
     navigating = true;
-    document.getElementById('enter-label').style.opacity = '0';
+    document.getElementById('enter-zone').style.opacity = '0';
     setTimeout(function() { window.location.href = '/corporate.html'; }, 600);
   });
 
