@@ -691,29 +691,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </nav>
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
-  <!-- ═══ SHADER HERO — aliimam/shader-lines (21st.dev) ═══ -->
-  <section id="top" style="position:relative;width:100%;height:100vh;overflow:hidden;background:#0C0C0E;">
-
-    <!-- WebGL shader canvas -->
-    <canvas id="shader-hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
-
-    <!-- Radial vignette so logo is legible over the shader -->
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 50%,rgba(12,12,14,.6) 0%,rgba(12,12,14,.15) 60%,transparent 100%);pointer-events:none;z-index:5;"></div>
-
-    <!-- Centered logo -->
-    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
-      <img src="wh-slash-icon.png" alt="WealthHealth AI"
-           style="width:min(100px,18vw);height:auto;display:block;opacity:.92;filter:drop-shadow(0 0 50px rgba(255,255,255,.12));"/>
-    </div>
-
-    <!-- Scroll hint -->
-    <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.32);font-family:'Geist',system-ui;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;user-select:none;pointer-events:none;animation:bob 2.2s ease-in-out infinite;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-      Scroll
-    </div>
-  </section>
-
-  <div class="hero-section-wrap" id="intro">
+  <div class="hero-section-wrap" id="top">
     <div id="wh-shader"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
@@ -1294,6 +1272,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </script>
   SHADER-V1-DISABLED-->
 
+  <!--SHADER-V2-DISABLED
   <!-- ═══════════════════════════════════════════════════════════════
        SHADER V2 — aliimam/web-gl-shader (chromatic sine wave)
        DISABLED — superseded by V3
@@ -1383,6 +1362,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     })();
   })();
   </script>
+  SHADER-V2-DISABLED-->
 
   <!--SHADER-V4-DISABLED
   <!-- ═══════════════════════════════════════════════════════════════
@@ -1730,16 +1710,19 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- ═══ SHADER HERO — shader-lines plain WebGL ═══ -->
   <script>
   (function() {
-    var canvas = document.getElementById('shader-hero-canvas');
-    if (!canvas) return;
+    var container = document.getElementById('wh-shader');
+    if (!container) return;
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'display:block;width:100%;height:100%;';
+    container.appendChild(canvas);
 
     // Force WebGL1 — GLSL ES 1.0 (avoids gl_FragColor issue in WebGL2)
     var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) { console.warn('WebGL not available'); return; }
 
     function resize() {
-      var W = canvas.parentElement.offsetWidth || window.innerWidth;
-      var H = canvas.parentElement.offsetHeight || window.innerHeight;
+      var W = container.offsetWidth  || window.innerWidth;
+      var H = container.offsetHeight || window.innerHeight;
       canvas.width  = W;
       canvas.height = H;
       gl.viewport(0, 0, W, H);
@@ -1824,7 +1807,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       if (visible && !rafId) { rafId = requestAnimationFrame(frame); }
       else if (!visible && rafId) { cancelAnimationFrame(rafId); rafId = null; }
     }, { threshold: 0.01 });
-    io.observe(canvas);
+    io.observe(container);
 
     rafId = requestAnimationFrame(frame);
   })();
