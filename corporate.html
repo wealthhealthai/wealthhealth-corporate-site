@@ -724,7 +724,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── FORGE ── -->
-      <div class="prod-section reveal" id="forge" data-product="forge" id="prod-forge">
+      <div class="prod-section reveal" data-product="forge" id="prod-forge">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Forge Platform</span>
@@ -789,7 +789,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── PROMETHEUS ── -->
-      <div class="prod-section reveal" id="prometheus" data-product="prometheus" id="prod-prometheus">
+      <div class="prod-section reveal" data-product="prometheus" id="prod-prometheus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Prometheus Platform</span>
@@ -866,7 +866,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── MIDAS ── -->
-      <div class="prod-section reveal" id="midas" data-product="midas" id="prod-midas">
+      <div class="prod-section reveal" data-product="midas" id="prod-midas">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Midas Platform</span>
@@ -896,7 +896,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         </span>
       </div>
       <!-- ── OLYMPUS ── -->
-      <div class="prod-section reveal" id="olympus" data-product="olympus" id="prod-olympus">
+      <div class="prod-section reveal" data-product="olympus" id="prod-olympus">
         <div class="container">
           <div class="prod-center-top">
             <span class="prod-eyebrow">The Olympus Platform</span>
@@ -1493,10 +1493,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <script>
   (function() {
     var PLATFORMS = [
-      { label:'Prometheus', color:'#F46411', img:'logo-prometheus.png', url:'#prometheus' },
-      { label:'Forge',      color:'#C0392B', img:'logo-forge.png',      url:'#forge'      },
-      { label:'Midas',      color:'#8054FF', img:'logo-midas.png',      url:'#midas',   soon:true },
-      { label:'Olympus',    color:'#107C10', img:'logo-olympus.png',    url:'#olympus', soon:true },
+      { label:'Prometheus', color:'#F46411', img:'logo-prometheus.png', url:'#prod-prometheus' },
+      { label:'Forge',      color:'#C0392B', img:'logo-forge.png',      url:'#prod-forge'      },
+      { label:'Midas',      color:'#8054FF', img:'logo-midas.png',      url:'#prod-midas',   soon:true },
+      { label:'Olympus',    color:'#107C10', img:'logo-olympus.png',    url:'#prod-olympus', soon:true },
     ];
 
     var wrap  = document.getElementById('orbital-wrap');
