@@ -1622,12 +1622,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     const canvas = document.getElementById('flicker-logo-canvas');
     if (!wrap || !canvas) return;
 
-    const SQUARE  = 3;      // cell size in physical px
-    const GAP     = 2;      // gap between cells
+    const SQUARE  = 3;
+    const GAP     = 2;
     const STEP    = SQUARE + GAP;
     const MAX_OPQ = 0.95;
     const MIN_OPQ = 0.08;
-    const FLICKER = 0.14;   // per-cell flicker probability per frame
+    const FLICKER = 0.14;
 
     const ctx = canvas.getContext('2d');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1635,7 +1635,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     const img = new Image();
     img.src = 'wh-slash-icon.png';
     img.onload = function() {
-      const displayH = 60;
+      // 2× original size
+      const displayH = 120;
       const displayW = Math.round((img.width / img.height) * displayH);
       const physW    = displayW * dpr;
       const physH    = displayH * dpr;
@@ -1645,7 +1646,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       canvas.width  = physW;
       canvas.height = physH;
 
-      // Render logo offscreen to sample alpha mask
+      // Render logo offscreen — read RGBA to get both mask + original colors
       const off  = document.createElement('canvas');
       off.width  = physW;
       off.height = physH;
@@ -1655,23 +1656,31 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
       const cols = Math.floor(physW / STEP);
       const rows = Math.floor(physH / STEP);
-      const mask = new Uint8Array(cols * rows);
-      const opq  = new Float32Array(cols * rows);
+      const mask  = new Uint8Array(cols * rows);   // 0=empty, 1=white, 2=blue
+      const opq   = new Float32Array(cols * rows);
 
-      // Check center + four corners of each cell for logo coverage
       const pts = [[0,0],[SQUARE-1,0],[0,SQUARE-1],[SQUARE-1,SQUARE-1],
                    [Math.floor(SQUARE/2), Math.floor(SQUARE/2)]];
 
       for (let c = 0; c < cols; c++) {
         for (let r = 0; r < rows; r++) {
-          let hit = false;
-          for (let p = 0; p < pts.length && !hit; p++) {
+          let maxAlpha = 0, sumR = 0, sumG = 0, sumB = 0, hits = 0;
+          for (let p = 0; p < pts.length; p++) {
             const sx = c * STEP + pts[p][0];
             const sy = r * STEP + pts[p][1];
-            if (sx < physW && sy < physH && px[(sy * physW + sx) * 4 + 3] > 15) hit = true;
+            if (sx < physW && sy < physH) {
+              const idx = (sy * physW + sx) * 4;
+              const a = px[idx + 3];
+              if (a > maxAlpha) maxAlpha = a;
+              sumR += px[idx]; sumG += px[idx+1]; sumB += px[idx+2];
+              hits++;
+            }
           }
-          if (hit) {
-            mask[c * rows + r] = 1;
+          if (maxAlpha > 15) {
+            const avgR = sumR / hits, avgB = sumB / hits;
+            // Blue cell: native blue OR right-side slash (fallback for white-only PNGs)
+            const isBlue = (avgB > avgR + 40) || (c / cols > 0.60);
+            mask[c * rows + r] = isBlue ? 2 : 1;
             opq[c * rows + r]  = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
           }
         }
@@ -1684,7 +1693,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             const i = c * rows + r;
             if (!mask[i]) continue;
             if (Math.random() < FLICKER) opq[i] = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
-            ctx.fillStyle = 'rgba(255,255,255,' + opq[i].toFixed(2) + ')';
+            const o = opq[i].toFixed(2);
+            // mask=1 → white, mask=2 → WH blue (#2667FF)
+            ctx.fillStyle = mask[i] === 2
+              ? 'rgba(38,103,255,' + o + ')'
+              : 'rgba(255,255,255,' + o + ')';
             ctx.fillRect(c * STEP, r * STEP, SQUARE, SQUARE);
           }
         }
