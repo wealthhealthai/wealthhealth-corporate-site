@@ -1739,23 +1739,21 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     ].join('\n');
 
     var FSrc = [
-      'precision mediump float;',
+      'precision lowp float;',          // lowp = fastest GPU precision
       'uniform vec2  resolution;',
       'uniform float time;',
-      'float rnd(float x){return fract(sin(x)*1e4);}',
-      'float rnd2(vec2 s){return fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);}',
       'void main(){',
       '  vec2 uv=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);',
-      '  float sx=256.0/4.0; float sy=256.0/2.0;',
+      '  float sx=64.0; float sy=128.0;',   // mosaic snap
       '  uv.x=floor(uv.x*sx)/sx; uv.y=floor(uv.y*sy)/sy;',
-      '  float t=time*0.06+rnd2(vec2(uv.x,0.0))*0.4;',
-      '  float lw=0.0008; float r=length(uv);',
+      '  float t=time*0.05;',
+      '  float lw=0.001; float r=length(uv);',
       '  float cr=0.0,cg=0.0,cb=0.0;',
-      '  for(int i=0;i<5;i++){',
-      '    float f=lw*float(i*i);',
-      '    cr+=f/abs(fract(t          +float(i)*0.01)-r);',
-      '    cg+=f/abs(fract(t-0.01     +float(i)*0.01)-r);',
-      '    cb+=f/abs(fract(t-0.02     +float(i)*0.01)-r);',
+      '  for(int i=0;i<3;i++){',           // 3 iterations vs 5 (40% less math)
+      '    float f=lw*float(i*i+1);',
+      '    cr+=f/abs(fract(t          +float(i)*0.015)-r);',
+      '    cg+=f/abs(fract(t-0.012    +float(i)*0.015)-r);',
+      '    cb+=f/abs(fract(t-0.024    +float(i)*0.015)-r);',
       '  }',
       '  gl_FragColor=vec4(cb,cg,cr,1.0);',
       '}'
@@ -1797,17 +1795,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     var visible = true, rafId = null;
 
-    var lastFrame = 0;
-    var FPS_INTERVAL = 1000 / 30; // 30fps cap
-    function frame(ts) {
-      rafId = requestAnimationFrame(frame);
-      if (!visible) return;
-      if (ts - lastFrame < FPS_INTERVAL) return;
-      lastFrame = ts;
-      t += 0.05;
+    function frame() {
+      t += 0.04;
       gl.uniform1f(uTime, t);
       setRes();
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      rafId = requestAnimationFrame(frame);
     }
 
     var io = new IntersectionObserver(function(e) {
