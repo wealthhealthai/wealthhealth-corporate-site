@@ -1720,21 +1720,16 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) { console.warn('WebGL not available'); return; }
 
-    // Fixed draw resolution — mosaic grid is only ~64×128 cells so
-    // 512×288 captures every unique output. CSS pixelated upscale = no blur.
-    var DRAW_W = 512, DRAW_H = 288;
-    canvas.width  = DRAW_W;
-    canvas.height = DRAW_H;
-    canvas.style.cssText += ';image-rendering:pixelated;image-rendering:crisp-edges;';
-    gl.viewport(0, 0, DRAW_W, DRAW_H);
-
     function resize() {
       var W = container.offsetWidth  || window.innerWidth;
       var H = container.offsetHeight || window.innerHeight;
+      // Draw at half size — mosaic shader hides quality loss, pixelated=sharp upscale
+      canvas.width  = Math.floor(W * 0.5);
+      canvas.height = Math.floor(H * 0.5);
       canvas.style.width  = W + 'px';
       canvas.style.height = H + 'px';
-      // resolution uniform uses the logical viewport size for correct UV mapping
-      gl.uniform2f(uRes, W, H);
+      canvas.style.imageRendering = 'pixelated';
+      gl.viewport(0, 0, canvas.width, canvas.height);
     }
     resize();
     window.addEventListener('resize', resize);
@@ -1797,10 +1792,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     var t = 0.0;
 
     function setRes() {
-      // Use logical viewport size for UV calc, not draw buffer size
-      var W = container.offsetWidth  || window.innerWidth;
-      var H = container.offsetHeight || window.innerHeight;
-      gl.uniform2f(uRes, W, H);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
     }
     setRes();
 
