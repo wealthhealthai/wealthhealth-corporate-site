@@ -9,87 +9,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;background:#000;}
+html,body{height:100%;overflow:hidden;background:#000;cursor:pointer;}
 
-#spiral-canvas{
-  position:fixed;inset:0;
-  display:block;width:100%;height:100%;
-}
+#spiral-canvas{position:fixed;inset:0;display:block;width:100%;height:100%;}
 
-/* Overlay UI */
-#overlay{
+#enter-label{
   position:fixed;inset:0;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   pointer-events:none;
   font-family:'Geist',system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;
   z-index:10;
   transition:opacity .6s ease;
 }
-
-.wh-logo{
-  height:52px;width:auto;
-  margin-bottom:24px;
-  filter:drop-shadow(0 0 20px rgba(255,255,255,.3));
-}
-
-.wh-name{
-  font-size:clamp(28px,5vw,52px);
-  font-weight:800;
-  letter-spacing:-.04em;
-  color:#fff;
-  margin-bottom:10px;
-  text-shadow:0 0 60px rgba(255,255,255,.15);
-}
-
-.wh-tagline{
-  font-size:clamp(13px,2vw,16px);
-  font-weight:400;
-  color:rgba(255,255,255,.45);
-  letter-spacing:.06em;
+#enter-label span{
+  font-size:clamp(18px,4vw,28px);
+  font-weight:700;
+  letter-spacing:.28em;
   text-transform:uppercase;
-  margin-bottom:52px;
+  color:rgba(255,255,255,.9);
+  text-shadow:0 0 30px rgba(255,255,255,.4);
 }
-
-#enter-btn{
-  pointer-events:all;
-  display:inline-flex;align-items:center;gap:10px;
-  padding:14px 36px;
-  font-family:'Geist',system-ui,sans-serif;
-  font-size:15px;font-weight:700;letter-spacing:-.01em;
-  color:#fff;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:999px;
-  cursor:pointer;
-  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
-  text-decoration:none;
-}
-#enter-btn:hover{
-  background:rgba(255,255,255,.15);
-  border-color:rgba(255,255,255,.5);
-  transform:translateY(-2px);
-  box-shadow:0 12px 40px rgba(255,255,255,.08);
-}
-#enter-btn svg{transition:transform .2s;}
-#enter-btn:hover svg{transform:translateX(3px);}
 </style>
 </head>
 <body>
 
 <canvas id="spiral-canvas"></canvas>
 
-<div id="overlay">
-  <img class="wh-logo" src="wh-slash-icon.png" alt="WealthHealth AI"/>
-  <h1 class="wh-name">WealthHealth AI</h1>
-  <p class="wh-tagline">The new DTC growth stack for health and wellness</p>
-  <a id="enter-btn" href="/corporate.html">
-    Enter
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>
-  </a>
+<div id="enter-label">
+  <span>Enter</span>
 </div>
 
 <script>
@@ -300,11 +248,12 @@ html,body{height:100%;overflow:hidden;background:#000;}
 
   requestAnimationFrame(loop);
 
-  // ── Enter button: fade out overlay, navigate ──
-  document.getElementById('enter-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    var overlay = document.getElementById('overlay');
-    overlay.style.opacity = '0';
+  // ── Click anywhere → fade label and navigate ──
+  var navigating = false;
+  document.addEventListener('click', function() {
+    if (navigating) return;
+    navigating = true;
+    document.getElementById('enter-label').style.opacity = '0';
     setTimeout(function() { window.location.href = '/corporate.html'; }, 600);
   });
 
