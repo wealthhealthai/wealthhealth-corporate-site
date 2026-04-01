@@ -661,7 +661,27 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     .foot-links a{font-size:13px;color:rgba(255,255,255,.35);transition:color .15s;}
     .foot-links a:hover{color:rgba(255,255,255,.6);}
     .copy{width:100%;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);font-size:12px;color:rgba(255,255,255,.25);}
-  </style>
+
+    /* ── Animated gradient hero background ── */
+    @keyframes blobMove1 {
+      0%,100%{ transform:translate(0,0) scale(1); }
+      33%    { transform:translate(8vw,-12vh) scale(1.15); }
+      66%    { transform:translate(-6vw,8vh) scale(0.92); }
+    }
+    @keyframes blobMove2 {
+      0%,100%{ transform:translate(0,0) scale(1); }
+      33%    { transform:translate(-10vw,8vh) scale(1.1); }
+      66%    { transform:translate(12vw,-6vh) scale(0.95); }
+    }
+    @keyframes blobMove3 {
+      0%,100%{ transform:translate(0,0) scale(1); }
+      50%    { transform:translate(6vw,10vh) scale(1.08); }
+    }
+    .hero-bg-blob { position:absolute;border-radius:50%;filter:blur(80px);opacity:0.2;will-change:transform;pointer-events:none; }
+    .hero-bg-blob-1 { width:60vw;height:60vw;background:radial-gradient(circle,#2667FF 0%,transparent 70%);top:-15%;left:-10%;animation:blobMove1 18s ease-in-out infinite; }
+    .hero-bg-blob-2 { width:50vw;height:50vw;background:radial-gradient(circle,#4d8cff 0%,transparent 70%);bottom:-20%;right:-10%;animation:blobMove2 22s ease-in-out infinite; }
+    .hero-bg-blob-3 { width:35vw;height:35vw;background:radial-gradient(circle,#2714B8 0%,transparent 70%);top:25%;left:45%;animation:blobMove3 16s ease-in-out infinite; }
+    </style>
   <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
 </head>
 
@@ -691,25 +711,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </nav>
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
-  <!-- ═══════════════════════════════════════════
-       DITHERING HERO — shadway/hero-dithering-card
-       @paper-design/shaders v0.0.72 — clean slate
-  ═══════════════════════════════════════════ -->
-  <section id="top" style="position:relative;width:100%;height:100vh;overflow:hidden;background:#0C0C0E;cursor:pointer;" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})">
-    <!-- CSS animated gradient — compositor thread, zero GPU fragment load -->
-    <div style="position:absolute;inset:0;overflow:hidden;">
-      <div class="dither-blob dither-blob-1"></div>
-      <div class="dither-blob dither-blob-2"></div>
-      <div class="dither-blob dither-blob-3"></div>
+  <div class="hero-section-wrap" id="top">
+    <div id="wh-shader">
+      <div class="hero-bg-blob hero-bg-blob-1"></div>
+      <div class="hero-bg-blob hero-bg-blob-2"></div>
+      <div class="hero-bg-blob hero-bg-blob-3"></div>
     </div>
-    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:10;">
-      <img src="wh-slash-icon.png" alt="WealthHealth" style="width:clamp(48px,6vw,72px);height:auto;opacity:.92;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(255,255,255,.2));"/>
-      <p style="font-family:'Geist',system-ui;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);user-select:none;">Scroll to explore</p>
-    </div>
-  </section>
-
-  <div class="hero-section-wrap" id="intro">
-    <div id="wh-shader"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
