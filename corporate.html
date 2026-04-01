@@ -1476,94 +1476,23 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- ═══ PARTICLE HERO — Canvas 2D ═══ -->
   <script>
+  // Absolute minimum canvas test
   (function() {
-    // Append canvas directly to body, clipped to hero section via CSS
-    var mount = document.getElementById('particle-mount');
+    var c = document.createElement('canvas');
+    c.width = 600; c.height = 400;
+    c.style.cssText = 'position:absolute;top:0;left:0;z-index:999;display:block;';
     var hero = document.getElementById('top');
-    if (!container) return;
-
-    var canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:block;pointer-events:none;';
-    canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;';
-    if (mount) mount.appendChild(canvas); else document.getElementById('top').appendChild(canvas);
-
-    var ctx = canvas.getContext('2d');
-    var W = 0, H = 0, particles = [];
-    var heroBottom = 0;
-
-    // Only show particles over hero section
-    function getHeroBounds() {
-      if (hero) {
-        var r = hero.getBoundingClientRect();
-        heroBottom = r.bottom;
-      } else {
-        heroBottom = window.innerHeight;
-      }
+    if (hero) hero.appendChild(c);
+    var ctx = c.getContext('2d');
+    // Bright unmissable test pattern
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.fillRect(0, 0, 600, 400);
+    ctx.fillStyle = 'white';
+    for (var i = 0; i < 50; i++) {
+      ctx.fillRect(Math.random()*580, Math.random()*380, 3, 8);
     }
-
-    function resize() {
-      var el = mount || document.getElementById('top');
-      W = el ? (el.offsetWidth || window.innerWidth) : window.innerWidth;
-      H = el ? (el.offsetHeight || window.innerHeight) : window.innerHeight;
-      canvas.width  = W;
-      canvas.height = H;
-      initParticles();
-    }
-
-    function makeParticle() {
-      return {
-        x:  Math.random() * W,
-        y:  Math.random() * H,
-        vy: -(Math.random() * 0.3 + 0.08),
-        op: Math.random() * 0.6 + 0.15,
-        h:  Math.random() * 3 + 1,
-        life: Math.random() * 400 + 100,
-        age: 0
-      };
-    }
-
-    function initParticles() {
-      var count = Math.floor((W * H) / 5000);
-      particles = [];
-      for (var i = 0; i < count; i++) particles.push(makeParticle());
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.y += p.vy;
-        p.age++;
-        var fade = Math.max(0, 1 - p.age / p.life);
-        if (fade <= 0 || p.y < -5) {
-          p.x = Math.random() * W;
-          p.y = H + 5;
-          p.age = 0;
-          p.life = Math.random() * 400 + 100;
-          p.op = Math.random() * 0.6 + 0.15;
-          fade = 1;
-        }
-        ctx.fillStyle = 'rgba(77,140,255,' + (p.op * fade).toFixed(2) + ')';
-        ctx.fillRect(p.x, p.y, 0.5, p.h);
-      }
-      requestAnimationFrame(animate);
-    }
-
-    // Resize once DOM is ready, then start
-    function start() {
-      resize();
-      window.addEventListener('resize', resize);
-      animate();
-    }
-
-    if (document.readyState !== 'loading') {
-      start();
-    } else {
-      document.addEventListener('DOMContentLoaded', start);
-    }
+    console.log('Canvas test: appended to', hero ? '#top' : 'null', 'size:', c.width, c.height);
   })();
   </script>
-
 </body>
