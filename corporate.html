@@ -1455,15 +1455,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     }
     tick();
 
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(e) {
-        if (e[0].isIntersecting) { if (!timer) timer = setInterval(tick, 50); }
-        else                     { clearInterval(timer); timer = null; }
-      }, { threshold: 0.1 });
-      io.observe(wrap);
-    } else {
-      timer = setInterval(tick, 50);
-    }
+    // Orbital rotation disabled for performance test
+    tick(); // render once at initial positions, no animation
   })();
   </script>
 
@@ -1516,7 +1509,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
                  *mat2(6.,-4.,4.,6.);
           vec4 o=vec4(0.0);
           float f=2.0+fbm(p+vec2(iTime*5.0,0.0))*0.5;
-          for(float i=0.0;i++<35.0;){
+          for(float i=0.0;i++<12.0;){
             vec2 v=p+cos(i*i+(iTime+p.x*0.08)*0.025+i*vec2(13.,11.))*3.5;
             float tailNoise=fbm(v+vec2(iTime*0.5,i))*0.3*(1.0-(i/35.0));
             vec4 auroraColors=vec4(
