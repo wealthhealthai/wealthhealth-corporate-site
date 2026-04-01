@@ -196,6 +196,31 @@
     .nav-cta-hub:active{transform:translateY(1px);}
 
     .nav-mobile{display:none;}
+    /* Mobile menu overlay */
+    .nav-mobile{cursor:pointer;display:flex;align-items:center;gap:6px;}
+    .nav-mobile svg{transition:transform .2s;}
+    .mobile-menu{
+      display:none;position:fixed;top:62px;left:0;right:0;bottom:0;
+      background:rgba(12,12,14,.97);backdrop-filter:blur(16px);
+      z-index:49;flex-direction:column;padding:24px 28px;gap:4px;
+      overflow-y:auto;
+    }
+    .mobile-menu.open{display:flex;}
+    .mobile-menu a,.mobile-menu button{
+      font-family:var(--font-ui);font-size:18px;font-weight:600;
+      color:rgba(238,233,228,.8);text-decoration:none;
+      padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);
+      background:none;border-left:none;border-right:none;border-top:none;
+      text-align:left;cursor:pointer;letter-spacing:-.01em;
+      transition:color .15s;
+    }
+    .mobile-menu a:hover,.mobile-menu button:hover{color:#fff;}
+    .mobile-menu .menu-cta{
+      margin-top:16px;padding:16px;border-radius:0;border:none;
+      background:linear-gradient(135deg,rgba(38,103,255,1),rgba(39,20,184,1));
+      color:#fff;font-size:16px;text-align:center;
+    }
+    
     @media(max-width:760px){
       .nav-links{display:none;}
       .nav-mobile{display:block;color:rgba(255,255,255,.6);font-size:12px;letter-spacing:.12em;text-transform:uppercase;}
@@ -288,7 +313,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     h1{
       font-family:var(--font-display);
-      font-size:clamp(3.2rem,7vw,5.5rem);
+      font-size:clamp(2.4rem,7vw,5.5rem);
       letter-spacing:-.05em;
       line-height:1.0;
       font-weight:900;
@@ -319,7 +344,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       margin-bottom:32px;
       text-shadow:0 1px 18px rgba(0,0,0,.95),0 0 48px rgba(12,12,14,.9);
     }
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;}
     .btn{
       display:inline-flex;align-items:center;gap:10px;
       font-size:15px;font-weight:700;
@@ -669,7 +694,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         <img src="logo-wh-nav.png" style="height:20px;width:auto;display:block;" alt="WealthHealth"/>
       </a>
 
-      <div class="nav-mobile">Menu</div>
+      <button class="nav-mobile" onclick="document.getElementById('mobile-menu').classList.toggle('open');this.querySelector('span').textContent=document.getElementById('mobile-menu').classList.contains('open')?'Close':'Menu'" aria-label="Menu">
+        <span>Menu</span>
+      </button>
 
       <ul class="nav-links">
         <li><a href="#products">Products</a></li>
@@ -684,6 +711,14 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       </div>
     </div>
   </nav>
+  <div id="mobile-menu" class="mobile-menu" onclick="if(event.target===this)this.classList.remove('open')">
+    <a href="#products" onclick="document.getElementById('mobile-menu').classList.remove('open')">Products</a>
+    <a href="#about" onclick="document.getElementById('mobile-menu').classList.remove('open')">About</a>
+    <a href="#enterprise-hub-section" onclick="document.getElementById('mobile-menu').classList.remove('open')">B2B</a>
+    <a href="#contact" onclick="document.getElementById('mobile-menu').classList.remove('open')">Contact</a>
+    <a href="/partners.html" class="menu-cta">Enterprise Hub →</a>
+    <a href="https://forgeai.bot" class="menu-cta" target="_blank">Try Forge →</a>
+  </div>
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
@@ -1498,12 +1533,12 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         void main(){
           vec2 p=((gl_FragCoord.xy)-iResolution*.5)/iResolution.y*mat2(6.,-4.,4.,6.);
           vec4 o=vec4(0.);float f=2.+fbm(p+vec2(iTime*5.,0.))*.5;
-          for(float i=0.;i++<12.;){
+          for(float i=0.;i++<20.;){
             vec2 v=p+cos(i*i+(iTime+p.x*.08)*.025+i*vec2(13.,11.))*3.5;
             vec4 c=vec4(.1+.3*sin(i*.2+iTime*.4),.3+.5*cos(i*.3+iTime*.5),.7+.3*sin(i*.4+iTime*.3),1.);
-            o+=c*exp(sin(i*i+iTime*.8))/length(max(v,vec2(v.x*f*.015,v.y*1.5)))*smoothstep(0.,1.,i/12.)*.6;
+            o+=c*exp(sin(i*i+iTime*.8))/length(max(v,vec2(v.x*f*.015,v.y*1.5)))*smoothstep(0.,1.,i/20.)*.8;
           }
-          gl_FragColor=tanh(pow(o/100.,vec4(1.6)))*1.5;
+          gl_FragColor=tanh(pow(o/80.,vec4(1.4)))*2.0;
         }`
     });
     scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat));
@@ -1518,7 +1553,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     window.addEventListener('resize',resize);
 
     let raf=null;
-    function frame(){mat.uniforms.iTime.value+=0.016;renderer.render(scene,camera);raf=requestAnimationFrame(frame);}
+    function frame(){mat.uniforms.iTime.value+=0.022;renderer.render(scene,camera);raf=requestAnimationFrame(frame);}
     const io=new IntersectionObserver(([e])=>{
       if(e.isIntersecting&&!raf) raf=requestAnimationFrame(frame);
       else if(!e.isIntersecting&&raf){cancelAnimationFrame(raf);raf=null;}
