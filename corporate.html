@@ -691,7 +691,19 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </nav>
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
-  <div class="hero-section-wrap" id="top">
+  <!-- ═══════════════════════════════════════════
+       DITHERING HERO — shadway/hero-dithering-card
+       @paper-design/shaders v0.0.72 — clean slate
+  ═══════════════════════════════════════════ -->
+  <section id="top" style="position:relative;width:100%;height:100vh;overflow:hidden;background:#0C0C0E;cursor:pointer;" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})">
+    <canvas id="dither-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:10;">
+      <img src="wh-slash-icon.png" alt="WealthHealth" style="width:clamp(48px,6vw,72px);height:auto;opacity:.92;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(255,255,255,.2));"/>
+      <p style="font-family:'Geist',system-ui;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);user-select:none;">Scroll to explore</p>
+    </div>
+  </section>
+
+  <div class="hero-section-wrap" id="intro">
     <div id="wh-shader"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
@@ -1475,49 +1487,27 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- ═══ DITHERING HERO — shadway/hero-dithering-card (@paper-design/shaders) ═══ -->
+  <!-- Dithering shader init -->
   <script type="module">
-  import { Dithering } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@1.3.0/dist/index.js';
-
-  (function() {
-    const container = document.getElementById('wh-shader');
-    if (!container) return;
-
-    // Create canvas
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;';
-    container.appendChild(canvas);
-
-    // Resize canvas to container
-    function resize() {
-      canvas.width  = container.offsetWidth  || window.innerWidth;
-      canvas.height = container.offsetHeight || window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Init dithering shader — WH blue palette
-    try {
-      const dithering = new Dithering({
-        el: canvas,
-        colorBack: '#0C0C0E',
-        colorFront: '#2667FF',
-        shape: 'warp',
-        type: '4x4',
-        speed: 0.3,
-        minPixelRatio: 1,
-      });
-      dithering.play();
-
-      // Pause when off-screen
-      const io = new IntersectionObserver(e => {
-        e[0].isIntersecting ? dithering.play() : dithering.pause();
-      }, { threshold: 0.01 });
-      io.observe(container);
-    } catch(e) {
-      console.warn('Dithering shader failed:', e);
-    }
-  })();
+  import { Dithering } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.72/dist/index.js';
+  const canvas = document.getElementById('dither-canvas');
+  if (canvas) {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+    const fx = new Dithering({
+      el: canvas,
+      colorBack:  '#050510',
+      colorFront: '#2667FF',
+      shape: 'warp',
+      type:  '4x4',
+      speed: 0.3,
+    });
+    fx.play();
+    new IntersectionObserver(([e]) => e.isIntersecting ? fx.play() : fx.pause(), {threshold:0.01}).observe(canvas);
+  }
   </script>
-
 </body>
