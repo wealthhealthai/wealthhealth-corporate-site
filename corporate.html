@@ -693,7 +693,6 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
     <div id="wh-shader"></div>
-    <div id="particle-mount" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
@@ -1476,69 +1475,48 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- ═══ PARTICLE HERO — Canvas 2D rising particles ═══ -->
-  <script>
+  <!-- ═══ DITHERING HERO — shadway/hero-dithering-card (@paper-design/shaders) ═══ -->
+  <script type="module">
+  import { Dithering } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@1.3.0/dist/index.js';
+
   (function() {
-    var hero = document.getElementById('top');
-    if (!hero) return;
+    const container = document.getElementById('wh-shader');
+    if (!container) return;
 
-    var c = document.createElement('canvas');
-    c.style.cssText = 'position:absolute;top:0;left:0;z-index:1;display:block;pointer-events:none;';
-    hero.appendChild(c);
-    var ctx = c.getContext('2d');
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;';
+    container.appendChild(canvas);
 
-    var W, H, particles = [];
-
+    // Resize canvas to container
     function resize() {
-      W = window.innerWidth;
-      H = window.innerHeight;
-      c.width  = W;
-      c.height = H;
+      canvas.width  = container.offsetWidth  || window.innerWidth;
+      canvas.height = container.offsetHeight || window.innerHeight;
     }
-
-    function make() {
-      return {
-        x:    Math.random() * W,
-        y:    H + Math.random() * 20,
-        vy:   -(Math.random() * 0.4 + 0.05),
-        op:   Math.random() * 0.55 + 0.15,
-        h:    Math.random() * 3 + 1,
-        life: Math.random() * 500 + 200,
-        age:  Math.random() * 300   // stagger start ages
-      };
-    }
-
-    function init() {
-      particles = [];
-      var n = Math.floor(W * H / 5000);
-      for (var i = 0; i < n; i++) {
-        var p = make();
-        p.y = Math.random() * H;  // scatter initially
-        particles.push(p);
-      }
-    }
-
-    function frame() {
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.y   += p.vy;
-        p.age ++;
-        var fade = Math.max(0, 1 - p.age / p.life);
-        if (p.y < -5 || fade <= 0) {
-          particles[i] = make();
-          continue;
-        }
-        ctx.fillStyle = 'rgba(77,140,255,' + (p.op * fade).toFixed(2) + ')';
-        ctx.fillRect(p.x, p.y, 0.5, p.h);
-      }
-      requestAnimationFrame(frame);
-    }
-
     resize();
-    init();
-    frame();
-    window.addEventListener('resize', function() { resize(); init(); });
+    window.addEventListener('resize', resize);
+
+    // Init dithering shader — WH blue palette
+    try {
+      const dithering = new Dithering({
+        el: canvas,
+        colorBack: '#0C0C0E',
+        colorFront: '#2667FF',
+        shape: 'warp',
+        type: '4x4',
+        speed: 0.3,
+        minPixelRatio: 1,
+      });
+      dithering.play();
+
+      // Pause when off-screen
+      const io = new IntersectionObserver(e => {
+        e[0].isIntersecting ? dithering.play() : dithering.pause();
+      }, { threshold: 0.01 });
+      io.observe(container);
+    } catch(e) {
+      console.warn('Dithering shader failed:', e);
+    }
   })();
   </script>
 
