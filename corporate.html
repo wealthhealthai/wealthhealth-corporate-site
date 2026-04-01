@@ -1476,23 +1476,70 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
+  <!-- ═══ PARTICLE HERO — Canvas 2D rising particles ═══ -->
   <script>
-  // Absolute minimum canvas test
   (function() {
-    var c = document.createElement('canvas');
-    c.width = 600; c.height = 400;
-    c.style.cssText = 'position:absolute;top:0;left:0;z-index:999;display:block;';
     var hero = document.getElementById('top');
-    if (hero) hero.appendChild(c);
+    if (!hero) return;
+
+    var c = document.createElement('canvas');
+    c.style.cssText = 'position:absolute;top:0;left:0;z-index:1;display:block;pointer-events:none;';
+    hero.appendChild(c);
     var ctx = c.getContext('2d');
-    // Bright unmissable test pattern
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.fillRect(0, 0, 600, 400);
-    ctx.fillStyle = 'white';
-    for (var i = 0; i < 50; i++) {
-      ctx.fillRect(Math.random()*580, Math.random()*380, 3, 8);
+
+    var W, H, particles = [];
+
+    function resize() {
+      W = window.innerWidth;
+      H = hero.offsetHeight || window.innerHeight;
+      c.width  = W;
+      c.height = H;
     }
-    console.log('Canvas test: appended to', hero ? '#top' : 'null', 'size:', c.width, c.height);
+
+    function make() {
+      return {
+        x:    Math.random() * W,
+        y:    H + Math.random() * 20,
+        vy:   -(Math.random() * 0.4 + 0.05),
+        op:   Math.random() * 0.55 + 0.15,
+        h:    Math.random() * 3 + 1,
+        life: Math.random() * 500 + 200,
+        age:  Math.random() * 300   // stagger start ages
+      };
+    }
+
+    function init() {
+      particles = [];
+      var n = Math.floor(W * H / 5000);
+      for (var i = 0; i < n; i++) {
+        var p = make();
+        p.y = Math.random() * H;  // scatter initially
+        particles.push(p);
+      }
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.y   += p.vy;
+        p.age ++;
+        var fade = Math.max(0, 1 - p.age / p.life);
+        if (p.y < -5 || fade <= 0) {
+          particles[i] = make();
+          continue;
+        }
+        ctx.fillStyle = 'rgba(77,140,255,' + (p.op * fade).toFixed(2) + ')';
+        ctx.fillRect(p.x, p.y, 0.5, p.h);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    resize();
+    init();
+    frame();
+    window.addEventListener('resize', function() { resize(); init(); });
   })();
   </script>
+
 </body>
