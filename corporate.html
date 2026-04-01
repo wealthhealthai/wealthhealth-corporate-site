@@ -302,9 +302,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     h1 em{
       font-style:normal;
       background:linear-gradient(125deg,#4d8cff 0%,#7B5EFF 25%,#2667FF 50%,#60a5fa 75%,#4d8cff 100%);
-      background-size:250% auto;
+      background-size:100% auto;
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      animation:gradientShift 5s ease infinite;
+      /* gradient static — animating background-position forces repaint */
     }
     /* Option A — dark radial vignette: dims particles at center where text lives */
     #wh-vignette{
@@ -547,8 +547,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     /* Default: sections below-fold start at full opacity (no snap) */
     /* JS-driven: active section = 1.0, others = 0.25 with blur */
     .prod-section{
-      transition:opacity .6s cubic-bezier(.22,.68,0,1), filter .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
-      will-change: opacity, filter;
+      transition:opacity .6s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1.05);
+      will-change: opacity, transform;
       position: relative;
     }
 
@@ -677,7 +677,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       0%,100%{ transform:translate(0,0) scale(1); }
       50%    { transform:translate(6vw,10vh) scale(1.08); }
     }
-    .hero-bg-blob { position:absolute;border-radius:50%;filter:blur(80px);opacity:0.2;will-change:transform;pointer-events:none; }
+    .hero-bg-blob { position:absolute;border-radius:50%;opacity:0.18;will-change:transform;pointer-events:none; }
     .hero-bg-blob-1 { width:60vw;height:60vw;background:radial-gradient(circle,#2667FF 0%,transparent 70%);top:-15%;left:-10%;animation:blobMove1 18s ease-in-out infinite; }
     .hero-bg-blob-2 { width:50vw;height:50vw;background:radial-gradient(circle,#4d8cff 0%,transparent 70%);bottom:-20%;right:-10%;animation:blobMove2 22s ease-in-out infinite; }
     .hero-bg-blob-3 { width:35vw;height:35vw;background:radial-gradient(circle,#2714B8 0%,transparent 70%);top:25%;left:45%;animation:blobMove3 16s ease-in-out infinite; }
