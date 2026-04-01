@@ -1472,7 +1472,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- ═══ GLSL HILLS — aliimam/glsl-hills (21st.dev) ═══ -->
   <script type="module">
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169/build/three.module.js';
-  {
+  (function() {
     const canvas = document.getElementById('hills-canvas');
     const container = document.getElementById('wh-shader');
     if (!canvas || !container) return;
@@ -1592,7 +1592,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     // Start immediately (hero is visible on load)
     clock.start(); rafId = requestAnimationFrame(frame);
-  }
+  })();
   </script>
 
 </body>
