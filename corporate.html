@@ -240,7 +240,7 @@
       top:0;left:0;width:100%;height:100%;
       pointer-events:none;z-index:0;opacity:0.75;
     }
-    #wh-shader canvas{display:block;width:100%!important;height:100%!important;}
+    #wh-shader canvas{display:block;}  /* size set by JS */
 
     /* Ambient glow — also scoped to hero */
     .glow{
@@ -1477,90 +1477,74 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- ═══ PARTICLE HERO — aliimam/particle-hero (21st.dev) port ═══ -->
-  <script>
-  (function() {
-    var canvas = document.getElementById('particle-canvas');
-    var container = document.getElementById('wh-shader');
-    if (!canvas || !container) return;
-    var ctx = canvas.getContext('2d');
 
-    function resize() {
+  <!-- ═══ PARTICLE HERO — Canvas 2D rising particles ═══ -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Size canvas to viewport
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.cssText = 'position:absolute;inset:0;width:' + canvas.width + 'px;height:' + canvas.height + 'px;';
+
+    window.addEventListener('resize', function() {
       canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
       canvas.style.width  = canvas.width  + 'px';
       canvas.style.height = canvas.height + 'px';
       initParticles();
-    }
+    });
 
     var particles = [];
 
-    function createParticle() {
-      var p = {
+    function makeParticle() {
+      return {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        speed: Math.random() / 5 + 0.1,
-        opacity: 1,
-        fadingOut: false,
-        fadeStart: Date.now() + Math.random() * 600 + 100,
-        reset: function() {
-          this.x = Math.random() * canvas.width;
-          this.y = canvas.height + Math.random() * 20;
-          this.speed = Math.random() / 5 + 0.1;
-          this.opacity = 1;
-          this.fadingOut = false;
-          this.fadeStart = Date.now() + Math.random() * 600 + 100;
-        },
-        update: function() {
-          this.y -= this.speed;
-          if (this.y < 0) this.reset();
-          if (!this.fadingOut && Date.now() > this.fadeStart) this.fadingOut = true;
-          if (this.fadingOut) {
-            this.opacity -= 0.008;
-            if (this.opacity <= 0) this.reset();
-          }
-        },
-        draw: function() {
-          // WH blue-white particles instead of cyan
-          var r = Math.floor(38  + Math.random() * 80);
-          var g = Math.floor(103 + Math.random() * 80);
-          ctx.fillStyle = 'rgba(' + r + ',' + g + ',255,' + this.opacity.toFixed(2) + ')';
-          ctx.fillRect(this.x, this.y, 0.4, Math.random() * 2 + 1);
-        }
+        vy: -(Math.random() * 0.3 + 0.08),
+        opacity: Math.random() * 0.7 + 0.1,
+        h: Math.random() * 3 + 1,
+        life: Math.random() * 300 + 100,
+        age: 0
       };
-      return p;
     }
 
     function initParticles() {
-      var count = Math.floor((canvas.width * canvas.height) / 6000);
+      var count = Math.floor((canvas.width * canvas.height) / 5000);
       particles = [];
-      for (var i = 0; i < count; i++) particles.push(createParticle());
+      for (var i = 0; i < count; i++) particles.push(makeParticle());
     }
-
-    var rafId = null;
+    initParticles();
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
+        var p = particles[i];
+        p.y += p.vy;
+        p.age++;
+        var fade = 1 - (p.age / p.life);
+        if (fade <= 0 || p.y < 0) {
+          // Reset particle at bottom
+          p.x = Math.random() * canvas.width;
+          p.y = canvas.height + 5;
+          p.vy = -(Math.random() * 0.3 + 0.08);
+          p.opacity = Math.random() * 0.7 + 0.1;
+          p.h = Math.random() * 3 + 1;
+          p.life = Math.random() * 300 + 100;
+          p.age = 0;
+          fade = 1;
+        }
+        ctx.fillStyle = 'rgba(77,140,255,' + (p.opacity * fade).toFixed(2) + ')';
+        ctx.fillRect(p.x, p.y, 0.5, p.h);
       }
-      rafId = requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
     }
-
-    window.addEventListener('resize', resize);
-
-    // Init after layout settles — container.offsetWidth can be 0 at parse time
-    window.addEventListener('load', function() {
-      resize();
-      rafId = requestAnimationFrame(animate);
-    });
-    // Immediate fallback if load already fired
-    if (document.readyState === 'complete') {
-      resize();
-      rafId = requestAnimationFrame(animate);
-    }
-  })();
+    animate();
+  });
   </script>
 
 </body>
