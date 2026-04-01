@@ -693,6 +693,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
     <div id="wh-shader"></div>
+    <div id="particle-mount" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
@@ -1479,14 +1480,14 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <script>
   (function() {
     // Append canvas directly to body, clipped to hero section via CSS
+    var mount = document.getElementById('particle-mount');
     var hero = document.getElementById('top');
     if (!container) return;
 
     var canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:block;pointer-events:none;';
-    // Position fixed behind hero, same z-index as wh-shader
-    canvas.style.cssText = 'position:fixed;top:0;left:0;z-index:0;pointer-events:none;display:block;';
-    document.body.appendChild(canvas);
+    canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;';
+    if (mount) mount.appendChild(canvas); else document.getElementById('top').appendChild(canvas);
 
     var ctx = canvas.getContext('2d');
     var W = 0, H = 0, particles = [];
@@ -1503,13 +1504,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     }
 
     function resize() {
-      W = window.innerWidth;
-      H = window.innerHeight;
+      var el = mount || document.getElementById('top');
+      W = el ? (el.offsetWidth || window.innerWidth) : window.innerWidth;
+      H = el ? (el.offsetHeight || window.innerHeight) : window.innerHeight;
       canvas.width  = W;
       canvas.height = H;
-      canvas.style.width  = W + 'px';
-      canvas.style.height = H + 'px';
-      getHeroBounds();
       initParticles();
     }
 
