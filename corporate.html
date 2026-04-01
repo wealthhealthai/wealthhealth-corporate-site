@@ -1486,8 +1486,10 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     var ctx = canvas.getContext('2d');
 
     function resize() {
-      canvas.width  = container.offsetWidth  || window.innerWidth;
-      canvas.height = container.offsetHeight || window.innerHeight;
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.width  = canvas.width  + 'px';
+      canvas.style.height = canvas.height + 'px';
       initParticles();
     }
 
@@ -1535,7 +1537,8 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       for (var i = 0; i < count; i++) particles.push(createParticle());
     }
 
-    var rafId = null, visible = false;
+    var rafId = null;
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < particles.length; i++) {
@@ -1545,17 +1548,18 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       rafId = requestAnimationFrame(animate);
     }
 
-    resize();
     window.addEventListener('resize', resize);
 
-    var io = new IntersectionObserver(function(e) {
-      visible = e[0].isIntersecting;
-      if (visible && !rafId) rafId = requestAnimationFrame(animate);
-      else if (!visible && rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    }, { threshold: 0.01 });
-    io.observe(container);
-
-    rafId = requestAnimationFrame(animate);
+    // Init after layout settles — container.offsetWidth can be 0 at parse time
+    window.addEventListener('load', function() {
+      resize();
+      rafId = requestAnimationFrame(animate);
+    });
+    // Immediate fallback if load already fired
+    if (document.readyState === 'complete') {
+      resize();
+      rafId = requestAnimationFrame(animate);
+    }
   })();
   </script>
 
