@@ -1478,24 +1478,38 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   <!-- ═══ PARTICLE HERO — Canvas 2D ═══ -->
   <script>
   (function() {
-    // Create canvas via JS (same pattern as Three.js renderers that worked)
-    var container = document.getElementById('wh-shader');
+    // Append canvas directly to body, clipped to hero section via CSS
+    var hero = document.getElementById('top');
     if (!container) return;
 
     var canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:block;pointer-events:none;';
-    container.appendChild(canvas);
+    // Position fixed behind hero, same z-index as wh-shader
+    canvas.style.cssText = 'position:fixed;top:0;left:0;z-index:0;pointer-events:none;display:block;';
+    document.body.appendChild(canvas);
 
     var ctx = canvas.getContext('2d');
     var W = 0, H = 0, particles = [];
+    var heroBottom = 0;
+
+    // Only show particles over hero section
+    function getHeroBounds() {
+      if (hero) {
+        var r = hero.getBoundingClientRect();
+        heroBottom = r.bottom;
+      } else {
+        heroBottom = window.innerHeight;
+      }
+    }
 
     function resize() {
-      W = container.offsetWidth || window.innerWidth;
-      H = container.offsetHeight || window.innerHeight;
-      if (W === 0) W = window.innerWidth;
-      if (H === 0) H = window.innerHeight;
+      W = window.innerWidth;
+      H = window.innerHeight;
       canvas.width  = W;
       canvas.height = H;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      getHeroBounds();
       initParticles();
     }
 
