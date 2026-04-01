@@ -1695,7 +1695,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             var i = c * rows + r;
             if (!mask[i]) continue;
             if (Math.random() < prob) opq[i] = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
-            ctx.fillStyle = 'rgba(255,255,255,' + opq[i].toFixed(2) + ')';
+            ctx.fillStyle = 'rgba(38,103,255,' + opq[i].toFixed(2) + ')';
             ctx.fillRect(c * stepPx, r * stepPx, sqPx, sqPx);
           }
         }
