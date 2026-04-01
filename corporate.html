@@ -691,7 +691,19 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
   </nav>
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
-  <div class="hero-section-wrap" id="top">
+  <!-- ═══ FLICKERING LOGO HERO ═══ -->
+  <section id="top" style="position:relative;width:100%;height:100vh;background:#0C0C0E;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})">
+
+    <canvas id="flicker-hero-canvas" style="display:block;max-width:90vw;"></canvas>
+
+    <!-- Scroll hint -->
+    <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.32);font-family:'Geist',system-ui;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;pointer-events:none;animation:bob 2.2s ease-in-out infinite;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Scroll
+    </div>
+  </section>
+
+  <div class="hero-section-wrap" id="intro">
     <div id="wh-shader"><canvas id="hills-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
@@ -1592,6 +1604,86 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
     // Start immediately (hero is visible on load)
     clock.start(); rafId = requestAnimationFrame(frame);
+  })();
+  </script>
+
+
+  <!-- ═══ FLICKERING LOGO HERO SCRIPT ═══ -->
+  <script>
+  (function() {
+    var canvas = document.getElementById('flicker-hero-canvas');
+    if (!canvas) return;
+
+    var SQUARE = 5, GAP = 4, STEP = 9;
+    var MAX_OPQ = 0.95, MIN_OPQ = 0.05, FLICKER = 0.1;
+    var ctx = canvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    var img = new Image();
+    // Use SVG for perfect scaling at any size
+    img.src = 'wh-logo-primary.svg';
+    img.onerror = function() { img.src = 'logo-wh-nav.png'; };
+
+    img.onload = function() {
+      // Display size: up to 680px wide, proportional height
+      var displayW = Math.min(680, window.innerWidth * 0.82);
+      var displayH = Math.round(displayW * (img.height / img.width));
+      var physW = displayW * dpr;
+      var physH = displayH * dpr;
+
+      canvas.width  = physW;
+      canvas.height = physH;
+      canvas.style.width  = displayW + 'px';
+      canvas.style.height = displayH + 'px';
+
+      // Sample logo pixels for the mask
+      var off = document.createElement('canvas');
+      off.width = physW; off.height = physH;
+      var octx = off.getContext('2d');
+      octx.drawImage(img, 0, 0, physW, physH);
+      var px = octx.getImageData(0, 0, physW, physH).data;
+
+      var cols = Math.floor(physW / (STEP * dpr)) + 1;
+      var rows = Math.floor(physH / (STEP * dpr)) + 1;
+      var stepPx = Math.round(STEP * dpr);
+      var sqPx   = Math.round(SQUARE * dpr);
+      var mask = new Uint8Array(cols * rows);
+      var opq  = new Float32Array(cols * rows);
+
+      // Check 5 points per cell for better coverage
+      var pts = [[0,0],[sqPx-1,0],[0,sqPx-1],[sqPx-1,sqPx-1],[Math.floor(sqPx/2),Math.floor(sqPx/2)]];
+
+      for (var c = 0; c < cols; c++) {
+        for (var r = 0; r < rows; r++) {
+          var hit = false;
+          for (var p = 0; p < pts.length && !hit; p++) {
+            var sx = c * stepPx + pts[p][0];
+            var sy = r * stepPx + pts[p][1];
+            if (sx < physW && sy < physH && px[(sy * physW + sx) * 4 + 3] > 20) hit = true;
+          }
+          if (hit) {
+            mask[c * rows + r] = 1;
+            opq[c * rows + r]  = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
+          }
+        }
+      }
+
+      // Animate
+      function animate() {
+        ctx.clearRect(0, 0, physW, physH);
+        for (var c = 0; c < cols; c++) {
+          for (var r = 0; r < rows; r++) {
+            var i = c * rows + r;
+            if (!mask[i]) continue;
+            if (Math.random() < FLICKER) opq[i] = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
+            ctx.fillStyle = 'rgba(255,255,255,' + opq[i].toFixed(2) + ')';
+            ctx.fillRect(c * stepPx, r * stepPx, sqPx, sqPx);
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    };
   })();
   </script>
 
