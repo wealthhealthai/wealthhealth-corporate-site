@@ -1615,34 +1615,46 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     if (!canvas) return;
 
     var SQUARE = 5, GAP = 4, STEP = 9;
-    var MAX_OPQ = 0.95, MIN_OPQ = 0.05, FLICKER = 0.1;
+    var MAX_OPQ = 0.95, MIN_OPQ = 0.06;
+    var FLICKER = 0.012;  // ~once every 1.4s per cell — slow, elegant
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    // Draw the wordmark directly — guaranteed transparent bg, no file issues
-    // Draw mask inline
-      // Size the canvas to match a wide wordmark
-      var displayW = Math.min(720, window.innerWidth * 0.85);
-      var displayH = Math.round(displayW * 0.18); // ~18% aspect ratio for wordmark
-      var physW = displayW * dpr;
-      var physH = displayH * dpr;
+    function buildCanvas(iconImg) {
+      // Layout: icon (square) centered above text
+      var displayW  = Math.min(760, window.innerWidth * 0.85);
+      var textH     = Math.round(displayW * 0.16);   // text row height
+      var iconH     = Math.round(textH * 1.2);        // icon slightly taller
+      var iconW     = iconImg ? Math.round(iconH * (iconImg.width / iconImg.height)) : iconH;
+      var gap       = Math.round(textH * 0.35);
+      var displayH  = iconH + gap + textH;
+      var physW = displayW * dpr, physH = displayH * dpr;
+      var pIconH = iconH * dpr, pIconW = iconW * dpr;
+      var pTextH = textH * dpr, pGap = gap * dpr;
 
-      canvas.width  = physW;
-      canvas.height = physH;
+      canvas.width  = physW; canvas.height = physH;
       canvas.style.width  = displayW + 'px';
       canvas.style.height = displayH + 'px';
 
-      // Draw wordmark on offscreen canvas — white on transparent
       var off = document.createElement('canvas');
       off.width = physW; off.height = physH;
       var octx = off.getContext('2d');
       octx.clearRect(0, 0, physW, physH);
       octx.fillStyle = 'white';
-      var fontSize = Math.round(physH * 0.72);
+
+      // Draw icon centered at top
+      var iconX = (physW - pIconW) / 2;
+      if (iconImg) {
+        octx.drawImage(iconImg, iconX, 0, pIconW, pIconH);
+      }
+
+      // Draw wordmark below icon
+      var fontSize = Math.round(pTextH * 0.72);
       octx.font = 'bold ' + fontSize + 'px \'Plus Jakarta Sans\', \'Geist\', system-ui, sans-serif';
       octx.textAlign = 'center';
       octx.textBaseline = 'middle';
-      octx.fillText('WealthHealth', physW / 2, physH / 2);
+      octx.fillText('WealthHealth', physW / 2, pIconH + pGap + pTextH / 2);
+
       var px = octx.getImageData(0, 0, physW, physH).data;
 
       var cols = Math.floor(physW / (STEP * dpr)) + 1;
@@ -1685,7 +1697,14 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         requestAnimationFrame(animate);
       }
       animate();
-    })();
+    } // end buildCanvas
+
+    // Load icon, then build
+    var icon = new Image();
+    icon.onload  = function() { buildCanvas(icon); };
+    icon.onerror = function() { buildCanvas(null); };  // works without icon too
+    icon.src = 'wh-slash-icon.png';
+  })();
   </script>
 
 </body>
