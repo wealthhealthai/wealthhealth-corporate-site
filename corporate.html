@@ -692,9 +692,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
-    <!-- CSS animated gradient hero — pure CSS, no external deps, zero GPU cost -->
-    <div id="wh-shader" style="position:absolute;inset:0;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:#0C0C0E;animation:heroGrad 12s ease infinite;background-size:400% 400%;"></div>
+    <!-- Particle hero — aliimam/particle-hero (21st.dev), Canvas 2D -->
+    <div id="wh-shader" style="position:absolute;inset:0;overflow:hidden;background:#05060f;">
+      <canvas id="particle-canvas" style="position:absolute;inset:0;display:block;"></canvas>
     </div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
@@ -1475,5 +1475,88 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
+
+
+  <!-- ═══ PARTICLE HERO — aliimam/particle-hero (21st.dev) port ═══ -->
+  <script>
+  (function() {
+    var canvas = document.getElementById('particle-canvas');
+    var container = document.getElementById('wh-shader');
+    if (!canvas || !container) return;
+    var ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = container.offsetWidth  || window.innerWidth;
+      canvas.height = container.offsetHeight || window.innerHeight;
+      initParticles();
+    }
+
+    var particles = [];
+
+    function createParticle() {
+      var p = {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        speed: Math.random() / 5 + 0.1,
+        opacity: 1,
+        fadingOut: false,
+        fadeStart: Date.now() + Math.random() * 600 + 100,
+        reset: function() {
+          this.x = Math.random() * canvas.width;
+          this.y = canvas.height + Math.random() * 20;
+          this.speed = Math.random() / 5 + 0.1;
+          this.opacity = 1;
+          this.fadingOut = false;
+          this.fadeStart = Date.now() + Math.random() * 600 + 100;
+        },
+        update: function() {
+          this.y -= this.speed;
+          if (this.y < 0) this.reset();
+          if (!this.fadingOut && Date.now() > this.fadeStart) this.fadingOut = true;
+          if (this.fadingOut) {
+            this.opacity -= 0.008;
+            if (this.opacity <= 0) this.reset();
+          }
+        },
+        draw: function() {
+          // WH blue-white particles instead of cyan
+          var r = Math.floor(38  + Math.random() * 80);
+          var g = Math.floor(103 + Math.random() * 80);
+          ctx.fillStyle = 'rgba(' + r + ',' + g + ',255,' + this.opacity.toFixed(2) + ')';
+          ctx.fillRect(this.x, this.y, 0.4, Math.random() * 2 + 1);
+        }
+      };
+      return p;
+    }
+
+    function initParticles() {
+      var count = Math.floor((canvas.width * canvas.height) / 6000);
+      particles = [];
+      for (var i = 0; i < count; i++) particles.push(createParticle());
+    }
+
+    var rafId = null, visible = false;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
+      rafId = requestAnimationFrame(animate);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    var io = new IntersectionObserver(function(e) {
+      visible = e[0].isIntersecting;
+      if (visible && !rafId) rafId = requestAnimationFrame(animate);
+      else if (!visible && rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    }, { threshold: 0.01 });
+    io.observe(container);
+
+    rafId = requestAnimationFrame(animate);
+  })();
+  </script>
 
 </body>
