@@ -1619,15 +1619,11 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    var img = new Image();
-    // Use SVG for perfect scaling at any size
-    img.src = 'wh-logo-primary.svg';
-    img.onerror = function() { img.src = 'logo-wh-nav.png'; };
-
-    img.onload = function() {
-      // Display size: up to 680px wide, proportional height
-      var displayW = Math.min(680, window.innerWidth * 0.82);
-      var displayH = Math.round(displayW * (img.height / img.width));
+    // Draw the wordmark directly — guaranteed transparent bg, no file issues
+    // Draw mask inline
+      // Size the canvas to match a wide wordmark
+      var displayW = Math.min(720, window.innerWidth * 0.85);
+      var displayH = Math.round(displayW * 0.18); // ~18% aspect ratio for wordmark
       var physW = displayW * dpr;
       var physH = displayH * dpr;
 
@@ -1636,11 +1632,17 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
       canvas.style.width  = displayW + 'px';
       canvas.style.height = displayH + 'px';
 
-      // Sample logo pixels for the mask
+      // Draw wordmark on offscreen canvas — white on transparent
       var off = document.createElement('canvas');
       off.width = physW; off.height = physH;
       var octx = off.getContext('2d');
-      octx.drawImage(img, 0, 0, physW, physH);
+      octx.clearRect(0, 0, physW, physH);
+      octx.fillStyle = 'white';
+      var fontSize = Math.round(physH * 0.72);
+      octx.font = 'bold ' + fontSize + 'px \'Plus Jakarta Sans\', \'Geist\', system-ui, sans-serif';
+      octx.textAlign = 'center';
+      octx.textBaseline = 'middle';
+      octx.fillText('WealthHealth', physW / 2, physH / 2);
       var px = octx.getImageData(0, 0, physW, physH).data;
 
       var cols = Math.floor(physW / (STEP * dpr)) + 1;
@@ -1661,7 +1663,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
             var sy = r * stepPx + pts[p][1];
             if (sx < physW && sy < physH && px[(sy * physW + sx) * 4 + 3] > 20) hit = true;
           }
-          if (hit) {
+            if (hit) {
             mask[c * rows + r] = 1;
             opq[c * rows + r]  = Math.random() * (MAX_OPQ - MIN_OPQ) + MIN_OPQ;
           }
@@ -1683,8 +1685,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
         requestAnimationFrame(animate);
       }
       animate();
-    };
-  })();
+    })();
   </script>
 
 </body>
