@@ -692,10 +692,7 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
-    <!-- Particle hero — aliimam/particle-hero (21st.dev), Canvas 2D -->
-    <div id="wh-shader" style="position:absolute;inset:0;overflow:hidden;background:#05060f;">
-      <canvas id="particle-canvas" style="position:absolute;inset:0;display:block;"></canvas>
-    </div>
+    <div id="wh-shader"></div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
 
@@ -1478,73 +1475,82 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
 
 
-  <!-- ═══ PARTICLE HERO — Canvas 2D rising particles ═══ -->
+  <!-- ═══ PARTICLE HERO — Canvas 2D ═══ -->
   <script>
-  window.addEventListener('DOMContentLoaded', function() {
-    var canvas = document.getElementById('particle-canvas');
-    if (!canvas) return;
+  (function() {
+    // Create canvas via JS (same pattern as Three.js renderers that worked)
+    var container = document.getElementById('wh-shader');
+    if (!container) return;
+
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:block;pointer-events:none;';
+    container.appendChild(canvas);
+
     var ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    var W = 0, H = 0, particles = [];
 
-    // Size canvas to viewport
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.cssText = 'position:absolute;inset:0;width:' + canvas.width + 'px;height:' + canvas.height + 'px;';
-
-    window.addEventListener('resize', function() {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvas.style.width  = canvas.width  + 'px';
-      canvas.style.height = canvas.height + 'px';
+    function resize() {
+      W = container.offsetWidth || window.innerWidth;
+      H = container.offsetHeight || window.innerHeight;
+      if (W === 0) W = window.innerWidth;
+      if (H === 0) H = window.innerHeight;
+      canvas.width  = W;
+      canvas.height = H;
       initParticles();
-    });
-
-    var particles = [];
+    }
 
     function makeParticle() {
       return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x:  Math.random() * W,
+        y:  Math.random() * H,
         vy: -(Math.random() * 0.3 + 0.08),
-        opacity: Math.random() * 0.7 + 0.1,
-        h: Math.random() * 3 + 1,
-        life: Math.random() * 300 + 100,
+        op: Math.random() * 0.6 + 0.15,
+        h:  Math.random() * 3 + 1,
+        life: Math.random() * 400 + 100,
         age: 0
       };
     }
 
     function initParticles() {
-      var count = Math.floor((canvas.width * canvas.height) / 5000);
+      var count = Math.floor((W * H) / 5000);
       particles = [];
       for (var i = 0; i < count; i++) particles.push(makeParticle());
     }
-    initParticles();
 
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < particles.length; i++) {
         var p = particles[i];
         p.y += p.vy;
         p.age++;
-        var fade = 1 - (p.age / p.life);
-        if (fade <= 0 || p.y < 0) {
-          // Reset particle at bottom
-          p.x = Math.random() * canvas.width;
-          p.y = canvas.height + 5;
-          p.vy = -(Math.random() * 0.3 + 0.08);
-          p.opacity = Math.random() * 0.7 + 0.1;
-          p.h = Math.random() * 3 + 1;
-          p.life = Math.random() * 300 + 100;
+        var fade = Math.max(0, 1 - p.age / p.life);
+        if (fade <= 0 || p.y < -5) {
+          p.x = Math.random() * W;
+          p.y = H + 5;
           p.age = 0;
+          p.life = Math.random() * 400 + 100;
+          p.op = Math.random() * 0.6 + 0.15;
           fade = 1;
         }
-        ctx.fillStyle = 'rgba(77,140,255,' + (p.opacity * fade).toFixed(2) + ')';
+        ctx.fillStyle = 'rgba(77,140,255,' + (p.op * fade).toFixed(2) + ')';
         ctx.fillRect(p.x, p.y, 0.5, p.h);
       }
       requestAnimationFrame(animate);
     }
-    animate();
-  });
+
+    // Resize once DOM is ready, then start
+    function start() {
+      resize();
+      window.addEventListener('resize', resize);
+      animate();
+    }
+
+    if (document.readyState !== 'loading') {
+      start();
+    } else {
+      document.addEventListener('DOMContentLoaded', start);
+    }
+  })();
   </script>
 
 </body>
