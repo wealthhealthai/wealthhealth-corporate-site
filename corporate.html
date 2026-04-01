@@ -692,17 +692,9 @@ radial-gradient(900px 600px at 50% 0%, rgba(255,255,255,.025) 0%, transparent 70
 
   <!-- HERO WRAPPER — mesh is absolute inside this, clipped at boundary -->
   <div class="hero-section-wrap" id="top">
-    <!-- Video hero background — thanh/hero-landing-page (21st.dev) -->
+    <!-- CSS animated gradient hero — pure CSS, no external deps, zero GPU cost -->
     <div id="wh-shader" style="position:absolute;inset:0;overflow:hidden;">
-      <video autoplay muted loop playsinline
-             style="position:absolute;top:-10%;left:0;width:100%;height:120%;object-fit:cover;z-index:0;">
-        <source src="https://mybycketvercelprojecttest.s3.sa-east-1.amazonaws.com/animation-bg.mp4" type="video/mp4"/>
-      </video>
-      <!-- Blue gradient overlays matching component design -->
-      <div style="position:absolute;inset:0;background:linear-gradient(to right, rgba(0,132,255,0.18) 0%, transparent 40%);pointer-events:none;z-index:1;"></div>
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom-left, rgba(0,132,255,0.1) 0%, transparent 50%);pointer-events:none;z-index:1;"></div>
-      <!-- Vignette so hero text reads clearly -->
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 42%, rgba(12,12,14,.55) 0%, rgba(12,12,14,.18) 55%, transparent 80%);pointer-events:none;z-index:2;"></div>
+      <div style="position:absolute;inset:0;background:#0C0C0E;animation:heroGrad 12s ease infinite;background-size:400% 400%;"></div>
     </div>
     <div id="wh-vignette"></div>
     <div class="glow"></div>
